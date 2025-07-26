@@ -11,7 +11,13 @@ app.secret_key = config.secret_key
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    all_aquariums = aquariums.get_aquariums()
+    return render_template("index.html", aquariums = all_aquariums)
+
+@app.route("/aquarium/<int:aquarium_id>")
+def page(aquarium_id):
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    return render_template("show_aquarium.html", aquarium = aquarium)
 
 @app.route("/new_aquarium")
 def new_aquarium():

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Akvaario: {{ aquarium.name }}</title>
+</head>
+
+<body>
+  {% if session.username %}
+  <p>
+    Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
+  </p>
+  </p>
+  {% endif %}
+
+  <h1>Akvaario: {{ aquarium.name }}</h1>
+  <p>
+    Akvaarion omistaja: {{ aquarium.username }}
+  </p>
+  <p>
+    Akvaarion tilavuus: {{ aquarium.volume }} litraa ({{ aquarium.length }} x {{ aquarium.depth }} x {{ aquarium.height }} cm)
+  </p>
+  <p>
+    Kuvaus: {{ aquarium.description }}
+  </p>
+  <p>
+    <a href="/">Etusivulle</a>
+  </p>
+</body>
+
+</html>
