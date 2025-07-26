@@ -9,7 +9,25 @@ def get_aquariums():
     return db.query(sql)
 
 def get_aquarium(aquarium_id):
-    sql = """SELECT a.name, a.volume, a.length, a.depth, a.height, a.description, u.username 
+    sql = """SELECT a.id,
+                    a.name,
+                    a.length,
+                    a.depth,
+                    a.height,
+                    a.volume,
+                    a.description,
+                    u.username,
+                    u.id user_id
              FROM aquariums a, users u
              WHERE a.user_id = u.id AND a.id = ?"""
     return db.query(sql, [aquarium_id])[0]
+
+def update_aquarium(name, l, d, h, volume, description, aquarium_id):
+    sql = """UPDATE aquariums SET name = ?,
+                                  length = ?,
+                                  depth = ?,
+                                  height = ?,
+                                  volume = ?,
+                                  description = ?
+                              WHERE id = ?"""
+    return db.execute(sql, [name, l, d, h, volume, description, aquarium_id])

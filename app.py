@@ -12,12 +12,12 @@ app.secret_key = config.secret_key
 @app.route("/")
 def index():
     all_aquariums = aquariums.get_aquariums()
-    return render_template("index.html", aquariums = all_aquariums)
+    return render_template("index.html", aquariums=all_aquariums)
 
 @app.route("/aquarium/<int:aquarium_id>")
 def page(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
-    return render_template("show_aquarium.html", aquarium = aquarium)
+    return render_template("show_aquarium.html", aquarium=aquarium)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -31,11 +31,38 @@ def create_aquarium():
     d = int(request.form["depth"])
     h = int(request.form["height"])
     description = request.form["description"]
-    volume = l*d*h//1000 # calculate volume in liters
+    volume = l*d*h//1000 # Calculate volume in liters
+
+    # Check that the name is at least 1 character long
+    if len(name) < 1:
+        return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
 
     aquariums.add_aquarium(user_id, name, l, d, h, volume, description)
 
     return redirect("/")
+
+@app.route("/edit_aquarium/<int:aquarium_id>")
+def edit_aquarium(aquarium_id):
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    return render_template("edit_aquarium.html", aquarium=aquarium)
+
+@app.route("/update_aquarium", methods=["POST"])
+def update_aquarium():
+    aquarium_id = request.form["aquarium_id"]
+    name = request.form["name"]
+    l = int(request.form["length"])
+    d = int(request.form["depth"])
+    h = int(request.form["height"])
+    description = request.form["description"]
+    volume = l*d*h//1000 # Calculate volume in liters
+
+    # Check that the name is at least 1 character long
+    if len(name) < 1:
+        return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
+
+    aquariums.update_aquarium(name, l, d, h, volume, description, aquarium_id)
+
+    return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/register")
 def register():
