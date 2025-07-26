@@ -38,7 +38,6 @@ def create_aquarium():
         return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
 
     aquariums.add_aquarium(user_id, name, l, d, h, volume, description)
-
     return redirect("/")
 
 @app.route("/edit_aquarium/<int:aquarium_id>")
@@ -61,8 +60,20 @@ def update_aquarium():
         return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
 
     aquariums.update_aquarium(name, l, d, h, volume, description, aquarium_id)
-
     return redirect("/aquarium/" + str(aquarium_id))
+
+@app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
+def remove_aquarium(aquarium_id):
+    if request.method == "GET":
+        aquarium = aquariums.get_aquarium(aquarium_id)
+        return render_template("remove_aquarium.html", aquarium=aquarium)
+    
+    if request.method == "POST":
+        if "remove" in request.form:
+            aquariums.remove_aquarium(aquarium_id)
+            return redirect("/")
+        else:
+            return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/register")
 def register():

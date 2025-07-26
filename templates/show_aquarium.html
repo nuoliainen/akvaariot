@@ -16,6 +16,7 @@
   <h1>Akvaario: {{ aquarium.name }}</h1>
   {% if session.user_id == aquarium.user_id %}
     <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
+    <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a>
   {% endif %}
   <p>
     Akvaarion omistaja: {{ aquarium.username }}

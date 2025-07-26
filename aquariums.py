@@ -31,3 +31,7 @@ def update_aquarium(name, l, d, h, volume, description, aquarium_id):
                                   description = ?
                               WHERE id = ?"""
     return db.execute(sql, [name, l, d, h, volume, description, aquarium_id])
+
+def remove_aquarium(aquarium_id):
+    sql = "DELETE FROM aquariums WHERE id = ?"
+    return db.execute(sql, [aquarium_id])
