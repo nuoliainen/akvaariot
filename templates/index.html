@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Tosi hyvä akvaariosovellus</title>
+</head>
+
+<body>
+    {% if session.username %}
+    <p>
+        Olet kirjautunut nimellä {{ session.username }}
+    </p>
+    <p>
+        <a href="/logout">Kirjaudu ulos</a>
+    </p>
+    {% else %}
+    <p>
+        <a href="/login">Kirjaudu sisään</a>
+        <a href="/register">Luo tunnus</a>
+    </p>
+    {% endif %}
+  <h1>Akvaariot</h1>
+</body>
+
+</html>
