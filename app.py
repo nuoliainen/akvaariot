@@ -4,6 +4,7 @@ from flask import Flask
 from flask import redirect, render_template, request, session
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
+import aquariums
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -26,8 +27,7 @@ def create_aquarium():
     description = request.form["description"]
     volume = l*d*h//1000 # calculate volume in liters
 
-    sql = "INSERT INTO aquariums (user_id, name, length, depth, height, volume, description) VALUES (?, ?, ?, ?, ?, ?, ?)"
-    db.execute(sql, [user_id, name, l, d, h, volume, description])
+    aquariums.add_aquarium(user_id, name, l, d, h, volume, description)
 
     return redirect("/")
 
