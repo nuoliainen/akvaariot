@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Haku</title>
+</head>
+
+<body>
+  {% include "session_info.html" %}
+  {% include "navigation_bar.html" %}
+  <h1>Haku</h1>
+  <form action="/search" method="get">
+    <p>
+      Hakusana:  
+      {% if query %}
+      <input type="text" name="query" value="{{ query }}" />
+      {% else %}
+      <input type="text" name="query" />
+      {% endif %}
+    </p>
+    <input type="submit" value="Hae" />
+  </form>
+
+  {% if query %}
+  <h2>Tulokset</h2>
+  <ul>
+    {% if results %}
+      {% for result in results %}
+      <li><a href="/aquarium/{{ result.id }}"> {{ result.name }}</a>, {{ result.volume }} litraa</li>
+      {% endfor %}
+    {% else %}
+      Ei tuloksia hakusanalla {{ query }}
+    {% endif %}
+  </ul>
+
+  {% endif %}
+
+</body>
+
+</html>

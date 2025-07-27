@@ -35,3 +35,18 @@ def update_aquarium(name, l, d, h, volume, description, aquarium_id):
 def remove_aquarium(aquarium_id):
     sql = "DELETE FROM aquariums WHERE id = ?"
     return db.execute(sql, [aquarium_id])
+
+def search(query):
+    sql = """SELECT a.name,
+                    a.volume
+             FROM aquariums a
+             JOIN users u ON a.user_id = u.id
+             WHERE a.name LIKE ? OR
+                   a.length LIKE ? OR
+                   a.depth LIKE ? OR
+                   a.height LIKE ? OR
+                   a.volume LIKE ? OR
+                   a.description LIKE ? OR
+                   u.username LIKE ?
+             ORDER BY a.id DESC"""
+    return db.query(sql, ["%" + query + "%"]*7)

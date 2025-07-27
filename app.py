@@ -14,6 +14,12 @@ def index():
     all_aquariums = aquariums.get_aquariums()
     return render_template("index.html", aquariums=all_aquariums)
 
+@app.route("/search")
+def search():
+    query = request.args.get("query")
+    results = aquariums.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
+
 @app.route("/aquarium/<int:aquarium_id>")
 def page(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
