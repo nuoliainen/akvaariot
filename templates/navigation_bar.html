@@ -1,0 +1,8 @@
+<p>
+  <a href="/">Etusivu</a>
+  <a href="/">Haku</a>
+  {% if session.username %}
+    <a href="">Omat akvaariot</a>
+    <a href="/new_aquarium">Luo uusi akvaario</a>
+  {% endif %}
+</p>

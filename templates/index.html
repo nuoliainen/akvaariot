@@ -10,18 +10,14 @@
   <p>
     Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
   </p>
-  <p>
-    <a href="">Omat akvaariot</a>
-    <a href="/new_aquarium">Luo uusi akvaario</a>
-  </p>
   {% else %}
   <p>
     <a href="/login">Kirjaudu sisään</a>
     <a href="/register">Luo tunnus</a>
   </p>
   {% endif %}
-
   <h1>Akvaariot</h1>
+  {% include "navigation_bar.html" %}
   <h2>Kaikki akvaariot</h2>
   <ul>
     {% for aquarium in aquariums %}
