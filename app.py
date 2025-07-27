@@ -1,7 +1,7 @@
 import sqlite3
 import db
 from flask import Flask
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
 import config
 import aquariums
@@ -49,11 +49,17 @@ def create_aquarium():
 @app.route("/edit_aquarium/<int:aquarium_id>")
 def edit_aquarium(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
     return render_template("edit_aquarium.html", aquarium=aquarium)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
     aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
     name = request.form["name"]
     l = int(request.form["length"])
     d = int(request.form["depth"])
@@ -70,8 +76,11 @@ def update_aquarium():
 
 @app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
 def remove_aquarium(aquarium_id):
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
     if request.method == "GET":
-        aquarium = aquariums.get_aquarium(aquarium_id)
         return render_template("remove_aquarium.html", aquarium=aquarium)
 
     if request.method == "POST":
