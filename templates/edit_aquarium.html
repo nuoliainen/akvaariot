@@ -7,25 +7,24 @@
 
 <body>
   {% include 'session_info.html' %}
-
   <h1>Muokkaa akvaariota</h1>
   <form action="/update_aquarium" method="post">
     <p>
       Akvaarion nimi: <br />
-      <input type="text" name="name" value="{{ aquarium.name }}"/>
+      <input type="text" name="name" value="{{ aquarium.name }}" />
     </p>
     <p>
       Mitat (leveys x syvyys x korkeus): <br />
-      <input type="number" name="length" size="5" min="0" value="{{ aquarium.length }}"/> x 
-      <input type="number" name="depth" size="5" min="0" value="{{ aquarium.depth }}"/> x 
-      <input type="number" name="height" size="5" min="0" value="{{ aquarium.height }}"/> cm
+      <input type="number" name="length" size="5" min="0" value="{{ aquarium.length }}" /> x 
+      <input type="number" name="depth" size="5" min="0" value="{{ aquarium.depth }}" /> x 
+      <input type="number" name="height" size="5" min="0" value="{{ aquarium.height }}" /> cm
     <p>
       Muuta: <br />
       <textarea name="description" rows="10" cols="60">{{ aquarium.description }}</textarea>
     </p>
     <!-- hidden field to pass on the aquarium id -->
-    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}"/>
-    <input type="submit" value="Tallenna muutokset"/>
+    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+    <input type="submit" value="Tallenna muutokset" />
   </form>
 </body>
 
