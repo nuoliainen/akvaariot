@@ -67,7 +67,7 @@ def remove_aquarium(aquarium_id):
     if request.method == "GET":
         aquarium = aquariums.get_aquarium(aquarium_id)
         return render_template("remove_aquarium.html", aquarium=aquarium)
-    
+
     if request.method == "POST":
         if "remove" in request.form:
             aquariums.remove_aquarium(aquarium_id)

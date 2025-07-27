@@ -6,13 +6,7 @@
 </head>
 
 <body>
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  </p>
-  {% endif %}
-
+  {% include 'session_info.html' %}
   <h1>Akvaario: {{ aquarium.name }}</h1>
   {% if session.user_id == aquarium.user_id %}
     <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
