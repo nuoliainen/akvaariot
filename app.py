@@ -9,6 +9,10 @@ import aquariums
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+def require_login():
+    if "user_id" not in session:
+        abort(403)
+
 @app.route("/")
 def index():
     all_aquariums = aquariums.get_aquariums()
@@ -29,10 +33,12 @@ def page(aquarium_id):
 
 @app.route("/new_aquarium")
 def new_aquarium():
+    require_login()
     return render_template("new_aquarium.html")
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
+    require_login()
     user_id = session["user_id"]
     name = request.form["name"]
     l = int(request.form["length"])
@@ -50,6 +56,7 @@ def create_aquarium():
 
 @app.route("/edit_aquarium/<int:aquarium_id>")
 def edit_aquarium(aquarium_id):
+    require_login()
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
         abort(404)
@@ -59,6 +66,7 @@ def edit_aquarium(aquarium_id):
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
+    require_login()
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
@@ -82,6 +90,7 @@ def update_aquarium():
 
 @app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
 def remove_aquarium(aquarium_id):
+    require_login()
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
         abort(404)
@@ -146,6 +155,7 @@ def login():
 
 @app.route("/logout")
 def logout():
-    del session["user_id"]
-    del session["username"]
+    if "user_id" in session:
+        del session["user_id"]
+        del session["username"]
     return redirect("/")
