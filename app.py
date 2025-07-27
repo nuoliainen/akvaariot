@@ -23,6 +23,8 @@ def search():
 @app.route("/aquarium/<int:aquarium_id>")
 def page(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
     return render_template("show_aquarium.html", aquarium=aquarium)
 
 @app.route("/new_aquarium")
@@ -49,6 +51,8 @@ def create_aquarium():
 @app.route("/edit_aquarium/<int:aquarium_id>")
 def edit_aquarium(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
     return render_template("edit_aquarium.html", aquarium=aquarium)
@@ -57,6 +61,8 @@ def edit_aquarium(aquarium_id):
 def update_aquarium():
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 
@@ -77,6 +83,8 @@ def update_aquarium():
 @app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
 def remove_aquarium(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 

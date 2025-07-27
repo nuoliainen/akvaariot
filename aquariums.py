@@ -20,7 +20,8 @@ def get_aquarium(aquarium_id):
                     u.id user_id
              FROM aquariums a, users u
              WHERE a.user_id = u.id AND a.id = ?"""
-    return db.query(sql, [aquarium_id])[0]
+    result = db.query(sql, [aquarium_id])
+    return result[0] if result else None
 
 def update_aquarium(name, l, d, h, volume, description, aquarium_id):
     sql = """UPDATE aquariums SET name = ?,
