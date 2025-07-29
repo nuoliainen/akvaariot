@@ -6,26 +6,32 @@
 </head>
 
 <body>
+
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
+
   <h1>Uusi akvaario</h1>
   <form action="/create_aquarium" method="post">
     <p>
       Akvaarion nimi: <br />
       <input type="text" name="name" size="50" maxlength="50" required />
     </p>
+
     <p>
       Mitat (leveys x syvyys x korkeus): <br />
       <input type="number" name="length" size="5" min="1" max="9999" value="100" required /> x
       <input type="number" name="depth" size="5" min="1" max="9999" value="40" required /> x
       <input type="number" name="height" size="5" min="1" max="9999" value="40" required /> cm
     </p>
+
     <p>
       Muuta: <br />
       <textarea name="description" rows="10" cols="60" maxlength="5000"></textarea>
     </p>
+
     <input type="submit" value="Luo akvaario" />
   </form>
+
 </body>
 
 </html>

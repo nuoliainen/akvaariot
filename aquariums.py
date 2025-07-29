@@ -1,15 +1,18 @@
 import db
 
 def add_aquarium(user_id, name, dims, volume, description):
+    """Adds a new aquarium into the database."""
     sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, description)
              VALUES (?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, description])
 
 def get_aquariums():
+    """Gets all aquariums from the database."""
     sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC"
     return db.query(sql)
 
 def get_aquarium(aquarium_id):
+    """Gets an aquarium grom the database based on aquarium id."""
     sql = """SELECT a.id,
                     a.name,
                     a.length,
@@ -25,6 +28,7 @@ def get_aquarium(aquarium_id):
     return result[0] if result else None
 
 def update_aquarium(name, dims, volume, description, aquarium_id):
+    """Updates the information of an aquarium into the database."""
     sql = """UPDATE aquariums SET name = ?,
                                   length = ?,
                                   depth = ?,
@@ -35,10 +39,12 @@ def update_aquarium(name, dims, volume, description, aquarium_id):
     return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, description, aquarium_id])
 
 def remove_aquarium(aquarium_id):
+    """Removes a specific aquarium from the database."""
     sql = "DELETE FROM aquariums WHERE id = ?"
     return db.execute(sql, [aquarium_id])
 
 def search(query):
+    """Selects all aquariums that contain a keyword in any column."""
     sql = """SELECT a.name,
                     a.volume
              FROM aquariums a

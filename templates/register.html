@@ -6,22 +6,28 @@
 </head>
 
 <body>
+
   {% include "navigation_bar.html" %}
+
   <form action="/create_user" method="post">
     <p>
       Tunnus: <br />
       <input type="text" name="username" minlength="1" maxlength="50" required />
     </p>
+
     <p>
       Salasana: <br />
       <input type="password" name="password1" minlength="1" maxlength="50" required />
     </p>
+
     <p>
       Salasana uudestaan: <br />
       <input type="password" name="password2" minlength="1" maxlength="50" required />
     </p>
+
     <input type="submit" value="Luo tunnus" />
   </form>
+
 </body>
 
 </html>

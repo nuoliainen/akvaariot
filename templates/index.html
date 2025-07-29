@@ -6,6 +6,7 @@
 </head>
 
 <body>
+
   {% if session.username %}
   <p>
     Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
@@ -16,14 +17,17 @@
     <a href="/register">Luo tunnus</a>
   </p>
   {% endif %}
+
   <h1>Akvaariot</h1>
   {% include "navigation_bar.html" %}
+
   <h2>Kaikki akvaariot</h2>
   <ul>
     {% for aquarium in aquariums %}
     <li><a href="/aquarium/{{ aquarium.id }}"> {{ aquarium.name }}</a>, {{ aquarium.volume }} litraa</li>
     {% endfor %}
   </ul>
+
 </body>
 
 </html>

@@ -6,26 +6,29 @@
 </head>
 
 <body>
+
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
+
   <h1>Akvaario: {{ aquarium.name }}</h1>
   {% if session.user_id == aquarium.user_id %}
     <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
     <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a>
   {% endif %}
+
   <p>
     Akvaarion omistaja: {{ aquarium.username }}
   </p>
+
   <p>
     Akvaarion tilavuus: {{ aquarium.volume }} litraa 
     ({{ aquarium.length }} x {{ aquarium.depth }} x {{ aquarium.height }} cm)
   </p>
+
   <p>
     Kuvaus: {{ aquarium.description }}
   </p>
-  <p>
-    <a href="/">Etusivulle</a>
-  </p>
+
 </body>
 
 </html>
