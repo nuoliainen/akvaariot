@@ -12,7 +12,7 @@ def get_aquariums():
     return db.query(sql)
 
 def get_aquarium(aquarium_id):
-    """Gets an aquarium grom the database based on aquarium id."""
+    """Gets an aquarium from the database based on aquarium id."""
     sql = """SELECT a.id,
                     a.name,
                     a.length,
