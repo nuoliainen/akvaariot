@@ -1,8 +1,9 @@
 import db
 
-def add_aquarium(user_id, name, l, d, h, volume, description):
-    sql = "INSERT INTO aquariums (user_id, name, length, depth, height, volume, description) VALUES (?, ?, ?, ?, ?, ?, ?)"
-    db.execute(sql, [user_id, name, l, d, h, volume, description])
+def add_aquarium(user_id, name, dims, volume, description):
+    sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, description)
+             VALUES (?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, description])
 
 def get_aquariums():
     sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC"
@@ -23,7 +24,7 @@ def get_aquarium(aquarium_id):
     result = db.query(sql, [aquarium_id])
     return result[0] if result else None
 
-def update_aquarium(name, l, d, h, volume, description, aquarium_id):
+def update_aquarium(name, dims, volume, description, aquarium_id):
     sql = """UPDATE aquariums SET name = ?,
                                   length = ?,
                                   depth = ?,
@@ -31,7 +32,7 @@ def update_aquarium(name, l, d, h, volume, description, aquarium_id):
                                   volume = ?,
                                   description = ?
                               WHERE id = ?"""
-    return db.execute(sql, [name, l, d, h, volume, description, aquarium_id])
+    return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, description, aquarium_id])
 
 def remove_aquarium(aquarium_id):
     sql = "DELETE FROM aquariums WHERE id = ?"

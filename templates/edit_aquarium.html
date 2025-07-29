@@ -6,19 +6,20 @@
 </head>
 
 <body>
-  {% include 'session_info.html' %}
+  {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
   <h1>Muokkaa akvaariota</h1>
   <form action="/update_aquarium" method="post">
     <p>
       Akvaarion nimi: <br />
-      <input type="text" name="name" value="{{ aquarium.name }}" />
+      <input type="text" name="name" size="50" value="{{ aquarium.name }}" required />
     </p>
     <p>
       Mitat (leveys x syvyys x korkeus): <br />
-      <input type="number" name="length" size="5" min="0" value="{{ aquarium.length }}" /> x 
-      <input type="number" name="depth" size="5" min="0" value="{{ aquarium.depth }}" /> x 
-      <input type="number" name="height" size="5" min="0" value="{{ aquarium.height }}" /> cm
+      <input type="number" name="length" size="5" min="1" max="9999" value="{{ aquarium.length }}" required /> x
+      <input type="number" name="depth" size="5" min="1" max="9999" value="{{ aquarium.depth }}" required /> x
+      <input type="number" name="height" size="5" min="1" max="9999" value="{{ aquarium.height }}" required /> cm
+    </p>
     <p>
       Muuta: <br />
       <textarea name="description" rows="10" cols="60">{{ aquarium.description }}</textarea>

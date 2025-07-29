@@ -1,8 +1,8 @@
 import sqlite3
-import db
 from flask import Flask
 from flask import redirect, render_template, request, session, abort
 from werkzeug.security import generate_password_hash, check_password_hash
+import db
 import config
 import aquariums
 
@@ -12,6 +12,27 @@ app.secret_key = config.secret_key
 def require_login():
     if "user_id" not in session:
         abort(403)
+
+def validate_input(name, description, dims):
+    """Validates the input from a form to an aquarium."""
+    # Validate length of aquarium name
+    if not name or len(name) > 50:
+        abort(400, description="Name is required and must be 50 characters or less.")
+
+    # Validate length of description
+    if len(description) > 5000:
+        abort(400, description="Description must be 5000 characters or less.")
+
+    # Validate dimensions:
+    try:
+        # Convert dimensions to integers
+        l, d, h = int(dims[0]), int(dims[1]), int(dims[2])
+        # Check that each dimension is within a correct range
+        if not 0 < l < 10000 or not 0 < d < 10000 or not 0 < h < 10000:
+            abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
+    except (ValueError, KeyError):
+        # Abort if conversion to integer failed or if dimensions are missing
+        abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
 
 @app.route("/")
 def index():
@@ -41,17 +62,12 @@ def create_aquarium():
     require_login()
     user_id = session["user_id"]
     name = request.form["name"]
-    l = int(request.form["length"])
-    d = int(request.form["depth"])
-    h = int(request.form["height"])
     description = request.form["description"]
-    volume = l*d*h//1000 # Calculate volume in liters
+    dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
-    # Check that the name is at least 1 character long
-    if len(name) < 1:
-        return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
-
-    aquariums.add_aquarium(user_id, name, l, d, h, volume, description)
+    validate_input(name, description, dims)
+    volume = dims[0]*dims[1]*dims[2] // 1000
+    aquariums.add_aquarium(user_id, name, dims, volume, description)
     return redirect("/")
 
 @app.route("/edit_aquarium/<int:aquarium_id>")
@@ -75,17 +91,14 @@ def update_aquarium():
         abort(403)
 
     name = request.form["name"]
-    l = int(request.form["length"])
-    d = int(request.form["depth"])
-    h = int(request.form["height"])
     description = request.form["description"]
-    volume = l*d*h//1000 # Calculate volume in liters
+    dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
-    # Check that the name is at least 1 character long
-    if len(name) < 1:
-        return "VIRHE: Akvaarion nimen tulee olla vähintään yhden merkin pituinen!"
+    validate_input(name, description, dims)
+    volume = dims[0]*dims[1]*dims[2] // 1000
 
-    aquariums.update_aquarium(name, l, d, h, volume, description, aquarium_id)
+    aquariums.update_aquarium(name, dims, volume, description, aquarium_id)
+
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
@@ -104,8 +117,7 @@ def remove_aquarium(aquarium_id):
         if "remove" in request.form:
             aquariums.remove_aquarium(aquarium_id)
             return redirect("/")
-        else:
-            return redirect("/aquarium/" + str(aquarium_id))
+        return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/register")
 def register():
@@ -116,6 +128,14 @@ def create_user():
     username = request.form["username"]
     password1 = request.form["password1"]
     password2 = request.form["password2"]
+
+    if not username or len(username) > 50:
+        abort(400, description="Name is required and must be 50 characters or less.")
+    if not password1 or len(password1) > 50:
+        abort(400, description="Name is required and must be 50 characters or less.")
+    if not password2 or len(password2) > 50:
+        abort(400, description="Name is required and must be 50 characters or less.")
+
     if password1 != password2:
         return "VIRHE: salasanat eivät ole samat"
     password_hash = generate_password_hash(password1)
@@ -141,17 +161,16 @@ def login():
         result = db.query(sql, [username])
         if not result:
             return "VIRHE: väärä tunnus"
-        else:
-            result = result[0]
-            user_id = result["id"]
-            password_hash = result["password_hash"]
 
-            if check_password_hash(password_hash, password):
-                session["user_id"] = user_id
-                session["username"] = username
-                return redirect("/")
-            else:
-                return "VIRHE: väärä salasana"
+        result = result[0]
+        user_id = result["id"]
+        password_hash = result["password_hash"]
+
+        if check_password_hash(password_hash, password):
+            session["user_id"] = user_id
+            session["username"] = username
+            return redirect("/")
+        return "VIRHE: väärä salasana"
 
 @app.route("/logout")
 def logout():
