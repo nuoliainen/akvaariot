@@ -45,7 +45,8 @@ def remove_aquarium(aquarium_id):
 
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
-    sql = """SELECT a.name,
+    sql = """SELECT a.id,
+                    a.name,
                     a.volume
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
