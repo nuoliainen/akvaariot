@@ -5,6 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
 import aquariums
+import users
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -44,6 +45,19 @@ def index():
     # Render the "index.html" template, passing the list of aquariums
     return render_template("index.html", aquariums=all_aquariums)
 
+@app.route("/user/<int:user_id>")
+def show_user(user_id):
+    """Renders the page for a specific user."""
+    # Get the user details using the provided user ID
+    user = users.get_user(user_id)
+    # Check if the user exists
+    if not user:
+        # If not, raise a 404 Not Found error
+        abort(404)
+
+    # Render the "show_user.html" template with the user details
+    return render_template("show_user.html", user=user)
+
 @app.route("/search")
 def search():
     """Renders the search page and results based on user query."""
@@ -56,7 +70,7 @@ def search():
     return render_template("search.html", query=query, results=results)
 
 @app.route("/aquarium/<int:aquarium_id>")
-def page(aquarium_id):
+def show_aquarium(aquarium_id):
     """Renders the page for a specific aquarium."""
     # Get the aquarium details using the provided aquarium ID
     aquarium = aquariums.get_aquarium(aquarium_id)

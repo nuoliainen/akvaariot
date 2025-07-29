@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Käyttäjä: {{ user.username }}</title>
+</head>
+
+<body>
+
+  {% include "session_info.html" %}
+  {% include "navigation_bar.html" %}
+
+  <h1>Käyttäjä: {{ user.username }}</h1>
+  {% if session.user_id == user.id %}
+    Oma sivu!!
+  {% endif %}
+
+  <p>Käyttäjän akvaariot</p>
+
+</body>
+
+</html>

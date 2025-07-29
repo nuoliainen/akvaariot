@@ -2,7 +2,7 @@
   <a href="/">Etusivu</a>
   <a href="/search">Haku</a>
   {% if session.username %}
-    <a href="">Omat akvaariot</a>
+    <a href="/user/{{ session.user_id }}">Omat akvaariot</a>
     <a href="/new_aquarium">Luo uusi akvaario</a>
   {% endif %}
 </p>
