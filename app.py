@@ -107,7 +107,7 @@ def create_aquarium():
     # Validate that the details were provided correctly
     validate_input(name, description, dims)
     # Calculate volume in liters using the provided dimensions (cm)
-    volume = dims[0]*dims[1]*dims[2] // 1000
+    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
     # Add the new aquarium into the database using the provided details
     aquariums.add_aquarium(user_id, name, dims, volume, description)
 
@@ -163,7 +163,7 @@ def update_aquarium():
     # Validate that the details are provided correctly
     validate_input(name, description, dims)
     # Calculate volume in liters using the provided dimensions (cm)
-    volume = dims[0]*dims[1]*dims[2] // 1000
+    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
     # Update the aquarium details in the database
     aquariums.update_aquarium(name, dims, volume, description, aquarium_id)
 
