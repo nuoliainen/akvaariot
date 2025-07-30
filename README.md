@@ -11,7 +11,7 @@ Sovellus, jolla voit pitää kirjaa akvarioistasi ja niiden asukkaista, sekä se
 - [x] Käyttäjä näkee sovellukseen lisätyt akvaariot. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät akvaariot.
 - [x] Käyttäjä pystyy etsimään omia ja muiden akvaarioita hakusanan perusteella.
 - [ ] Käyttäjä pystyy etsimään/rajaamaan omia ja muiden akvaariota lajin, koon jne. perusteella.
-- [ ] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja (akvaarioiden lukumäärä, lajien ja yksilöiden lukumäärä jne.) ja käyttäjän lisäämät akvaariot.
+- [x] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja (akvaarioiden lukumäärä, lajien ja yksilöiden lukumäärä jne.) ja käyttäjän lisäämät akvaariot.
 - [ ] Käyttäjä pystyy valitsemaan akvaariolle yhden tai useamman luokittelun (esim. suunnitelma/oikea akvaario, makea/merivesi, trooppinen/viileä, biotooppi, blackwater, lajiakvaario jne.).
 - [ ] Käyttäjä pystyy kommentoimaan tai lisäämään jonkin reaktion omiin ja muiden käyttäjien akvaarioihin.
 
