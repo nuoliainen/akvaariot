@@ -19,7 +19,7 @@ Sovellus, jolla voit pitää kirjaa akvarioistasi ja niiden asukkaista, sekä se
 ## Sovelluksen käynnistäminen
 
 *(Windows)*  
-Kloonaa repositorio komennolla `git clone` https://github.com/nuoliainen/akvaariot tai [lataa ZIP-tiedosto](https://github.com/nuoliainen/akvaariot/archive/refs/heads/main.zip) ja pura kansio. Tuplaklikkaa RUN.bat tiedostoa tai syötä komentoja manuaalisesti seuraavan kuvauksen mukaisesti: RUN.bat tiedosto luo virtuaaliympäristön komennolla `python -m venv venv` jos sitä ei vielä ole. Virtuaaliympäristö aktivoidaan komennolla `call venv\Scripts\activate`. Jos virtuaaliympäristö vasta luotiin, asennetaan Flask komennolla `pip install flask`. Tietokanta luodaan komennolla `sqlite3 database.db < schema.sql` jos sitä ei vielä ole. Sen jälkeen suoritetaan komento `flask run`, jolloin sovelluksen pitäisi toimia selaimella osoitteessa http://127.0.0.1:5000/.
+Kloonaa repositorio komennolla `git clone https://github.com/nuoliainen/akvaariot` tai [lataa ZIP-tiedosto](https://github.com/nuoliainen/akvaariot/archive/refs/heads/main.zip) ja pura kansio. Tuplaklikkaa RUN.bat tiedostoa tai syötä komentoja manuaalisesti seuraavan kuvauksen mukaisesti: RUN.bat tiedosto luo virtuaaliympäristön komennolla `python -m venv venv` jos sitä ei vielä ole. Virtuaaliympäristö aktivoidaan komennolla `call venv\Scripts\activate`. Jos virtuaaliympäristö vasta luotiin, asennetaan Flask komennolla `pip install flask`. Tietokanta luodaan komennolla `sqlite3 database.db < schema.sql` jos sitä ei vielä ole. Sen jälkeen suoritetaan komento `flask run`, jolloin sovelluksen pitäisi toimia selaimella osoitteessa http://127.0.0.1:5000/.
 
 
 ## Sovelluksen testaaminen
