@@ -61,4 +61,4 @@ def search(query):
                    a.description LIKE ? OR
                    u.username LIKE ?
              ORDER BY a.id DESC"""
-    return db.query(sql, ["%" + query + "%"]*7)
+    return db.query(sql, ["%" + query + "%"]*8)
