@@ -1,4 +1,33 @@
+from werkzeug.security import generate_password_hash, check_password_hash
 import db
+
+def create_user(username, password):
+    """Creates a new user into the database."""
+    # Hash the password for security
+    password_hash = generate_password_hash(password)
+    # Insert the new user into the database
+    sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
+    db.execute(sql, [username, password_hash])
+
+def check_login(username, password):
+    # Get the user's hashed password from the database
+    sql = "SELECT id, password_hash FROM users WHERE username = ?"
+    result = db.query(sql, [username])
+
+    # Check if the username exists in the database
+    if not result:
+        return None
+
+    # Extract user ID and password hash from the query result
+    result = result[0]
+    user_id = result["id"]
+    password_hash = result["password_hash"]
+
+    # Verify the provided password against the stored hash
+    if check_password_hash(password_hash, password):
+        return user_id
+    # Return none if the password is incorrect
+    return None
 
 def get_user(user_id):
     """Gets a user from the database based on user id."""

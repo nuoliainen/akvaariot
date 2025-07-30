@@ -1,7 +1,6 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort
-from werkzeug.security import generate_password_hash, check_password_hash
 import db
 import config
 import aquariums
@@ -230,19 +229,15 @@ def create_user():
     # Check if the two passwords match
     if password1 != password2:
         return "VIRHE: salasanat eivät ole samat" # Error message for passwords that do not match
-    # Hash the password for security
-    password_hash = generate_password_hash(password1)
 
     try:
-        # Insert the new user into the database
-        sql = "INSERT INTO users (username, password_hash) VALUES (?, ?)"
-        db.execute(sql, [username, password_hash])
+        users.create_user(username, password1)
     except sqlite3.IntegrityError:
         # Raise an error if the username is already taken
         return "VIRHE: tunnus on jo varattu" # Error message for username already taken
 
     # Return a success message if the account is created
-    return "Tunnus luotu"
+    return render_template("user_created.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -257,28 +252,17 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        # Get the user's hashed password from the database
-        sql = "SELECT id, password_hash FROM users WHERE username = ?"
-        result = db.query(sql, [username])
-
-        # Check if the username exists in the database
-        if not result:
-            return "VIRHE: väärä tunnus" # Error message for incorrect username
-
-        # Extract user ID and password hash from the query result
-        result = result[0]
-        user_id = result["id"]
-        password_hash = result["password_hash"]
+        user_id = users.check_login(username, password)
 
         # Verify the provided password against the stored hash
-        if check_password_hash(password_hash, password):
+        if user_id:
             # Store user ID and username in the session if login is successful
             session["user_id"] = user_id
             session["username"] = username
             # Redirect to the homepage upon successful login
             return redirect("/")
-        # Return error message if the password is incorrect
-        return "VIRHE: väärä salasana" # Error message for incorrect password
+        else:
+            return "Väärä tunnus tai salasana"
 
 @app.route("/logout")
 def logout():
