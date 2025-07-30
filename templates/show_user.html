@@ -15,7 +15,18 @@
     Oma sivu!!
   {% endif %}
 
-  <p>Käyttäjän akvaariot</p>
+  <h2>Käyttäjän akvaariot</h2>
+  {% if aquariums | count == 1 %}
+    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaario.</p>
+  {% else %}
+    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</p>
+  {% endif %}
+
+  <ul>
+  {% for aquarium in aquariums %}
+    <li><a href="/aquarium/{{ aquarium.id }}"> {{ aquarium.name }}</a>, {{ aquarium.volume }} litraa</li>
+  {% endfor %}
+  </ul>
 
 </body>
 

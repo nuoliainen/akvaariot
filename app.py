@@ -55,8 +55,10 @@ def show_user(user_id):
         # If not, raise a 404 Not Found error
         abort(404)
 
+    # Get the aquariums by the user
+    aquariums = users.get_aquariums(user_id)
     # Render the "show_user.html" template with the user details
-    return render_template("show_user.html", user=user)
+    return render_template("show_user.html", user=user, aquariums=aquariums)
 
 @app.route("/search")
 def search():
