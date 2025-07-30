@@ -102,6 +102,7 @@ def create_aquarium():
     user_id = session["user_id"]
     # Get the aquarium details from the submitted form data
     name = request.form["name"]
+    date = request.form["date"]
     description = request.form["description"]
     dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
@@ -110,7 +111,7 @@ def create_aquarium():
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
     # Add the new aquarium into the database using the provided details
-    aquariums.add_aquarium(user_id, name, dims, volume, description)
+    aquariums.add_aquarium(user_id, name, dims, volume, date, description)
 
     # Redirect to the homepage after successfully creating the aquarium
     return redirect("/")
@@ -158,6 +159,7 @@ def update_aquarium():
 
     # Get the updated details from the form
     name = request.form["name"]
+    date = request.form["date"]
     description = request.form["description"]
     dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
@@ -166,7 +168,7 @@ def update_aquarium():
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
     # Update the aquarium details in the database
-    aquariums.update_aquarium(name, dims, volume, description, aquarium_id)
+    aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id)
 
     # Redirect to the updated aquarium's page
     return redirect("/aquarium/" + str(aquarium_id))

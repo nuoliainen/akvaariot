@@ -12,6 +12,7 @@ CREATE TABLE aquariums (
     depth INTEGER,
     height INTEGER,
     volume INTEGER,
+    date TEXT,
     description TEXT
 );
 

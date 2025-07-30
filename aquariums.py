@@ -1,10 +1,10 @@
 import db
 
-def add_aquarium(user_id, name, dims, volume, description):
+def add_aquarium(user_id, name, dims, volume, date, description):
     """Adds a new aquarium into the database."""
-    sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, description)
-             VALUES (?, ?, ?, ?, ?, ?, ?)"""
-    db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, description])
+    sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+    db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
 
 def get_aquariums():
     """Gets all aquariums from the database."""
@@ -19,6 +19,7 @@ def get_aquarium(aquarium_id):
                     a.depth,
                     a.height,
                     a.volume,
+                    a.date,
                     a.description,
                     u.username,
                     u.id user_id
@@ -27,16 +28,17 @@ def get_aquarium(aquarium_id):
     result = db.query(sql, [aquarium_id])
     return result[0] if result else None
 
-def update_aquarium(name, dims, volume, description, aquarium_id):
+def update_aquarium(name, dims, volume, date, description, aquarium_id):
     """Updates the information of an aquarium into the database."""
     sql = """UPDATE aquariums SET name = ?,
                                   length = ?,
                                   depth = ?,
                                   height = ?,
                                   volume = ?,
+                                  date = ?,
                                   description = ?
                               WHERE id = ?"""
-    return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, description, aquarium_id])
+    return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
 
 def remove_aquarium(aquarium_id):
     """Removes a specific aquarium from the database."""
@@ -55,6 +57,7 @@ def search(query):
                    a.depth LIKE ? OR
                    a.height LIKE ? OR
                    a.volume LIKE ? OR
+                   a.date LIKE ? OR
                    a.description LIKE ? OR
                    u.username LIKE ?
              ORDER BY a.id DESC"""
