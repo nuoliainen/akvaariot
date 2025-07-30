@@ -16,10 +16,14 @@
   {% endif %}
 
   <h2>Käyttäjän akvaariot</h2>
-  {% if aquariums | count == 1 %}
-    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaario.</p>
+  {% if aquariums | count == 0 %}
+    <p>Käyttäjällä ei ole akvaaarioita.</p>
+  {% elif aquariums | count == 1 %}
+    <p>Käyttäjällä on {{ aquariums | count }} akvaario.</br>
+       Käyttäjän akvaariossa on {{ aquariums[0].volume }} litraa vettä.</p>
   {% else %}
-    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</p>
+    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</br>
+       Käyttäjän akvaarioissa on yhteensä {{ aquariums | sum(attribute="volume") }} litraa vettä.</p>
   {% endif %}
 
   <ul>
