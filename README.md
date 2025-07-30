@@ -12,7 +12,7 @@ Sovellus, jolla voit pitää kirjaa akvarioistasi ja niiden asukkaista, sekä se
 - [x] Käyttäjä pystyy etsimään omia ja muiden akvaarioita hakusanan perusteella.
 - [ ] Käyttäjä pystyy etsimään/rajaamaan omia ja muiden akvaariota lajin, koon jne. perusteella.
 - [x] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja (akvaarioiden lukumäärä, lajien ja yksilöiden lukumäärä jne.) ja käyttäjän lisäämät akvaariot.
-- [ ] Käyttäjä pystyy valitsemaan akvaariolle yhden tai useamman luokittelun (esim. suunnitelma/oikea akvaario, makea/merivesi, trooppinen/viileä, biotooppi, blackwater, lajiakvaario jne.).
+- [ ] Käyttäjä pystyy valitsemaan akvaariolle yhden tai useamman luokittelun (esim. suunnitelma/oikea akvaario, käynnissä/lopetettu, makea/merivesi, trooppinen/viileä, biotooppi, blackwater, lajiakvaario jne.).
 - [ ] Käyttäjä pystyy kommentoimaan tai lisäämään jonkin reaktion omiin ja muiden käyttäjien akvaarioihin.
 
 
@@ -31,4 +31,5 @@ Kloonaa repositorio komennolla `git clone` https://github.com/nuoliainen/akvaari
    - Lisää uusia akvaarioita
    - Muokkaa akvaarioita tai poista niitä
    - Kokeile hakutoimintoa kirjoittamalla jokin hakusana
+   - Käy omalla ja muiden käyttäjäsivuilla
 5. Kirjaudu ulos
