@@ -26,7 +26,12 @@
   </p>
 
   <p>
-      Akvaarion pystytyspäivämäärä: {{ aquarium.date[8:10] }} {{ aquarium.date[5:7] }} {{ aquarium.date[:4] }}<br />
+    Akvaarion pystytyspäivämäärä:
+    {% if aquarium.date %}
+    {{ aquarium.date[8:10] }}.{{ aquarium.date[5:7] }}.{{ aquarium.date[:4] }}<br />
+    {% else %}
+    <i>ei ilmoitettu</i>
+    {% endif %}
   </p>
 
   <p>
