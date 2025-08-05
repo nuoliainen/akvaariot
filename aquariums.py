@@ -7,12 +7,12 @@ def add_aquarium(user_id, name, dims, volume, date, description):
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
 
 def get_aquariums():
-    """Gets all aquariums from the database."""
+    """Gets the details of all aquariums from the database."""
     sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC"
     return db.query(sql)
 
 def get_aquarium(aquarium_id):
-    """Gets an aquarium from the database based on aquarium id."""
+    """Gets the details of an aquarium from the database based on aquarium id."""
     sql = """SELECT a.id,
                     a.name,
                     a.length,
@@ -41,7 +41,7 @@ def update_aquarium(name, dims, volume, date, description, aquarium_id):
     return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
 
 def remove_aquarium(aquarium_id):
-    """Removes a specific aquarium from the database."""
+    """Removes a specific aquarium from the database based on aquarium id."""
     sql = "DELETE FROM aquariums WHERE id = ?"
     return db.execute(sql, [aquarium_id])
 
