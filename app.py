@@ -131,7 +131,7 @@ def update_aquarium():
     # Ensure the logged-in user is the owner of the aquarium
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
-    
+
     if "save" in request.form:
         name = request.form["name"]
         date = request.form["date"]
