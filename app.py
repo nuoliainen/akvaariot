@@ -131,18 +131,18 @@ def update_aquarium():
     # Ensure the logged-in user is the owner of the aquarium
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
+    
+    if "save" in request.form:
+        name = request.form["name"]
+        date = request.form["date"]
+        description = request.form["description"]
+        dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
-    name = request.form["name"]
-    date = request.form["date"]
-    description = request.form["description"]
-    dims = [request.form["length"], request.form["depth"], request.form["height"]]
+        validate_input(name, description, dims)
+        # Calculate volume in liters using the provided dimensions (cm)
+        volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
+        aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id)
 
-    validate_input(name, description, dims)
-    # Calculate volume in liters using the provided dimensions (cm)
-    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
-    aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id)
-
-    # Redirect to the updated aquarium's page
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/remove_aquarium/<int:aquarium_id>", methods=["GET", "POST"])
