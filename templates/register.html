@@ -13,10 +13,10 @@
 
   {% include "navigation_bar.html" %}
 
-  <form action="/create_user" method="post">
+  <form action="/register" method="post">
     <p>
       Tunnus: <br />
-      <input type="text" name="username" minlength="1" maxlength="50" required />
+      <input type="text" name="username" value="{{ filled.username }}" minlength="1" maxlength="50" required />
     </p>
 
     <p>
@@ -31,6 +31,12 @@
 
     <input type="submit" value="Luo tunnus" />
   </form>
+
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
 
 </body>
 

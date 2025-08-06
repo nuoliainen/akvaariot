@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask
-from flask import redirect, render_template, request, session, abort
+from flask import redirect, render_template, request, session, abort, flash
 import db
 import config
 import aquariums
@@ -163,37 +163,40 @@ def remove_aquarium(aquarium_id):
         # If removal was cancelled, redirect back to the aquarium's page
         return redirect("/aquarium/" + str(aquarium_id))
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    """Renders the registration page."""
-    return render_template("register.html")
-
-@app.route("/create_user", methods=["POST"])
-def create_user():
     """Handles the creation of a new user account."""
-    username = request.form["username"]
-    password1 = request.form["password1"]
-    password2 = request.form["password2"]
+    if request.method == "GET":
+        return render_template("register.html", filled={})
 
-    # Validate length of username
-    if not username or len(username) > 50:
-        abort(400, description="Name is required and must be 50 characters or less.")
-    # Validate length of passwords
-    if not password1 or len(password1) > 50:
-        abort(400, description="Password is required and must be 50 characters or less.")
-    if not password2 or len(password2) > 50:
-        abort(400, description="Password is required and must be 50 characters or less.")
+    if request.method == "POST":
+        username = request.form["username"]
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
 
-    if password1 != password2:
-        return "VIRHE: salasanat eivät ole samat"
+        # Validate length of username
+        if not username or len(username) > 50:
+            abort(400, description="Name is required and must be 50 characters or less.")
+        # Validate length of passwords
+        if not password1 or len(password1) > 50:
+            abort(400, description="Password is required and must be 50 characters or less.")
+        if not password2 or len(password2) > 50:
+            abort(400, description="Password is required and must be 50 characters or less.")
 
-    try:
-        users.create_user(username, password1)
-    except sqlite3.IntegrityError:
-        # Raise an error if the username is already taken
-        return "VIRHE: tunnus on jo varattu"
+        if password1 != password2:
+            flash("VIRHE: salasanat eivät ole samat")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
 
-    return render_template("user_created.html")
+        try:
+            users.create_user(username, password1)
+        except sqlite3.IntegrityError:
+            flash("VIRHE: tunnus on jo varattu")
+            filled = {"username": username}
+            return render_template("register.html", filled=filled)
+
+        flash("Tunnuksen luonti onnistui!")
+        return redirect("/")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -213,7 +216,8 @@ def login():
             session["username"] = username
             return redirect("/")
         else:
-            return "Väärä tunnus tai salasana"
+            flash("VIRHE: Väärä tunnus tai salasana!")
+            return redirect("/login")
 
 @app.route("/logout")
 def logout():

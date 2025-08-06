@@ -18,6 +18,12 @@
   </p>
   {% endif %}
 
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
+
   <h1>Akvaariot</h1>
   {% include "navigation_bar.html" %}
 
