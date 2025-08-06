@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, flash
+import markupsafe
 import db
 import config
 import aquariums
@@ -32,6 +33,12 @@ def validate_input(name, description, dims):
             abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
     except (ValueError, KeyError):
         abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
+
+@app.template_filter()
+def show_lines(content):
+    content = str(markupsafe.escape(content))
+    content = content.replace("\n", "<br />")
+    return markupsafe.Markup(content)
 
 @app.route("/")
 def index():
