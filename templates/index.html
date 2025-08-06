@@ -7,16 +7,7 @@
 
 <body>
 
-  {% if session.username %}
-  <p>
-    Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
-  </p>
-  {% else %}
-  <p>
-    <a href="/login">Kirjaudu sisään</a>
-    <a href="/register">Luo tunnus</a>
-  </p>
-  {% endif %}
+  {% include "session_info.html" %}
 
   {% for message in get_flashed_messages() %}
   <p>
