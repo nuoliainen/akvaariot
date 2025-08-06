@@ -100,12 +100,17 @@ def create_aquarium():
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
 
-    # Get all submitted class entries (title, value) from the form
+    all_classes = aquariums.get_all_classes()
     classes = []
+    # Get and validate all submitted class entries (title, value) from the form
     for entry in request.form.getlist("classes"):
         if entry:
-            parts = entry.split(":")
-            classes.append((parts[0], parts[1]))
+            title, value = entry.split(":")
+            if title not in all_classes:
+                abort(403)
+            if value not in all_classes[title]:
+                abort(403)
+            classes.append((title, value))
 
     aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
 
@@ -158,12 +163,17 @@ def update_aquarium():
         # Calculate volume in liters using the provided dimensions (cm)
         volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
 
-        # Get all submitted class entries (title, value) from the form
+        all_classes = aquariums.get_all_classes()
         classes = []
+        # Get and validate all submitted class entries (title, value) from the form
         for entry in request.form.getlist("classes"):
             if entry:
-                parts = entry.split(":")
-                classes.append((parts[0], parts[1]))
+                title, value = entry.split(":")
+                if title not in all_classes:
+                    abort(403)
+                if value not in all_classes[title]:
+                    abort(403)
+                classes.append((title, value))
 
         aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
 
