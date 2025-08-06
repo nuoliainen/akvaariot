@@ -74,14 +74,15 @@ def show_aquarium(aquarium_id):
     # Check if the aquarium exists
     if not aquarium:
         abort(404)
-
-    return render_template("show_aquarium.html", aquarium=aquarium)
+    classes = aquariums.get_aquarium_classes(aquarium_id)
+    return render_template("show_aquarium.html", aquarium=aquarium, classes=classes)
 
 @app.route("/new_aquarium")
 def new_aquarium():
     """Renders the page for creating a new aquarium."""
     require_login()
-    return render_template("new_aquarium.html")
+    classes = aquariums.get_all_classes()
+    return render_template("new_aquarium.html", classes=classes)
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
@@ -98,7 +99,14 @@ def create_aquarium():
     validate_input(name, description, dims)
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
-    aquariums.add_aquarium(user_id, name, dims, volume, date, description)
+
+    classes = []
+    for entry in request.form.getlist("classes"):
+        if entry:
+            parts = entry.split(":")
+            classes.append((parts[0], parts[1]))
+
+    aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
 
     return redirect("/")
 

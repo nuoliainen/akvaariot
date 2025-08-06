@@ -34,6 +34,17 @@
     {% endif %}
   </p>
 
+  {% if classes %}
+  <p>
+    Luokittelu:
+    <ul>
+      {% for class in classes %}
+      <li>{{ class.title}}: {{ class.value }}</li>
+      {% endfor %}
+    </ul>
+  </p>
+  {% endif %}
+
   <p>
     Kuvaus:
     <p>{{ aquarium.description | show_lines }}</p>

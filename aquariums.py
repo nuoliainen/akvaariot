@@ -1,10 +1,32 @@
 import db
 
-def add_aquarium(user_id, name, dims, volume, date, description):
+def get_all_classes():
+    """Gets all titles and possible values of classes from the database as a dictionary."""
+    sql = "SELECT title, value FROM classes ORDER BY id"
+    result = db.query(sql)
+
+    classes = {}
+    for title, value in result:
+        if title not in classes:
+            classes[title] = []
+        classes[title].append(value)
+
+    return classes
+
+def get_aquarium_classes(aquarium_id):
+    sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
+    return db.query(sql, [aquarium_id])
+
+def add_aquarium(user_id, name, dims, volume, date, description, classes):
     """Adds a new aquarium into the database."""
     sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
+
+    aquarium_id = db.last_insert_id()
+    sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [aquarium_id, title, value])
 
 def get_aquariums():
     """Gets the details of all aquariums from the database."""

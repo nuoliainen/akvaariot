@@ -29,6 +29,18 @@
       <input type="date" name="date" />
     </p>
 
+    {% for class in classes %}
+    <p>
+      {{ class }}:<br />
+      <select name="classes">
+        <option value="">(tyhjä)</option>
+      {% for option in classes[class] %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+      {% endfor %}
+      </select>
+    </p>
+    {% endfor %}
+
     <p>
       Muuta: <br />
       <textarea name="description" rows="10" cols="60" maxlength="5000"></textarea>

@@ -16,10 +16,23 @@ CREATE TABLE aquariums (
     description TEXT
 );
 
+CREATE TABLE classes (
+    id INTEGER PRIMARY KEY,
+    title TEXT,
+    value TEXT
+);
+
+CREATE TABLE aquarium_classes (
+    id INTEGER PRIMARY KEY,
+    aquarium_id INTEGER REFERENCES aquariums,
+    title TEXT,
+    value TEXT
+);
+
 CREATE TABLE critters (
     id INTEGER PRIMARY KEY,
     user_id INTEGER REFERENCES users,
-    aquarium INTEGER REFERENCES aquariums,
+    aquarium_id INTEGER REFERENCES aquariums,
     species TEXT,
     group_size INTEGER
 );
