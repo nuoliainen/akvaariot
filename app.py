@@ -100,6 +100,7 @@ def create_aquarium():
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
 
+    # Get all submitted class entries (title, value) from the form
     classes = []
     for entry in request.form.getlist("classes"):
         if entry:
@@ -123,7 +124,14 @@ def edit_aquarium(aquarium_id):
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 
-    return render_template("edit_aquarium.html", aquarium=aquarium)
+    # Get all classes to display the possible options in the form
+    all_classes = aquariums.get_all_classes()
+    # Get the classes of the specific aquarium to display the classes that were selected before editing
+    classes = {class_title: "" for class_title in all_classes}
+    for entry in aquariums.get_aquarium_classes(aquarium_id):
+        classes[entry["title"]] = entry["value"]
+
+    return render_template("edit_aquarium.html", aquarium=aquarium, all_classes=all_classes, classes=classes)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
@@ -149,7 +157,15 @@ def update_aquarium():
         validate_input(name, description, dims)
         # Calculate volume in liters using the provided dimensions (cm)
         volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
-        aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id)
+
+        # Get all submitted class entries (title, value) from the form
+        classes = []
+        for entry in request.form.getlist("classes"):
+            if entry:
+                parts = entry.split(":")
+                classes.append((parts[0], parts[1]))
+
+        aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
 
     return redirect("/aquarium/" + str(aquarium_id))
 

@@ -29,6 +29,23 @@
       <input type="date" name="date" value="{{ aquarium.date }}" />
     </p>
 
+    {% for class in all_classes %}
+    <p>
+      {{ class }}:<br />
+      <select name="classes">
+        <option value="">(tyhjä)</option>
+      {% for option in all_classes[class] %}
+        {% if classes[class] == option %}
+        <!-- if an option was selected previously, display that one as the default -->
+        <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
+        {% else %}
+        <option value="{{ class }}:{{ option }}">{{ option }}</option>
+        {% endif %}
+      {% endfor %}
+      </select>
+    </p>
+    {% endfor %}
+
     <p>
       Muuta: <br />
       <textarea name="description" rows="10" cols="60">{{ aquarium.description }}</textarea>

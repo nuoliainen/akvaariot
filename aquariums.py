@@ -50,7 +50,7 @@ def get_aquarium(aquarium_id):
     result = db.query(sql, [aquarium_id])
     return result[0] if result else None
 
-def update_aquarium(name, dims, volume, date, description, aquarium_id):
+def update_aquarium(name, dims, volume, date, description, aquarium_id, classes):
     """Updates the information of an aquarium into the database."""
     sql = """UPDATE aquariums SET name = ?,
                                   length = ?,
@@ -60,12 +60,20 @@ def update_aquarium(name, dims, volume, date, description, aquarium_id):
                                   date = ?,
                                   description = ?
                               WHERE id = ?"""
-    return db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
+    db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
+
+    sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
+    db.execute(sql, [aquarium_id])
+    sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
+    for title, value in classes:
+        db.execute(sql, [aquarium_id, title, value])
 
 def remove_aquarium(aquarium_id):
     """Removes a specific aquarium from the database based on aquarium id."""
+    sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
+    db.execute(sql, [aquarium_id])
     sql = "DELETE FROM aquariums WHERE id = ?"
-    return db.execute(sql, [aquarium_id])
+    db.execute(sql, [aquarium_id])
 
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
