@@ -100,9 +100,20 @@ def add_comment(aquarium_id, user_id, content):
     db.execute(sql, [aquarium_id, user_id, content])
 
 def get_comments(aquarium_id):
-    sql = """SELECT comments.content, comments.sent_at, users.id AS user_id, users.username
+    sql = """SELECT comments.id, comments.content, comments.sent_at, users.id AS user_id, users.username
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
              ORDER BY comments.id DESC;"""
     return db.query(sql, [aquarium_id])
+
+def get_comment(comment_id):
+    sql = """SELECT id, content, sent_at, aquarium_id, user_id
+             FROM comments
+             WHERE id = ?"""
+    result = db.query(sql, [comment_id])
+    return result[0] if result else None
+
+def remove_comment(comment_id):
+    sql = "DELETE FROM comments WHERE id = ?"
+    db.execute(sql, [comment_id])

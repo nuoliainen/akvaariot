@@ -51,6 +51,12 @@
   </p>
 
   <h2>Kommentit</h2>
+  {% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+  {% endfor %}
+
   {% if comments %}
   <hr />
   {% for comment in comments %}
@@ -60,6 +66,9 @@
   <p>
     {{ comment.content | show_lines }}
   </p>
+  {% if session.user_id == comment.user_id %}
+    <a href="/remove_comment/{{ comment.id }}">Poista</a>
+  {% endif %}
   <hr />
   {% endfor %}
   {% else %}

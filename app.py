@@ -229,6 +229,29 @@ def create_comment():
 
     return redirect("/aquarium/" + str(aquarium_id))
 
+@app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
+def remove_comment(comment_id):
+    """Handles the removal of a comment."""
+    require_login()
+
+    comment = aquariums.get_comment(comment_id)
+    if not comment:
+        abort(404)
+    # Ensure the logged-in user is the author of the comment
+    if comment["user_id"] != session["user_id"]:
+        abort(403)
+
+    # Show the removal confirmation/cancellation page
+    if request.method == "GET":
+        return render_template("remove_comment.html", comment=comment)
+
+    # Remove comment or cancel action
+    if request.method == "POST":
+        if "remove" in request.form:
+            aquariums.remove_comment(comment_id)
+            flash("Poistettu!")
+        return redirect("/aquarium/" + str(comment["aquarium_id"]))
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Handles the creation of a new user account."""
