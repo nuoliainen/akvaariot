@@ -53,12 +53,12 @@
   <h2>Kommentit</h2>
   {% if comments %}
   <ul>
-      {% for comment in comments %}
-      <li>"{{ comment.comment | show_lines }}" <br />
-        käyttäjältä <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
-      </li>
-      {% endfor %}
-    </ul>
+    {% for comment in comments %}
+    <li>"{{ comment.content | show_lines }}" <br />
+      käyttäjältä <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
+    </li>
+    {% endfor %}
+  </ul>
   {% else %}
   <p>Ei vielä kommentteja</p>
   {% endif %}
@@ -66,7 +66,7 @@
   {% if session.username %}
   <h2>Lisää kommentti</h2>
   <form action="/create_comment" method="post">
-    <textarea name="comment" rows="10" cols="60" maxlength="5000" required></textarea> <br />
+    <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
     <input type="submit" value="Lähetä" />
     <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
   </form>

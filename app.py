@@ -215,17 +215,17 @@ def create_comment():
 
     user_id = session["user_id"]
     aquarium_id = request.form["aquarium_id"]
-    comment = request.form["comment"]
+    content = request.form["content"]
 
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
         print("ei ole akvaariota")
         abort(403)
 
-    if len(comment) > 5000:
+    if len(content) > 5000:
         abort(400, comment="Comment must be 5000 characters or less.")
 
-    aquariums.add_comment(aquarium_id, user_id, comment)
+    aquariums.add_comment(aquarium_id, user_id, content)
 
     return redirect("/aquarium/" + str(aquarium_id))
 
