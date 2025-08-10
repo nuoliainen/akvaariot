@@ -92,3 +92,17 @@ def search(query):
                    u.username LIKE ?
              ORDER BY a.id DESC"""
     return db.query(sql, ["%" + query + "%"]*8)
+
+def add_comment(aquarium_id, user_id, comment):
+    """Adds a new comment into the database."""
+    sql = """INSERT INTO comments (aquarium_id, user_id, comment)
+             VALUES (?, ?, ?)"""
+    db.execute(sql, [aquarium_id, user_id, comment])
+
+def get_comments(aquarium_id):
+    sql = """SELECT comments.comment, users.id AS user_id, users.username
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.aquarium_id = ?
+             ORDER BY comments.id;"""
+    return db.query(sql, [aquarium_id])

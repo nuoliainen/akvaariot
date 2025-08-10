@@ -36,3 +36,10 @@ CREATE TABLE critters (
     species TEXT,
     group_size INTEGER
 );
+
+CREATE TABLE comments (
+    id INTEGER PRIMARY KEY,
+    aquarium_id INTEGER REFERENCES aquariums,
+    user_id INTEGER REFERENCES users,
+    comment TEXT
+);

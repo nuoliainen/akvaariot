@@ -74,8 +74,11 @@ def show_aquarium(aquarium_id):
     # Check if the aquarium exists
     if not aquarium:
         abort(404)
+
     classes = aquariums.get_aquarium_classes(aquarium_id)
-    return render_template("show_aquarium.html", aquarium=aquarium, classes=classes)
+    comments = aquariums.get_comments(aquarium_id)
+
+    return render_template("show_aquarium.html", aquarium=aquarium, classes=classes, comments=comments)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -203,6 +206,28 @@ def remove_aquarium(aquarium_id):
             return redirect("/")
         # If removal was cancelled, redirect back to the aquarium's page
         return redirect("/aquarium/" + str(aquarium_id))
+
+@app.route("/create_comment", methods=["POST"])
+def create_comment():
+    """Creates a new comment based on user input.
+    Validates that the input is correct."""
+    require_login()
+
+    user_id = session["user_id"]
+    aquarium_id = request.form["aquarium_id"]
+    comment = request.form["comment"]
+
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        print("ei ole akvaariota")
+        abort(403)
+
+    if len(comment) > 5000:
+        abort(400, comment="Comment must be 5000 characters or less.")
+
+    aquariums.add_comment(aquarium_id, user_id, comment)
+
+    return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
