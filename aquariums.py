@@ -104,5 +104,5 @@ def get_comments(aquarium_id):
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
-             ORDER BY comments.id;"""
+             ORDER BY comments.id DESC;"""
     return db.query(sql, [aquarium_id])

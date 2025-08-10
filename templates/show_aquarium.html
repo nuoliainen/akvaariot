@@ -52,13 +52,16 @@
 
   <h2>Kommentit</h2>
   {% if comments %}
-  <ul>
-    {% for comment in comments %}
-    <li>"{{ comment.content | show_lines }}" <br />
-      käyttäjältä <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>
-    </li>
-    {% endfor %}
-  </ul>
+  <hr />
+  {% for comment in comments %}
+  <p>
+    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:
+  </p>
+  <p>
+    {{ comment.content | show_lines }}
+  </p>
+  <hr />
+  {% endfor %}
   {% else %}
   <p>Ei vielä kommentteja</p>
   {% endif %}
