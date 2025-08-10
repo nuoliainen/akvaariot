@@ -95,12 +95,12 @@ def search(query):
 
 def add_comment(aquarium_id, user_id, content):
     """Adds a new comment into the database."""
-    sql = """INSERT INTO comments (aquarium_id, user_id, content)
-             VALUES (?, ?, ?)"""
+    sql = """INSERT INTO comments (aquarium_id, user_id, content, sent_at)
+             VALUES (?, ?, ?, datetime('now'))"""
     db.execute(sql, [aquarium_id, user_id, content])
 
 def get_comments(aquarium_id):
-    sql = """SELECT comments.content, users.id AS user_id, users.username
+    sql = """SELECT comments.content, comments.sent_at, users.id AS user_id, users.username
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?

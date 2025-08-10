@@ -41,5 +41,6 @@ CREATE TABLE comments (
     id INTEGER PRIMARY KEY,
     aquarium_id INTEGER REFERENCES aquariums,
     user_id INTEGER REFERENCES users,
-    content TEXT
+    content TEXT,
+    sent_at TEXT
 );
