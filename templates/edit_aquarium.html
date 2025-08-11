@@ -51,7 +51,7 @@
       <textarea name="description" rows="10" cols="60">{{ aquarium.description }}</textarea>
     </p>
 
-    <!-- hidden field to pass on the aquarium id -->
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
     <input type="submit" name="save" value="Tallenna muutokset" />
     <input type="submit" name="cancel" value="Peruuta" />

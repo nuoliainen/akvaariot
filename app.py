@@ -1,6 +1,7 @@
 import sqlite3
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, flash
+import secrets
 import markupsafe
 import db
 import config
@@ -13,6 +14,12 @@ app.secret_key = config.secret_key
 def require_login():
     """Ensures that the user is logged in."""
     if "user_id" not in session:
+        abort(403)
+
+def check_csrf():
+    if "csrf_token" not in request.form:
+        abort(403)
+    if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
 def validate_input(name, description, dims):
@@ -92,6 +99,7 @@ def create_aquarium():
     """Creates a new aquarium based on user input.
     Validates that the input is correct and calculates the volume."""
     require_login()
+    check_csrf()
 
     user_id = session["user_id"]
     name = request.form["name"]
@@ -146,6 +154,7 @@ def update_aquarium():
     """Updates the details of an existing aquarium based on user input.
     Validates that the input is correct and calculates the volume."""
     require_login()
+    check_csrf()
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
@@ -201,6 +210,7 @@ def remove_aquarium(aquarium_id):
 
     # Remove aquarium or cancel action
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             aquariums.remove_aquarium(aquarium_id)
             return redirect("/")
@@ -212,6 +222,7 @@ def create_comment():
     """Creates a new comment based on user input.
     Validates that the input is correct."""
     require_login()
+    check_csrf()
 
     user_id = session["user_id"]
     aquarium_id = request.form["aquarium_id"]
@@ -247,6 +258,7 @@ def remove_comment(comment_id):
 
     # Remove comment or cancel action
     if request.method == "POST":
+        check_csrf()
         if "remove" in request.form:
             aquariums.remove_comment(comment_id)
             flash("Poistettu!")
@@ -259,6 +271,7 @@ def register():
         return render_template("register.html", filled={})
 
     if request.method == "POST":
+        check_csrf()
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
@@ -303,6 +316,7 @@ def login():
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
+            session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         else:
             flash("VIRHE: Väärä tunnus tai salasana!")

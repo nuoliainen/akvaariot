@@ -16,6 +16,7 @@
   <p>{{ comment.sent_at }}</p>
 
   <form action="/remove_comment/{{ comment.id }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="remove" value="Poista" />
     <input type="submit" name="cancel" value="Peruuta" />
   </form>
