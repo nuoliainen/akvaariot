@@ -55,7 +55,10 @@
     {% if critters %}
     <ul>
       {% for critter in critters %}
-      <li>{{ critter.species }} ({{ critter.count }})</li>
+      <li>
+        {{ critter.species }} ({{ critter.count }})
+        <a href="/remove_critter/{{ critter.id }}">Poista</a>
+      </li>
       {% endfor %}
     </ul>
     {% else %}

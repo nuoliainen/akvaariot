@@ -89,6 +89,18 @@ def get_critters(critter_id):
              ORDER BY species;"""
     return db.query(sql, [critter_id])
 
+def get_critter(critter_id):
+    """Gets a specific critter."""
+    sql = """SELECT id, species, count, aquarium_id, user_id
+             FROM critters
+             WHERE id = ?"""
+    result = db.query(sql, [critter_id])
+    return result[0] if result else None
+
+def remove_critter(critter_id):
+    sql = "DELETE FROM critters WHERE id = ?"
+    db.execute(sql, [critter_id])
+
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
     sql = """SELECT a.id,

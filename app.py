@@ -259,6 +259,29 @@ def create_critter():
     aquariums.add_critter(user_id, aquarium_id, species, count)
     return redirect("/aquarium/" + str(aquarium_id))
 
+@app.route("/remove_critter/<int:critter_id>", methods=["GET", "POST"])
+def remove_coritter(critter_id):
+    """Handles the removal of a critter."""
+    require_login()
+
+    critter = aquariums.get_critter(critter_id)
+    if not critter:
+        abort(404)
+    # Ensure the logged-in user is the owner of the critter
+    if critter["user_id"] != session["user_id"]:
+        abort(403)
+
+    # Show the removal confirmation/cancellation page
+    if request.method == "GET":
+        return render_template("remove_critter.html", critter=critter)
+
+    # Remove critter or cancel action
+    if request.method == "POST":
+        check_csrf()
+        if "remove" in request.form:
+            aquariums.remove_critter(critter_id)
+        return redirect("/aquarium/" + str(critter["aquarium_id"]))
+
 @app.route("/create_comment", methods=["POST"])
 def create_comment():
     """Creates a new comment based on user input.

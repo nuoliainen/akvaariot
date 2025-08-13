@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Poista eläin</title>
+</head>
+
+<body>
+  {% include "session_info.html" %}
+  {% include "navigation_bar.html" %}
+
+  <h1>Haluatko varmasti poistaa eläimen?</h1>
+
+  <p>Eläin: {{ critter.species }} ({{ critter.count }})</p>
+
+  <form action="/remove_critter/{{ critter.id }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" name="remove" value="Poista" />
+    <input type="submit" name="cancel" value="Peruuta" />
+  </form>
+</body>
+
+</html> 
