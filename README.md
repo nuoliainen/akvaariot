@@ -1,6 +1,6 @@
 # Akvaariosovellus
 
-Sovellus, jolla voit pitää kirjaa akvarioistasi ja niiden asukkaista, sekä selata muiden ihmisten lisäämiä akvaarioita.
+Sovellus, jolla voit pitää kirjaa akvaarioistasi ja niiden asukkaista, sekä selata muiden ihmisten lisäämiä akvaarioita.
 
 
 ## Ominaisuudet
