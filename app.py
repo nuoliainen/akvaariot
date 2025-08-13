@@ -258,7 +258,7 @@ def create_critter():
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/remove_critter/<int:critter_id>", methods=["GET", "POST"])
-def remove_coritter(critter_id):
+def remove_critter(critter_id):
     """Handles the removal of a critter."""
     require_login()
 

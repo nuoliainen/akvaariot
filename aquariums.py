@@ -84,7 +84,7 @@ def add_critter(user_id, aquarium_id, species, count):
 
 def get_critters(critter_id):
     """Gets the critters within an aquarium."""
-    sql = """SELECT species, count
+    sql = """SELECT id, species, count
              FROM critters
              WHERE aquarium_id = ?
              ORDER BY species;"""
