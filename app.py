@@ -333,7 +333,6 @@ def register():
         return render_template("register.html", filled={})
 
     if request.method == "POST":
-        check_csrf()
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
