@@ -14,8 +14,9 @@ if not exist "venv\" (
 )
 
 if not exist "database.db" (
-	echo Creating database.db...
+	echo Initializing database.db...
 	sqlite3 database.db < schema.sql
+	sqlite3 database.db < init.sql
 )
 
 echo Opening app...
