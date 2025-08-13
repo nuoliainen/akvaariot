@@ -6,6 +6,7 @@ import markupsafe
 import config
 import aquariums
 import users
+import db
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -123,8 +124,8 @@ def create_aquarium():
             classes.append((title, value))
 
     aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
-
-    return redirect("/")
+    # Redirect to the page of the new aquarium
+    return redirect("/aquarium/" + str(db.last_insert_id()))
 
 @app.route("/edit_aquarium/<int:aquarium_id>")
 def edit_aquarium(aquarium_id):
