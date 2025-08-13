@@ -75,6 +75,20 @@ def remove_aquarium(aquarium_id):
     sql = "DELETE FROM aquariums WHERE id = ?"
     db.execute(sql, [aquarium_id])
 
+def add_critter(user_id, aquarium_id, species, count):
+    """Adds a new animal into the aquarium."""
+    sql = """INSERT INTO critters (user_id, aquarium_id, species, count)
+             VALUES (?, ?, ?, ?)"""
+    db.execute(sql, [user_id, aquarium_id, species, count])
+
+def get_critters(critter_id):
+    """Get the critters within an aquarium."""
+    sql = """SELECT species, count
+             FROM critters
+             WHERE aquarium_id = ?
+             ORDER BY species;"""
+    return db.query(sql, [critter_id])
+
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
     sql = """SELECT a.id,

@@ -83,9 +83,11 @@ def show_aquarium(aquarium_id):
         abort(404)
 
     classes = aquariums.get_aquarium_classes(aquarium_id)
+    critters = aquariums.get_critters(aquarium_id)
     comments = aquariums.get_comments(aquarium_id)
 
-    return render_template("show_aquarium.html", aquarium=aquarium, classes=classes, comments=comments)
+    return render_template("show_aquarium.html",
+                           aquarium=aquarium, classes=classes, critters=critters, comments=comments)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -216,6 +218,46 @@ def remove_aquarium(aquarium_id):
             return redirect("/")
         # If removal was cancelled, redirect back to the aquarium's page
         return redirect("/aquarium/" + str(aquarium_id))
+
+@app.route("/new_critter")
+def new_critter():
+    """Renders the page for creating a new critter."""
+    require_login()
+    aquariums = users.get_aquariums(session["user_id"])
+    return render_template("new_critter.html", aquariums=aquariums)
+
+@app.route("/create_critter", methods=["POST"])
+def create_critter():
+    """Creates a new critter based on user input.
+    Validates that the input is correct."""
+    require_login()
+    check_csrf()
+
+    user_id = session["user_id"]
+    aquarium_id = request.form["aquarium_id"]
+    species = request.form["species"]
+    count = request.form["count"]
+
+    # Check if the aquarium exists
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+    # Ensure the logged-in user is the owner of the aquarium
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
+    if len(species) < 1 or len(species) > 100:
+        abort(400, description="Species name is required and must be 100 characters or less.")
+
+    try:
+        count = int(count)
+        if count < 1 or count > 9999:
+            abort(400, description="Group size must be between 1 and 9999.")
+    except (ValueError, KeyError):
+        abort(400, description="Group size must be a positive integer from 1 to 9999.")
+
+    aquariums.add_critter(user_id, aquarium_id, species, count)
+    return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/create_comment", methods=["POST"])
 def create_comment():

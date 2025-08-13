@@ -50,6 +50,23 @@
     <p>{{ aquarium.description | show_lines }}</p>
   </p>
 
+  <h2>Eläimet:</h2>
+  <p>
+    {% if critters %}
+    <ul>
+      {% for critter in critters %}
+      <li>{{ critter.species }} ({{ critter.count }})</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <i>Akvaario on tyhjä</i>
+    {% endif %}
+
+    {% if session.user_id == aquarium.user_id %}
+    <p><a href="/new_critter">Lisää eläin</a></p>
+    {% endif %}
+  </p>
+
   <h2>Kommentit</h2>
   {% for message in get_flashed_messages() %}
   <p>
