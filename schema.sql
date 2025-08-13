@@ -34,7 +34,7 @@ CREATE TABLE critters (
     user_id INTEGER REFERENCES users,
     aquarium_id INTEGER REFERENCES aquariums,
     species TEXT,
-    group_size INTEGER
+    count INTEGER
 );
 
 CREATE TABLE comments (

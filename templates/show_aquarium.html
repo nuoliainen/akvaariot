@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
 
@@ -28,22 +27,22 @@
   <p>
     Akvaarion pystytyspäivämäärä:
     {% if aquarium.date %}
-    {{ aquarium.date[8:10] }}.{{ aquarium.date[5:7] }}.{{ aquarium.date[:4] }}<br />
+      {{ aquarium.date[8:10] }}.{{ aquarium.date[5:7] }}.{{ aquarium.date[:4] }}<br />
     {% else %}
-    <i>ei ilmoitettu</i>
+      <i>ei ilmoitettu</i>
     {% endif %}
   </p>
 
-  {% if classes %}
   <p>
-    Luokittelu:
-    <ul>
-      {% for class in classes %}
-      <li>{{ class.title}}: {{ class.value }}</li>
-      {% endfor %}
-    </ul>
+    {% if classes %}
+      Luokittelu:
+      <ul>
+        {% for class in classes %}
+          <li>{{ class.title }}: {{ class.value }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
   </p>
-  {% endif %}
 
   <p>
     Kuvaus:
@@ -55,54 +54,56 @@
     {% if critters %}
     <ul>
       {% for critter in critters %}
-      <li>
-        {{ critter.species }} ({{ critter.count }})
-        <a href="/remove_critter/{{ critter.id }}">Poista</a>
-      </li>
+        <li>
+          {{ critter.species }} ({{ critter.count }})
+          <a href="/remove_critter/{{ critter.id }}">Poista</a>
+        </li>
       {% endfor %}
     </ul>
     {% else %}
-    <i>Akvaario on tyhjä</i>
+      <i>Akvaario on tyhjä</i>
     {% endif %}
 
     {% if session.user_id == aquarium.user_id %}
-    <p><a href="/new_critter">Lisää eläin</a></p>
+      <p>
+        <a href="/new_critter">Lisää eläin</a>
+      </p>
     {% endif %}
   </p>
 
   <h2>Kommentit</h2>
   {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
+    <p>
+      <b>{{ message }}</b>
+    </p>
   {% endfor %}
 
   {% if comments %}
-  <hr />
-  {% for comment in comments %}
-  <p>
-    <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> ({{ comment.sent_at }}):
-  </p>
-  <p>
-    {{ comment.content | show_lines }}
-  </p>
-  {% if session.user_id == comment.user_id %}
-    <a href="/remove_comment/{{ comment.id }}">Poista</a>
-  {% endif %}
-  <hr />
-  {% endfor %}
+    <hr />
+    {% for comment in comments %}
+      <p>
+        <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> ({{ comment.sent_at }}):
+      </p>
+      <p>
+        {{ comment.content | show_lines }}
+      </p>
+      {% if session.user_id == comment.user_id %}
+        <a href="/remove_comment/{{ comment.id }}">Poista</a>
+      {% endif %}
+      <hr />
+    {% endfor %}
   {% else %}
-  <p>Ei vielä kommentteja</p>
+    <p>Ei vielä kommentteja</p>
   {% endif %}
 
   {% if session.username %}
-  <h2>Lisää kommentti</h2>
-  <form action="/create_comment" method="post">
-    <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-    <input type="submit" value="Lähetä" />
-  </form>
+    <h2>Lisää kommentti</h2>
+    <form action="/create_comment" method="post">
+      <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+      <input type="submit" value="Lähetä" />
+    </form>
   {% endif %}
 
 </body>

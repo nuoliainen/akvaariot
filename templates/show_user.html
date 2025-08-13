@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
 
@@ -16,20 +15,24 @@
   {% endif %}
 
   <h2>Käyttäjän akvaariot</h2>
-  {% if aquariums | count == 0 %}
-    <p>Käyttäjällä ei ole akvaaarioita.</p>
-  {% elif aquariums | count == 1 %}
-    <p>Käyttäjällä on {{ aquariums | count }} akvaario.</br>
-       Käyttäjän akvaariossa on {{ aquariums[0].volume }} litraa vettä.</p>
-  {% else %}
-    <p>Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</br>
-       Käyttäjän akvaarioissa on yhteensä {{ aquariums | sum(attribute="volume") }} litraa vettä.</p>
-  {% endif %}
+  <p>
+    {% if aquariums | count == 0 %}
+      Käyttäjällä ei ole akvaaarioita.
+    {% elif aquariums | count == 1 %}
+      Käyttäjällä on {{ aquariums | count }} akvaario.</br>
+      Käyttäjän akvaariossa on {{ aquariums[0].volume }} litraa vettä.
+    {% else %}
+      Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</br>
+      Käyttäjän akvaarioissa on yhteensä {{ aquariums | sum(attribute="volume") }} litraa vettä.
+    {% endif %}
+  </p>
 
   <ul>
-  {% for aquarium in aquariums %}
-    <li><a href="/aquarium/{{ aquarium.id }}"> {{ aquarium.name }}</a>, {{ aquarium.volume }} litraa</li>
-  {% endfor %}
+    {% for aquarium in aquariums %}
+      <li>
+        <a href="/aquarium/{{ aquarium.id }}"> {{ aquarium.name }}</a>, {{ aquarium.volume }} litraa
+      </li>
+    {% endfor %}
   </ul>
 
 </body>

@@ -8,7 +8,9 @@
 <body>
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
+
   <h1>Haluatko varmasti poistaa akvaarion "{{ aquarium.name }} ({{ aquarium.volume }} litraa)"?</h1>
+
   <form action="/remove_aquarium/{{ aquarium.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="remove" value="Poista" />
@@ -16,4 +18,4 @@
   </form>
 </body>
 
-</html> 
+</html>

@@ -14,6 +14,7 @@ def get_all_classes():
     return classes
 
 def get_aquarium_classes(aquarium_id):
+    """Gets all classes of a specific aquarium."""
     sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
@@ -82,7 +83,7 @@ def add_critter(user_id, aquarium_id, species, count):
     db.execute(sql, [user_id, aquarium_id, species, count])
 
 def get_critters(critter_id):
-    """Get the critters within an aquarium."""
+    """Gets the critters within an aquarium."""
     sql = """SELECT species, count
              FROM critters
              WHERE aquarium_id = ?
@@ -98,6 +99,7 @@ def get_critter(critter_id):
     return result[0] if result else None
 
 def remove_critter(critter_id):
+    """Detele a critter from the database."""
     sql = "DELETE FROM critters WHERE id = ?"
     db.execute(sql, [critter_id])
 
@@ -126,7 +128,12 @@ def add_comment(aquarium_id, user_id, content):
     db.execute(sql, [aquarium_id, user_id, content])
 
 def get_comments(aquarium_id):
-    sql = """SELECT comments.id, comments.content, comments.sent_at, users.id AS user_id, users.username
+    """Gets all comments related to a specific aquarium."""
+    sql = """SELECT comments.id,
+                    comments.content,
+                    comments.sent_at,
+                    users.id AS user_id,
+                    users.username
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
@@ -134,6 +141,7 @@ def get_comments(aquarium_id):
     return db.query(sql, [aquarium_id])
 
 def get_comment(comment_id):
+    """Gets a specific comment."""
     sql = """SELECT id, content, sent_at, aquarium_id, user_id
              FROM comments
              WHERE id = ?"""
@@ -141,5 +149,6 @@ def get_comment(comment_id):
     return result[0] if result else None
 
 def remove_comment(comment_id):
+    """Deletes a comment from the database."""
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])

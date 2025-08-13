@@ -12,8 +12,10 @@
   <h1>Haluatko varmasti poistaa kommentin?</h1>
 
   <p>Kommenttisi:</p>
-  <p>{{ comment.content }}</p>
-  <p>{{ comment.sent_at }}</p>
+  <p>
+    {{ comment.content }} <br />
+    <i>{{ comment.sent_at }}</i>
+  </p>
 
   <form action="/remove_comment/{{ comment.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -22,4 +24,4 @@
   </form>
 </body>
 
-</html> 
+</html>

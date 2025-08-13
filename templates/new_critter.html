@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
 
@@ -16,17 +15,15 @@
       Laji: <br />
       <input type="text" name="species" size="50" maxlength="100" required />
     </p>
-
     <p>
       Eläinten lukumäärä: <br />
       <input type="number" name="count" size="5" min="1" max="9999" value="1" required />
     </p>
-
     <p>
       Akvaario: <br />
       <select name="aquarium_id">
         {% for aquarium in aquariums %}
-        <option value="{{ aquarium['id'] }}">{{ aquarium['name'] }}</option>
+          <option value="{{ aquarium['id'] }}">{{ aquarium['name'] }}</option>
         {% endfor %}
       </select>
     </p>

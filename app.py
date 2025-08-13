@@ -1,9 +1,8 @@
 import sqlite3
+import secrets
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, flash
-import secrets
 import markupsafe
-import db
 import config
 import aquariums
 import users
@@ -17,6 +16,7 @@ def require_login():
         abort(403)
 
 def check_csrf():
+    """Validates the CSRF token."""
     if "csrf_token" not in request.form:
         abort(403)
     if request.form["csrf_token"] != session["csrf_token"]:
@@ -43,6 +43,7 @@ def validate_input(name, description, dims):
 
 @app.template_filter()
 def show_lines(content):
+    """Template filter to safely display line breaks."""
     content = str(markupsafe.escape(content))
     content = content.replace("\n", "<br />")
     return markupsafe.Markup(content)
@@ -61,24 +62,20 @@ def show_user(user_id):
     if not user:
         abort(404)
 
-    aquariums = users.get_aquariums(user_id)
-
-    return render_template("show_user.html", user=user, aquariums=aquariums)
+    user_aquariums = users.get_aquariums(user_id)
+    return render_template("show_user.html", user=user, aquariums=user_aquariums)
 
 @app.route("/search")
 def search():
     """Renders the search page and results based on user query."""
     query = request.args.get("query")
-    # If a query is provided, search for matching aquariums - otherwise, return an empty list
     results = aquariums.search(query) if query else []
-
     return render_template("search.html", query=query, results=results)
 
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
     """Renders the page for a specific aquarium."""
     aquarium = aquariums.get_aquarium(aquarium_id)
-    # Check if the aquarium exists
     if not aquarium:
         abort(404)
 
@@ -135,21 +132,21 @@ def edit_aquarium(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    # Check if the aquarium exists
     if not aquarium:
         abort(404)
     # Ensure the logged-in user is the owner of the aquarium
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 
-    # Get all classes to display the possible options in the form
+    # Get all classes to display the available options in the form
     all_classes = aquariums.get_all_classes()
-    # Get the classes of the specific aquarium to display the classes that were selected before editing
+    # Get the classes of the specific aquarium to display as default values
     classes = {class_title: "" for class_title in all_classes}
     for entry in aquariums.get_aquarium_classes(aquarium_id):
         classes[entry["title"]] = entry["value"]
 
-    return render_template("edit_aquarium.html", aquarium=aquarium, all_classes=all_classes, classes=classes)
+    return render_template("edit_aquarium.html",
+                           aquarium=aquarium, all_classes=all_classes, classes=classes)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
@@ -160,7 +157,6 @@ def update_aquarium():
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
-    # Check if the aquarium exists
     if not aquarium:
         abort(404)
     # Ensure the logged-in user is the owner of the aquarium
@@ -199,7 +195,6 @@ def remove_aquarium(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    # Check if the aquarium exists
     if not aquarium:
         abort(404)
     # Ensure the logged-in user is the owner of the aquarium
@@ -223,8 +218,9 @@ def remove_aquarium(aquarium_id):
 def new_critter():
     """Renders the page for creating a new critter."""
     require_login()
-    aquariums = users.get_aquariums(session["user_id"])
-    return render_template("new_critter.html", aquariums=aquariums)
+    # Get all aquariums of the user to display options for changing the target aquarium
+    user_aquariums = users.get_aquariums(session["user_id"])
+    return render_template("new_critter.html", aquariums=user_aquariums)
 
 @app.route("/create_critter", methods=["POST"])
 def create_critter():
@@ -246,9 +242,11 @@ def create_critter():
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 
+    # Validate length of species name
     if len(species) < 1 or len(species) > 100:
         abort(400, description="Species name is required and must be 100 characters or less.")
 
+    # Validate count of individuals
     try:
         count = int(count)
         if count < 1 or count > 9999:
@@ -295,7 +293,6 @@ def create_comment():
 
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
-        print("ei ole akvaariota")
         abort(403)
 
     if len(content) > 5000:
@@ -376,16 +373,14 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-
         user_id = users.check_login(username, password)
         if user_id:
             session["user_id"] = user_id
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        else:
-            flash("VIRHE: Väärä tunnus tai salasana!")
-            return redirect("/login")
+        flash("VIRHE: Väärä tunnus tai salasana!")
+        return redirect("/login")
 
 @app.route("/logout")
 def logout():

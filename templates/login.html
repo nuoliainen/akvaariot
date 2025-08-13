@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
   <p>
     <a href="/register">Luo tunnus</a>
   </p>
@@ -18,7 +17,6 @@
       Tunnus: <br />
       <input type="text" name="username" minlength="1" maxlength="50" required />
     </p>
-
     <p>
       Salasana: <br />
       <input type="password" name="password" minlength="1" maxlength="50" required />
@@ -28,9 +26,9 @@
   </form>
 
   {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
+    <p>
+      <b>{{ message }}</b>
+    </p>
   {% endfor %}
 
 </body>

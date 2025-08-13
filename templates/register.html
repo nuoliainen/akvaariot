@@ -6,7 +6,6 @@
 </head>
 
 <body>
-
   <p>
     <a href="/login">Kirjaudu sisään</a>
   </p>
@@ -18,12 +17,10 @@
       Tunnus: <br />
       <input type="text" name="username" value="{{ filled.username }}" minlength="1" maxlength="50" required />
     </p>
-
     <p>
       Salasana: <br />
       <input type="password" name="password1" minlength="1" maxlength="50" required />
     </p>
-
     <p>
       Salasana uudestaan: <br />
       <input type="password" name="password2" minlength="1" maxlength="50" required />
@@ -33,9 +30,9 @@
   </form>
 
   {% for message in get_flashed_messages() %}
-  <p>
-    <b>{{ message }}</b>
-  </p>
+    <p>
+      <b>{{ message }}</b>
+    </p>
   {% endfor %}
 
 </body>
