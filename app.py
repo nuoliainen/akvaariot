@@ -1,7 +1,7 @@
 import sqlite3
 import secrets
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, flash
+from flask import redirect, render_template, request, session, abort, flash, make_response
 import markupsafe
 import config
 import aquariums
@@ -73,6 +73,58 @@ def search():
     results = aquariums.search(query) if query else []
     return render_template("search.html", query=query, results=results)
 
+@app.route("/images/<int:aquarium_id>")
+def edit_images(aquarium_id):
+    """Renders the page for editing images of an aquarium."""
+    require_login()
+
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+    # Ensure the logged-in user is the owner of the aquarium
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
+    images = aquariums.get_images(aquarium_id)
+    return render_template("images.html", aquarium=aquarium, images=images)
+
+@app.route("/add_image", methods=["POST"])
+def add_image():
+    """Adds an image to the aquarium."""
+    require_login()
+
+    aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+    # Ensure the logged-in user is the owner of the aquarium
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
+    file = request.files["image"]
+    if not file.filename.endswith((".png")):
+        flash("VIRHE: väärä tiedostomuoto")
+        return redirect("/images/" + str(aquarium_id))
+
+    image = file.read()
+    if len(image) > 100 * 1024:
+        flash("VIRHE: liian suuri kuva")
+        return redirect("/images/" + str(aquarium_id))
+
+    aquariums.add_image(aquarium_id, image)
+    flash("Kuva lisätty!")
+    return redirect("/images/" + str(aquarium_id))
+
+@app.route("/image/<int:image_id>")
+def show_image(image_id):
+    image = aquariums.get_image(image_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/png")
+    return response
+
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
     """Renders the page for a specific aquarium."""
@@ -83,9 +135,11 @@ def show_aquarium(aquarium_id):
     classes = aquariums.get_aquarium_classes(aquarium_id)
     critters = aquariums.get_critters(aquarium_id)
     comments = aquariums.get_comments(aquarium_id)
+    images = aquariums.get_images(aquarium_id)
 
     return render_template("show_aquarium.html",
-                           aquarium=aquarium, classes=classes, critters=critters, comments=comments)
+                           aquarium=aquarium, classes=classes, critters=critters, comments=comments,
+                           images=images)
 
 @app.route("/new_aquarium")
 def new_aquarium():

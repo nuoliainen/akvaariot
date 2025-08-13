@@ -152,3 +152,16 @@ def remove_comment(comment_id):
     """Deletes a comment from the database."""
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])
+
+def add_image(aquarium_id, image):
+    sql = "INSERT INTO images (aquarium_id, image) VALUES (?, ?)"
+    db.execute(sql, [aquarium_id, image])
+
+def get_images(aquarium_id):
+    sql = "SELECT id FROM images WHERE aquarium_id = ?"
+    return db.query(sql, [aquarium_id])
+
+def get_image(image_id):
+    sql = "SELECT image FROM images WHERE id = ?"
+    result = db.query(sql, [image_id])
+    return  result[0][0] if result else None

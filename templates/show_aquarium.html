@@ -12,8 +12,15 @@
   <h1>Akvaario: {{ aquarium.name }}</h1>
   {% if session.user_id == aquarium.user_id %}
     <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
-    <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a>
+    <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a> <br />
+    <a href="/images/{{ aquarium.id }}">Kuvat</a>
   {% endif %}
+
+  <p>
+    {% for image in images %}
+      <img src="/image/{{ image.id }}" />
+    {% endfor %}
+  </p>
 
   <p>
     Akvaarion omistaja: <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a>

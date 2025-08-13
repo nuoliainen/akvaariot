@@ -29,6 +29,13 @@ CREATE TABLE aquarium_classes (
     value TEXT
 );
 
+CREATE TABLE images (
+    id INTEGER PRIMARY KEY,
+    aquarium_id INTEGER REFERENCES aquariums,
+    image BLOB
+);
+
+
 CREATE TABLE critters (
     id INTEGER PRIMARY KEY,
     user_id INTEGER REFERENCES users,
