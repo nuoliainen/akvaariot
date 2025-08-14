@@ -1,5 +1,9 @@
 import db
 
+def aquarium_count():
+    sql = "SELECT COUNT(*) FROM aquariums"
+    return db.query(sql)[0][0]
+
 def get_all_classes():
     """Gets all titles and possible values of classes from the database as a dictionary."""
     sql = "SELECT title, value FROM classes ORDER BY id"
@@ -33,6 +37,13 @@ def get_aquariums():
     """Gets the details of all aquariums from the database."""
     sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC"
     return db.query(sql)
+
+def get_aquariums_page(page, page_size):
+    """Gets the details of all aquariums in a page."""
+    sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC LIMIT ? OFFSET ?"
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [limit, offset])
 
 def get_aquarium(aquarium_id):
     """Gets the details of an aquarium from the database based on aquarium id."""

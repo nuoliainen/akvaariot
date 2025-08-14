@@ -3,6 +3,7 @@ import secrets
 from flask import Flask
 from flask import redirect, render_template, request, session, abort, flash, make_response
 import markupsafe
+import math
 import config
 import aquariums
 import users
@@ -50,10 +51,21 @@ def show_lines(content):
     return markupsafe.Markup(content)
 
 @app.route("/")
-def index():
+@app.route("/<int:page>")
+def index(page=1):
     """Renders the homepage displaying all aquariums."""
-    all_aquariums = aquariums.get_aquariums()
-    return render_template("index.html", aquariums=all_aquariums)
+    page_size = 10
+    aquarium_count = aquariums.aquarium_count()
+    page_count = math.ceil(aquarium_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    all_aquariums = aquariums.get_aquariums_page(page, page_size)
+    return render_template("index.html", aquariums=all_aquariums, page=page, page_count=page_count)
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
