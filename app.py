@@ -115,6 +115,25 @@ def add_image():
     flash("Kuva lisätty!")
     return redirect("/images/" + str(aquarium_id))
 
+@app.route("/remove_images", methods=["POST"])
+def remove_images():
+    """Removes one or multiple images from the aquarium."""
+    require_login()
+
+    aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+    # Ensure the logged-in user is the owner of the aquarium
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
+    for image_id in request.form.getlist("image_id"):
+        aquariums.remove_image(image_id, aquarium_id)
+
+    flash("Kuva(t) poistettu!")
+    return redirect("/images/" + str(aquarium_id))
+
 @app.route("/image/<int:image_id>")
 def show_image(image_id):
     image = aquariums.get_image(image_id)
