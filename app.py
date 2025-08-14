@@ -92,6 +92,7 @@ def edit_images(aquarium_id):
 def add_image():
     """Adds an image to the aquarium."""
     require_login()
+    check_csrf()
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
@@ -119,6 +120,7 @@ def add_image():
 def remove_images():
     """Removes one or multiple images from the aquarium."""
     require_login()
+    check_csrf()
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
