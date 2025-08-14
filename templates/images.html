@@ -15,6 +15,7 @@
     Kuvia: {{ images | count }} kpl
   </p>
 
+  {% if images %}
   <form action="/remove_images" method="post">
     {% for image in images %}
       <input type="checkbox" name="image_id" value="{{ image.id }}" />
@@ -27,6 +28,7 @@
       <input type="submit" value="Poista valitut" />
     </p>
   </form>
+  {% endif %}
 
   <h2>Lisää uusi kuva</h2>
   <form action="/add_image" method="post" enctype="multipart/form-data">
