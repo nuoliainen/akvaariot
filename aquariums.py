@@ -185,3 +185,8 @@ def get_image(image_id):
 def remove_image(image_id, aquarium_id):
     sql = "DELETE FROM images WHERE id = ? AND aquarium_id = ?"
     db.execute(sql, [image_id, aquarium_id])
+
+def remove_images(aquarium_id):
+    """Deletes all images from an aquarium."""
+    sql = "DELETE FROM images WHERE aquarium_id = ?"
+    db.execute(sql, [aquarium_id])
