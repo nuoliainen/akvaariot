@@ -93,13 +93,13 @@ def add_critter(user_id, aquarium_id, species, count):
              VALUES (?, ?, ?, ?)"""
     db.execute(sql, [user_id, aquarium_id, species, count])
 
-def get_critters(critter_id):
+def get_critters(aquarium_id):
     """Gets the critters within an aquarium."""
     sql = """SELECT id, species, count
              FROM critters
              WHERE aquarium_id = ?
              ORDER BY species;"""
-    return db.query(sql, [critter_id])
+    return db.query(sql, [aquarium_id])
 
 def get_critter(critter_id):
     """Gets a specific critter."""
