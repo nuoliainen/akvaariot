@@ -1,9 +1,10 @@
 import sqlite3
 import secrets
 from flask import Flask
-from flask import redirect, render_template, request, session, abort, flash, make_response
+from flask import redirect, render_template, request, session, abort, flash, make_response, g
 import markupsafe
 import math
+import time
 import config
 import aquariums
 import users
@@ -49,6 +50,16 @@ def show_lines(content):
     content = str(markupsafe.escape(content))
     content = content.replace("\n", "<br />")
     return markupsafe.Markup(content)
+
+@app.before_request
+def before_request():
+    g.start_time = time.time()
+
+@app.after_request
+def after_request(response):
+    elapsed_time = round(time.time() - g.start_time, 2)
+    print("elapsed time:", elapsed_time, "s")
+    return response
 
 @app.route("/")
 @app.route("/<int:page>")
