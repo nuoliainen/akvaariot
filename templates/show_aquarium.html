@@ -63,7 +63,9 @@
       {% for critter in critters %}
         <li>
           {{ critter.species }} ({{ critter.count }})
-          <a href="/remove_critter/{{ critter.id }}">Poista</a>
+          {% if session.user_id == aquarium.user_id %}
+            <a href="/remove_critter/{{ critter.id }}">Poista</a>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>
