@@ -209,6 +209,9 @@ def create_aquarium():
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
 
+    aquariums.add_aquarium(user_id, name, dims, volume, date, description)
+    aquarium_id = db.last_insert_id()
+
     all_classes = aquariums.get_all_classes()
     classes = []
     # Get and validate all submitted class entries (title, value) from the form
@@ -221,9 +224,10 @@ def create_aquarium():
                 abort(403)
             classes.append((title, value))
 
-    aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
+    aquariums.add_aquarium_classes(aquarium_id, classes)
+
     # Redirect to the page of the new aquarium
-    return redirect("/aquarium/" + str(db.last_insert_id()))
+    return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/edit_aquarium/<int:aquarium_id>")
 def edit_aquarium(aquarium_id):

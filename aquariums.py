@@ -22,13 +22,13 @@ def get_aquarium_classes(aquarium_id):
     sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
-def add_aquarium(user_id, name, dims, volume, date, description, classes):
+def add_aquarium(user_id, name, dims, volume, date, description):
     """Adds a new aquarium into the database."""
     sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
 
-    aquarium_id = db.last_insert_id()
+def add_aquarium_classes(aquarium_id, classes):
     sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [aquarium_id, title, value])
