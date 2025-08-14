@@ -308,6 +308,7 @@ def remove_aquarium(aquarium_id):
     if request.method == "POST":
         check_csrf()
         if "remove" in request.form:
+            aquariums.remove_critters(aquarium_id)
             aquariums.remove_aquarium(aquarium_id)
             return redirect("/")
         # If removal was cancelled, redirect back to the aquarium's page
