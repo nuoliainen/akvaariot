@@ -21,8 +21,9 @@
       <img src="/image/{{ image.id }}" alt="Akvaarion kuva" />
       <br />
     {% endfor %}
-    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
     <p>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
       <input type="submit" value="Poista valitut" />
     </p>
   </form>
@@ -33,6 +34,7 @@
       <label for="image">Kuva</label>:
       <input type="file" id="image" name="image" accept=".png" />
     </p>
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
     <input type="submit" value="Lähetä" />
   </form>
