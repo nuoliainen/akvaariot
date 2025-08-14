@@ -114,6 +114,11 @@ def remove_critter(critter_id):
     sql = "DELETE FROM critters WHERE id = ?"
     db.execute(sql, [critter_id])
 
+def remove_critters(aquarium_id):
+    """Detele all critters from the aquarium."""
+    sql = "DELETE FROM critters WHERE aquarium_id = ?"
+    db.execute(sql, [aquarium_id])
+
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
     sql = """SELECT a.id,

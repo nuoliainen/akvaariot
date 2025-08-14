@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Poista eläin</title>
+</head>
+
+<body>
+  {% include "session_info.html" %}
+  {% include "navigation_bar.html" %}
+
+  <h1>Haluatko varmasti poistaa kaikki eläimet akvaariosta {{ aquarium.name }}?</h1>
+
+  <p>
+    Eläimet:
+    {% if critters %}
+    <ul>
+      {% for critter in critters %}
+        <li>
+          {{ critter.species }} ({{ critter.count }})
+        </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+
+  <form action="/remove_critters/{{ aquarium.id }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input type="submit" name="remove" value="Poista" />
+    <input type="submit" name="cancel" value="Peruuta" />
+  </form>
+</body>
+
+</html>
