@@ -12,16 +12,16 @@
   <h1>Uusi eläin</h1>
   <form action="/create_critter" method="post">
     <p>
-      Laji: <br />
-      <input type="text" name="species" size="50" maxlength="100" required />
+      <label for="species">Laji</label>:<br />
+      <input type="text" id="species" name="species" size="50" maxlength="100" required />
     </p>
     <p>
-      Eläinten lukumäärä: <br />
-      <input type="number" name="count" size="5" min="1" max="9999" value="1" required />
+      <label for="count">Eläinten lukumäärä</label>:<br />
+      <input type="number" id="count" name="count" size="5" min="1" max="9999" value="1" required />
     </p>
     <p>
-      Akvaario: <br />
-      <select name="aquarium_id">
+      <label for="aquarium">Akvaario</label>: <br />
+      <select id="aquarium" name="aquarium_id">
         {% for aquarium in aquariums %}
           <option value="{{ aquarium['id'] }}">{{ aquarium['name'] }}</option>
         {% endfor %}

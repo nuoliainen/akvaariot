@@ -12,26 +12,29 @@
   <h1>Uusi akvaario</h1>
   <form action="/create_aquarium" method="post">
     <p>
-      Akvaarion nimi: <br />
-      <input type="text" name="name" size="50" maxlength="50" required />
+      <label for="name">Akvaarion nimi</label>:<br />
+      <input type="text" id="name" name="name" size="50" maxlength="50" required />
     </p>
 
     <p>
-      Mitat (leveys x syvyys x korkeus): <br />
-      <input type="number" name="length" size="5" min="1" max="9999" value="100" required /> x
-      <input type="number" name="depth" size="5" min="1" max="9999" value="40" required /> x
-      <input type="number" name="height" size="5" min="1" max="9999" value="40" required /> cm
+      Mitat
+      (<label for="length">pituus</label>,
+      <label for="depth">syvyys</label>,
+      <label for="height">korkeus</label>):<br />
+      <input type="number" id="length" name="length" size="5" min="1" max="9999" value="100" required /> x
+      <input type="number" id="depth" name="depth" size="5" min="1" max="9999" value="40" required /> x
+      <input type="number" id="height" name="height" size="5" min="1" max="9999" value="40" required /> cm
     </p>
 
     <p>
-      Akvaarion pystytyspäivämäärä: <br />
-      <input type="date" name="date" />
+      <label for="date">Akvaarion pystytyspäivämäärä</label>:<br />
+      <input type="date" id="date" name="date" />
     </p>
 
     {% for class in classes %}
       <p>
-        {{ class }}:<br />
-        <select name="classes">
+        <label for="class:{{ class }}">{{ class }}</label>:<br />
+        <select id="class:{{ class }}" name="classes">
           <option value="">(tyhjä)</option>
           {% for option in classes[class] %}
             <option value="{{ class }}:{{ option }}">{{ option }}</option>
@@ -41,8 +44,8 @@
     {% endfor %}
 
     <p>
-      Muuta: <br />
-      <textarea name="description" rows="10" cols="60" maxlength="5000"></textarea>
+      <label for="description">Muuta</label>:<br />
+      <textarea id="description" name="description" rows="10" cols="60" maxlength="5000"></textarea>
     </p>
 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
