@@ -41,3 +41,19 @@ def get_aquariums(user_id):
              WHERE user_id = ?
              ORDER BY id DESC"""
     return db.query(sql, [user_id])
+
+def count_species(user_id):
+    """Counts the number of species that belong to a user."""
+    sql = """SELECT COUNT(DISTINCT species)
+             FROM critters
+             WHERE user_id = ?"""
+    result = db.query(sql, [user_id])
+    return result[0][0] if result else None
+
+def count_critters(user_id):
+    """Counts the number of individuals that belong to a user."""
+    sql = """SELECT SUM(count)
+             FROM critters
+             WHERE user_id = ?"""
+    result = db.query(sql, [user_id])
+    return result[0][0] if result else None

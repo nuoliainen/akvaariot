@@ -26,6 +26,17 @@
       Käyttäjän akvaarioissa on yhteensä {{ aquariums | sum(attribute="volume") }} litraa vettä.
     {% endif %}
   </p>
+  <p>
+    {% if species_count == 0 %}
+      Käyttäjällä ei ole eläimiä.
+    {% elif species_count == 1 and critter_count == 1 %}
+      Käyttäjällä on {{ species_count }} laji ja {{ critter_count }} yksilö.
+    {% elif species_count == 1 and critter_count > 1 %}
+      Käyttäjällä on {{ species_count }} laji ja {{ critter_count }} yksilöä.
+    {% else %}
+      Käyttäjällä on yhteensä {{ species_count}} lajia ja {{ critter_count }} yksilöä.
+    {% endif %}
+  </p>
 
   <ul>
     {% for aquarium in aquariums %}
