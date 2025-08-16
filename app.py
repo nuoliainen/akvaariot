@@ -317,7 +317,7 @@ def remove_aquarium(aquarium_id):
             aquariums.remove_images(aquarium_id)
             aquariums.remove_critters(aquarium_id)
             aquariums.remove_aquarium(aquarium_id)
-            return redirect("/")
+            return redirect("/user/" + str(session["user_id"]))
         # If removal was cancelled, redirect back to the aquarium's page
         return redirect("/aquarium/" + str(aquarium_id))
 
