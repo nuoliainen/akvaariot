@@ -322,6 +322,7 @@ def remove_aquarium(aquarium_id):
         aquariums.remove_images(aquarium_id)
         aquariums.remove_critters(aquarium_id)
         aquariums.remove_aquarium(aquarium_id)
+        flash("Poistettu!")
         return redirect("/user/" + str(session["user_id"]))
 
 @app.route("/new_critter")

@@ -10,6 +10,13 @@
   {% include "navigation_bar.html" %}
 
   <h1>Käyttäjä: {{ user.username }}</h1>
+
+  {% for message in get_flashed_messages() %}
+    <p>
+      <b>{{ message }}</b>
+    </p>
+  {% endfor %}
+
   {% if session.user_id == user.id %}
     Oma sivu!!
   {% endif %}
