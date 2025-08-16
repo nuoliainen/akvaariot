@@ -186,6 +186,10 @@ def get_images(aquarium_id):
     sql = "SELECT id FROM images WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
+def count_images(aquarium_id):
+    sql = "SELECT COUNT(id) FROM images WHERE aquarium_id = ?"
+    return db.query(sql, [aquarium_id])[0][0]
+
 def get_image(image_id):
     sql = "SELECT image FROM images WHERE id = ?"
     result = db.query(sql, [image_id])

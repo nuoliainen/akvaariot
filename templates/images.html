@@ -12,7 +12,7 @@
   <h1>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h1>
 
   <p>
-    Kuvia: {{ images | count }} kpl
+    Kuvia: {{ image_count }}/6 kpl
   </p>
 
   {% if images %}
@@ -30,16 +30,20 @@
   </form>
   {% endif %}
 
-  <h2>Lisää uusi kuva</h2>
-  <form action="/add_image" method="post" enctype="multipart/form-data">
-    <p>
-      <label for="image">Kuva</label>:
-      <input type="file" id="image" name="image" accept=".png" />
-    </p>
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-    <input type="submit" value="Lähetä" />
-  </form>
+  {% if image_count < 6 %}
+    <h2>Lisää uusi kuva</h2>
+    <form action="/add_image" method="post" enctype="multipart/form-data">
+      <p>
+        <label for="image">Kuva</label>:
+        <input type="file" id="image" name="image" accept=".png" />
+      </p>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+      <input type="submit" value="Lähetä" />
+    </form>
+  {% else %}
+    <p>Olet jo lisännyt maksimimäärän kuvia.</p>
+  {% endif %}
 
   {% for message in get_flashed_messages() %}
     <p>

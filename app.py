@@ -111,7 +111,9 @@ def edit_images(aquarium_id):
         abort(403)
 
     images = aquariums.get_images(aquarium_id)
-    return render_template("images.html", aquarium=aquarium, images=images)
+    image_count = aquariums.count_images(aquarium_id)
+    return render_template("images.html", aquarium=aquarium, images=images,
+                           image_count=image_count)
 
 @app.route("/add_image", methods=["POST"])
 def add_image():
@@ -126,6 +128,11 @@ def add_image():
     # Ensure the logged-in user is the owner of the aquarium
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
+
+    count = aquariums.count_images(aquarium_id)
+    if count >= 6:
+        flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.")
+        return redirect("/images/" + str(aquarium_id))
 
     file = request.files["image"]
     if not file.filename.endswith((".png")):
