@@ -22,14 +22,18 @@ for i in range(1, user_count + 1):
 # Add aquariums
 for i in range(1, aquarium_count + 1):
     user_id = random.randint(1, user_count)
-    db.execute("INSERT INTO aquariums (name, user_id) VALUES (?, ?)",
+    db.execute("""INSERT INTO aquariums (name, user_id, length, depth, height, volume)
+                  VALUES (?, ?, 130, 50, 50, 325)""",
                ["tank" + str(i), user_id])
 
 # Add critters
 for i in range(1, critter_count + 1):
     aquarium_id = random.randint(1, aquarium_count)
-    db.execute("INSERT INTO critters (species, aquarium_id) VALUES (?, ?)",
-               ["fish" + str(i), aquarium_id])
+    user_id = db.execute("SELECT user_id FROM aquariums WHERE id = ?",
+                         [aquarium_id]).fetchone()[0]
+    count = random.randint(1, 30)
+    db.execute("INSERT INTO critters (species, count, aquarium_id, user_id) VALUES (?, ?, ?, ?)",
+               ["fish" + str(i), count, aquarium_id, user_id])
 
 # Add comments
 for i in range(1, comment_count + 1):
