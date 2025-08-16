@@ -331,6 +331,11 @@ def new_critter():
     require_login()
     # Get all aquariums of the user to display options for changing the target aquarium
     user_aquariums = users.get_aquariums(session["user_id"])
+
+    if not user_aquariums:
+        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
+        return redirect("/new_aquarium")
+
     return render_template("new_critter.html", aquariums=user_aquariums)
 
 @app.route("/create_critter", methods=["POST"])
@@ -341,6 +346,11 @@ def create_critter():
     check_csrf()
 
     user_id = session["user_id"]
+    user_aquariums = users.get_aquariums(user_id)
+    if not user_aquariums:
+        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
+        return redirect("/new_aquarium")
+
     aquarium_id = request.form["aquarium_id"]
     species = request.form["species"]
     count = request.form["count"]

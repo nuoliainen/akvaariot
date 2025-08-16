@@ -9,6 +9,12 @@
   {% include "session_info.html" %}
   {% include "navigation_bar.html" %}
 
+  {% for message in get_flashed_messages() %}
+    <p>
+      <b>{{ message }}</b>
+    </p>
+  {% endfor %}
+
   <h1>Uusi akvaario</h1>
   <form action="/create_aquarium" method="post">
     <p>
