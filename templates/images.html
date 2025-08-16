@@ -11,6 +11,12 @@
 
   <h1>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h1>
 
+  {% for message in get_flashed_messages() %}
+    <p>
+      <b>{{ message }}</b>
+    </p>
+  {% endfor %}
+
   <p>
     Kuvia: {{ image_count }}/6 kpl
   </p>
@@ -44,12 +50,6 @@
   {% else %}
     <p>Olet jo lisännyt maksimimäärän kuvia.</p>
   {% endif %}
-
-  {% for message in get_flashed_messages() %}
-    <p>
-      <b>{{ message }}</b>
-    </p>
-  {% endfor %}
 
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
