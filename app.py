@@ -523,9 +523,8 @@ def remove_comment(comment_id):
     # Remove comment or cancel action
     if request.method == "POST":
         check_csrf()
-        if "remove" in request.form:
-            aquariums.remove_comment(comment_id)
-            flash("Poistettu!")
+        aquariums.remove_comment(comment_id)
+        flash("Poistettu!")
         return redirect("/aquarium/" + str(comment["aquarium_id"]))
 
 @app.route("/register", methods=["GET", "POST"])
