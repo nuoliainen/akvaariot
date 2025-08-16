@@ -316,16 +316,13 @@ def remove_aquarium(aquarium_id):
     if request.method == "GET":
         return render_template("remove_aquarium.html", aquarium=aquarium)
 
-    # Remove aquarium or cancel action
+    # Remove aquarium
     if request.method == "POST":
         check_csrf()
-        if "remove" in request.form:
-            aquariums.remove_images(aquarium_id)
-            aquariums.remove_critters(aquarium_id)
-            aquariums.remove_aquarium(aquarium_id)
-            return redirect("/user/" + str(session["user_id"]))
-        # If removal was cancelled, redirect back to the aquarium's page
-        return redirect("/aquarium/" + str(aquarium_id))
+        aquariums.remove_images(aquarium_id)
+        aquariums.remove_critters(aquarium_id)
+        aquariums.remove_aquarium(aquarium_id)
+        return redirect("/user/" + str(session["user_id"]))
 
 @app.route("/new_critter")
 def new_critter():
