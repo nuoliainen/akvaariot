@@ -54,8 +54,11 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
     <input type="submit" name="save" value="Tallenna muutokset" />
-    <input type="submit" name="cancel" value="Peruuta" />
   </form>
+
+  <p>
+    <a href="/aquarium/{{ aquarium.id }}">Takaisin (peruuta muutokset)</a>
+  </p>
 
 </body>
 
