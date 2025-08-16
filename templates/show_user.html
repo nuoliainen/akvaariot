@@ -31,7 +31,7 @@
       Käyttäjällä ei ole eläimiä.
     {% elif critter_counts.species == 1 and critter_counts.individuals == 1 %}
       Käyttäjällä on 1 laji ja 1 yksilö.
-    {% elif critter_counts.species == 1 and critter_count > 1 %}
+    {% elif critter_counts.species == 1 and critter_counts.individuals > 1 %}
       Käyttäjällä on 1 laji ja {{ critter_counts.individuals }} yksilöä.
     {% else %}
       Käyttäjällä on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
