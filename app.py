@@ -87,10 +87,9 @@ def show_user(user_id):
         abort(404)
 
     user_aquariums = users.get_aquariums(user_id)
-    species_count = users.count_species(user_id)
-    critter_count = users.count_critters(user_id)
+    critter_counts = users.count_critters(user_id)
     return render_template("show_user.html", user=user, aquariums=user_aquariums,
-                           species_count=species_count, critter_count=critter_count)
+                           critter_counts=critter_counts)
 
 @app.route("/search")
 def search():

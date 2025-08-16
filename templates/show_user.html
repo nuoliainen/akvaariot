@@ -27,14 +27,14 @@
     {% endif %}
   </p>
   <p>
-    {% if species_count == 0 %}
+    {% if critter_counts.species == 0 %}
       Käyttäjällä ei ole eläimiä.
-    {% elif species_count == 1 and critter_count == 1 %}
-      Käyttäjällä on {{ species_count }} laji ja {{ critter_count }} yksilö.
-    {% elif species_count == 1 and critter_count > 1 %}
-      Käyttäjällä on {{ species_count }} laji ja {{ critter_count }} yksilöä.
+    {% elif critters.species_count == 1 and critter_counts.individuals == 1 %}
+      Käyttäjällä on 1 laji ja 1 yksilö.
+    {% elif critter_counts.species == 1 and critter_count > 1 %}
+      Käyttäjällä on 1 laji ja {{ critter_counts.individuals }} yksilöä.
     {% else %}
-      Käyttäjällä on yhteensä {{ species_count}} lajia ja {{ critter_count }} yksilöä.
+      Käyttäjällä on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
     {% endif %}
   </p>
 
