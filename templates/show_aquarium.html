@@ -64,6 +64,7 @@
         <li>
           {{ critter.species }} ({{ critter.count }})
           {% if session.user_id == aquarium.user_id %}
+          <a href="/edit_critter/{{ critter.id }}">Muokkaa</a>
             <a href="/remove_critter/{{ critter.id }}">Poista</a>
           {% endif %}
         </li>

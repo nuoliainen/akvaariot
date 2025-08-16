@@ -109,6 +109,15 @@ def get_critter(critter_id):
     result = db.query(sql, [critter_id])
     return result[0] if result else None
 
+def update_critter(species, count, aquarium_id, critter_id):
+    """Updates the information of a critter into the database."""
+    sql = """UPDATE critters
+             SET species = ?,
+                 count = ?,
+                 aquarium_id = ?
+             WHERE id = ?"""
+    db.execute(sql, [species, count, aquarium_id, critter_id])
+
 def remove_critter(critter_id):
     """Detele a critter from the database."""
     sql = "DELETE FROM critters WHERE id = ?"

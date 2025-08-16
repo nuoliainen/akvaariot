@@ -364,6 +364,64 @@ def create_critter():
     aquariums.add_critter(user_id, aquarium_id, species, count)
     return redirect("/aquarium/" + str(aquarium_id))
 
+@app.route("/edit_critter/<int:critter_id>")
+def edit_critter(critter_id):
+    """Renders the page for editing a specific critter."""
+    require_login()
+
+    critter = aquariums.get_critter(critter_id)
+    if not critter:
+        abort(404)
+    # Ensure the logged-in user is the owner of the critter
+    if critter["user_id"] != session["user_id"]:
+        abort(403)
+
+    # Get all aquariums of the user to display options for changing the target aquarium
+    user_aquariums = users.get_aquariums(session["user_id"])
+    return render_template("edit_critter.html", critter=critter, aquariums=user_aquariums)
+
+@app.route("/update_critter", methods=["POST"])
+def update_critter():
+    """Updates the details of an existing critter based on user input."""
+    require_login()
+    check_csrf()
+
+    critter_id = request.form["critter_id"]
+    critter = aquariums.get_critter(critter_id)
+    if not critter:
+        abort(404)
+    # Ensure the logged-in user is the owner of the critter
+    if critter["user_id"] != session["user_id"]:
+        abort(403)
+
+    aquarium_id = request.form["aquarium_id"]
+    species = request.form["species"]
+    count = request.form["count"]
+
+    # Check if the aquarium exists
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+    # Ensure the logged-in user is the owner of the aquarium
+    if aquarium["user_id"] != session["user_id"]:
+        abort(403)
+
+    # Validate length of species name
+    if len(species) < 1 or len(species) > 100:
+        abort(400, description="Species name is required and must be 100 characters or less.")
+
+    # Validate count of individuals
+    try:
+        count = int(count)
+        if count < 1 or count > 9999:
+            abort(400, description="Group size must be between 1 and 9999.")
+    except (ValueError, KeyError):
+        abort(400, description="Group size must be a positive integer from 1 to 9999.")
+
+    aquariums.update_critter(species, count, aquarium_id, critter_id)
+
+    return redirect("/aquarium/" + str(aquarium_id))
+
 @app.route("/remove_critter/<int:critter_id>", methods=["GET", "POST"])
 def remove_critter(critter_id):
     """Handles the removal of a critter."""
