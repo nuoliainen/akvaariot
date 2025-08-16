@@ -26,8 +26,12 @@
   <form action="/remove_critters/{{ aquarium.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="remove" value="Poista" />
-    <input type="submit" name="cancel" value="Peruuta" />
   </form>
+
+  <p>
+    <a href="/aquarium/{{ aquarium.id }}">Takaisin (peruuta)</a>
+  </p>
+
 </body>
 
 </html>

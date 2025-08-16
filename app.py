@@ -445,8 +445,7 @@ def remove_critter(critter_id):
     # Remove critter or cancel action
     if request.method == "POST":
         check_csrf()
-        if "remove" in request.form:
-            aquariums.remove_critter(critter_id)
+        aquariums.remove_critter(critter_id)
         return redirect("/aquarium/" + str(critter["aquarium_id"]))
 
 @app.route("/remove_critters/<int:aquarium_id>", methods=["GET", "POST"])
@@ -470,8 +469,7 @@ def remove_critters(aquarium_id):
     # Remove critter or cancel action
     if request.method == "POST":
         check_csrf()
-        if "remove" in request.form:
-            aquariums.remove_critters(aquarium_id)
+        aquariums.remove_critters(aquarium_id)
         return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/create_comment", methods=["POST"])
