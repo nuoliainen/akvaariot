@@ -1,6 +1,6 @@
 import db
 
-def aquarium_count():
+def count_aquariums():
     """Gets the number of all aquariums in the database."""
     sql = "SELECT COUNT(*) FROM aquariums"
     return db.query(sql)[0][0]

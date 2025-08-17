@@ -119,7 +119,7 @@ def after_request(response):
 def index(page=1):
     """Renders the homepage displaying all aquariums."""
     page_size = 10
-    aquarium_count = aquariums.aquarium_count()
+    aquarium_count = aquariums.count_aquariums()
     page_count = math.ceil(aquarium_count / page_size)
     page_count = max(page_count, 1)
 
