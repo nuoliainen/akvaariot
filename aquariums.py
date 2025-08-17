@@ -101,7 +101,7 @@ def get_critters(aquarium_id):
     sql = """SELECT id, species, count
              FROM critters
              WHERE aquarium_id = ?
-             ORDER BY species;"""
+             ORDER BY species"""
     return db.query(sql, [aquarium_id])
 
 def get_critter(critter_id):
@@ -147,7 +147,7 @@ def get_comments(aquarium_id):
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
-             ORDER BY comments.id DESC;"""
+             ORDER BY comments.id DESC"""
     return db.query(sql, [aquarium_id])
 
 def get_newest_comments(aquarium_id, limit):
@@ -160,7 +160,7 @@ def get_newest_comments(aquarium_id, limit):
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
-             ORDER BY comments.id DESC LIMIT ?;"""
+             ORDER BY comments.id DESC LIMIT ?"""
     return db.query(sql, [aquarium_id, limit])
 
 def count_comments(aquarium_id):
@@ -180,7 +180,7 @@ def get_comments_page(aquarium_id, page, page_size):
              FROM comments
              JOIN users ON comments.user_id = users.id
              WHERE comments.aquarium_id = ?
-             ORDER BY comments.id DESC LIMIT ? OFFSET ?;"""
+             ORDER BY comments.id DESC LIMIT ? OFFSET ?"""
     return db.query(sql, [aquarium_id, limit, offset])
 
 def get_comment(comment_id):
