@@ -475,7 +475,8 @@ def search(page=1):
         return redirect(f"/search/{page_count}?query={query}")
 
     results = aquariums.search_page(query, page, page_size)
-    return render_template("search.html", query=query, results=results, page=page, page_count=page_count)
+    return render_template("search.html", query=query, results=results, page=page, page_count=page_count,
+                           result_count=result_count)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
