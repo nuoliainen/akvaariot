@@ -10,24 +10,36 @@
   <div class="header">
     <div class="session-info">
       {% if session.username %}
-        Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
+        <p class="user-info">Olet kirjautunut nimellä <strong>{{ session.username }}</strong></p>
+        <nav class="session-nav">
+          <ul>
+            <li><a href="/logout">Kirjaudu ulos</a></li>
+          </ul>
+        </nav>
       {% else %}
-        <a href="/login">Kirjaudu sisään</a>
-        <a href="/register">Luo tunnus</a>
+        <div class="placeholder"></div> <!-- empty placeholder -->
+        <nav class="session-nav">
+          <ul>
+            <li><a href="/login" class="{% if current_page == 'login' %}active{% endif %}">Kirjaudu sisään</a></li>
+            <li><a href="/register" class="{% if current_page == 'register' %}active{% endif %}">Luo tunnus</a></li>
+          </ul>
+        </nav>
       {% endif %}
     </div>
 
     <h1>Akvaariot</h1>
 
-    <div class="nav">
-      <a href="/">Etusivu</a>
-      <a href="/search">Haku</a>
-      {% if session.username %}
-        <a href="/user/{{ session.user_id }}">Omat akvaariot</a>
-        <a href="/new_aquarium">Luo uusi akvaario</a>
-        <a href="/new_critter">Lisää uusi eläin</a>
-      {% endif %}
-    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><a href="/" class="{% if current_page == 'index' %}active{% endif %}">Etusivu</a></li>
+        <li><a href="/search" class="{% if current_page == 'search' %}active{% endif %}">Haku</a></li>
+        {% if session.username %}
+          <li><a href="/user/{{ session.user_id }}" class="{% if current_page == 'userpage' %}active{% endif %}">Omat akvaariot</a></li>
+          <li><a href="/new_aquarium" class="{% if current_page == 'new_aquarium' %}active{% endif %}">Luo uusi akvaario</a></li>
+          <li><a href="/new_critter" class="{% if current_page == 'new_critter' %}active{% endif %}">Lisää uusi eläin</a></li>
+        {% endif %}
+      </ul>
+    </nav>
 
     <div class="flash-msg">
       {% for message in get_flashed_messages() %}

@@ -129,7 +129,8 @@ def index(page=1):
         return redirect("/" + str(page_count))
 
     all_aquariums = aquariums.get_aquariums_page(page, page_size)
-    return render_template("index.html", aquariums=all_aquariums, page=page, page_count=page_count)
+    return render_template("index.html", aquariums=all_aquariums, page=page, page_count=page_count,
+                           current_page="index")
 
 @app.route("/user/<int:user_id>")
 def show_user(user_id):
@@ -142,7 +143,7 @@ def show_user(user_id):
     user_aquariums = users.get_aquariums(user_id)
     critter_counts = users.count_critters(user_id)
     return render_template("show_user.html", user=user, aquariums=user_aquariums,
-                           critter_counts=critter_counts)
+                           critter_counts=critter_counts, current_page="userpage")
 
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
@@ -168,7 +169,7 @@ def new_aquarium():
     """Renders the page for creating a new aquarium."""
     require_login()
     classes = aquariums.get_all_classes()
-    return render_template("new_aquarium.html", classes=classes)
+    return render_template("new_aquarium.html", classes=classes, current_page="new_aquarium")
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
@@ -256,7 +257,7 @@ def new_critter():
         flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
         return redirect("/new_aquarium")
 
-    return render_template("new_critter.html", aquariums=user_aquariums)
+    return render_template("new_critter.html", aquariums=user_aquariums, current_page="new_critter")
 
 @app.route("/create_critter", methods=["POST"])
 def create_critter():
@@ -516,7 +517,8 @@ def search(page=1):
     """Renders the search page and results based on user query."""
     query = request.args.get("query")
     if not query:
-        return render_template("search.html", query=None, results=[], page=1, page_count=1)
+        return render_template("search.html", query=None, results=[], page=1, page_count=1,
+                               current_page="search")
     page_size = 10
     result_count = aquariums.count_search_results(query)
     page_count = math.ceil(result_count / page_size)
@@ -529,13 +531,13 @@ def search(page=1):
 
     results = aquariums.search_page(query, page, page_size)
     return render_template("search.html", query=query, results=results, page=page, page_count=page_count,
-                           result_count=result_count)
+                           result_count=result_count, current_page="search")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Handles the creation of a new user account."""
     if request.method == "GET":
-        return render_template("register.html", filled={})
+        return render_template("register.html", filled={}, current_page="register")
 
     if request.method == "POST":
         username = request.form["username"]
@@ -554,14 +556,14 @@ def register():
         if password1 != password2:
             flash("VIRHE: salasanat eivät ole samat")
             filled = {"username": username}
-            return render_template("register.html", filled=filled)
+            return render_template("register.html", filled=filled, current_page="register")
 
         try:
             users.create_user(username, password1)
         except sqlite3.IntegrityError:
             flash("VIRHE: tunnus on jo varattu")
             filled = {"username": username}
-            return render_template("register.html", filled=filled)
+            return render_template("register.html", filled=filled, current_page="register")
 
         flash("Tunnuksen luonti onnistui!")
         return redirect("/")
@@ -571,7 +573,7 @@ def login():
     """Handles user login functionality."""
     # Display the login form
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("login.html", current_page="login")
 
     # Process the login
     if request.method == "POST":
