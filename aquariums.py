@@ -1,6 +1,7 @@
 import db
 
 def aquarium_count():
+    """Gets the number of all aquariums in the database."""
     sql = "SELECT COUNT(*) FROM aquariums"
     return db.query(sql)[0][0]
 
@@ -17,7 +18,7 @@ def get_aquariums_page(page, page_size):
     return db.query(sql, [limit, offset])
 
 def get_aquarium(aquarium_id):
-    """Gets the details of an aquarium from the database based on aquarium id."""
+    """Gets the details of an aquarium from the database."""
     sql = """SELECT a.id,
                     a.name,
                     a.length,
@@ -35,14 +36,15 @@ def get_aquarium(aquarium_id):
 
 def update_aquarium(name, dims, volume, date, description, aquarium_id, classes):
     """Updates the information of an aquarium into the database."""
-    sql = """UPDATE aquariums SET name = ?,
-                                  length = ?,
-                                  depth = ?,
-                                  height = ?,
-                                  volume = ?,
-                                  date = ?,
-                                  description = ?
-                              WHERE id = ?"""
+    sql = """UPDATE aquariums
+             SET name = ?,
+                 length = ?,
+                 depth = ?,
+                 height = ?,
+                 volume = ?,
+                 date = ?,
+                 description = ?
+             WHERE id = ?"""
     db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
 
     sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
@@ -52,7 +54,7 @@ def update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
         db.execute(sql, [aquarium_id, title, value])
 
 def remove_aquarium(aquarium_id):
-    """Removes a specific aquarium from the database based on aquarium id."""
+    """Removes a specific aquarium from the database."""
     sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
     db.execute(sql, [aquarium_id])
     sql = "DELETE FROM aquariums WHERE id = ?"
@@ -72,7 +74,7 @@ def get_all_classes():
     return classes
 
 def get_selected_classes(aquarium_id):
-    """Gets all classes of a specific aquarium."""
+    """Gets all class titles and values of a specific aquarium that are currently selected."""
     sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
@@ -83,6 +85,7 @@ def add_aquarium(user_id, name, dims, volume, date, description):
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
 
 def add_aquarium_classes(aquarium_id, classes):
+    """Assigns classes for an aquarium."""
     sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [aquarium_id, title, value])
@@ -94,7 +97,7 @@ def add_critter(user_id, aquarium_id, species, count):
     db.execute(sql, [user_id, aquarium_id, species, count])
 
 def get_critters(aquarium_id):
-    """Gets the critters within an aquarium."""
+    """Gets all the critters within an aquarium."""
     sql = """SELECT id, species, count
              FROM critters
              WHERE aquarium_id = ?
@@ -102,7 +105,7 @@ def get_critters(aquarium_id):
     return db.query(sql, [aquarium_id])
 
 def get_critter(critter_id):
-    """Gets a specific critter."""
+    """Gets the details of a specific critter."""
     sql = """SELECT id, species, count, aquarium_id, user_id
              FROM critters
              WHERE id = ?"""
@@ -148,7 +151,7 @@ def get_comments(aquarium_id):
     return db.query(sql, [aquarium_id])
 
 def get_comment(comment_id):
-    """Gets a specific comment."""
+    """Gets the details of a specific comment."""
     sql = """SELECT id, content, sent_at, aquarium_id, user_id
              FROM comments
              WHERE id = ?"""
@@ -156,33 +159,38 @@ def get_comment(comment_id):
     return result[0] if result else None
 
 def remove_comment(comment_id):
-    """Deletes a comment from the database."""
+    """Removes a comment from the database."""
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])
 
 def add_image(aquarium_id, image):
+    """Adds an image into the database."""
     sql = "INSERT INTO images (aquarium_id, image) VALUES (?, ?)"
     db.execute(sql, [aquarium_id, image])
 
 def count_images(aquarium_id):
+    """Counts how many images an aquarium currently has."""
     sql = "SELECT COUNT(id) FROM images WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])[0][0]
 
 def get_images(aquarium_id):
+    """Gets the id's of all images of an aquarium."""
     sql = "SELECT id FROM images WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
 def get_image(image_id):
+    """Gets the data of an image."""
     sql = "SELECT image FROM images WHERE id = ?"
     result = db.query(sql, [image_id])
     return  result[0][0] if result else None
 
 def remove_image(image_id, aquarium_id):
+    """Removes an image from the database."""
     sql = "DELETE FROM images WHERE id = ? AND aquarium_id = ?"
     db.execute(sql, [image_id, aquarium_id])
 
 def remove_images(aquarium_id):
-    """Deletes all images from an aquarium."""
+    """Removes all images of an aquarium."""
     sql = "DELETE FROM images WHERE aquarium_id = ?"
     db.execute(sql, [aquarium_id])
 
