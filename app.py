@@ -44,6 +44,33 @@ def validate_input(name, description, dims):
     except (ValueError, KeyError):
         abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
 
+def get_aquarium_data():
+    """Gets and validates aquarium name, date, description and dimensions from the form."""
+    name = request.form["name"]
+    date = request.form["date"]
+    description = request.form["description"]
+    dims = [request.form["length"], request.form["depth"], request.form["height"]]
+
+    validate_input(name, description, dims)
+    # Calculate volume in liters using the provided dimensions (cm)
+    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
+
+    return name, date, description, dims, volume
+
+def get_validated_classes():
+    all_classes = aquariums.get_all_classes()
+    classes = []
+
+    # Get and validate all submitted class entries (title, value) from the form
+    for entry in request.form.getlist("classes"):
+        if entry:
+            title, value = entry.split(":")
+            if title not in all_classes or value not in all_classes[title]:
+                abort(403)
+            classes.append((title, value))
+
+    return classes
+
 @app.template_filter()
 def show_lines(content):
     """Template filter to safely display line breaks."""
@@ -209,30 +236,11 @@ def create_aquarium():
     check_csrf()
 
     user_id = session["user_id"]
-    name = request.form["name"]
-    date = request.form["date"]
-    description = request.form["description"]
-    dims = [request.form["length"], request.form["depth"], request.form["height"]]
-
-    validate_input(name, description, dims)
-    # Calculate volume in liters using the provided dimensions (cm)
-    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
-
+    name, date, description, dims, volume = get_aquarium_data()
     aquariums.add_aquarium(user_id, name, dims, volume, date, description)
     aquarium_id = db.last_insert_id()
 
-    all_classes = aquariums.get_all_classes()
-    classes = []
-    # Get and validate all submitted class entries (title, value) from the form
-    for entry in request.form.getlist("classes"):
-        if entry:
-            title, value = entry.split(":")
-            if title not in all_classes:
-                abort(403)
-            if value not in all_classes[title]:
-                abort(403)
-            classes.append((title, value))
-
+    classes = get_validated_classes()
     aquariums.add_aquarium_classes(aquarium_id, classes)
 
     # Redirect to the page of the new aquarium
@@ -275,26 +283,8 @@ def update_aquarium():
     if aquarium["user_id"] != session["user_id"]:
         abort(403)
 
-    name = request.form["name"]
-    date = request.form["date"]
-    description = request.form["description"]
-    dims = [request.form["length"], request.form["depth"], request.form["height"]]
-
-    validate_input(name, description, dims)
-    # Calculate volume in liters using the provided dimensions (cm)
-    volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
-
-    all_classes = aquariums.get_all_classes()
-    classes = []
-    # Get and validate all submitted class entries (title, value) from the form
-    for entry in request.form.getlist("classes"):
-        if entry:
-            title, value = entry.split(":")
-            if title not in all_classes:
-                abort(403)
-            if value not in all_classes[title]:
-                abort(403)
-            classes.append((title, value))
+    name, date, description, dims, volume = get_aquarium_data()
+    classes = get_validated_classes()
 
     aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
 
