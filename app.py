@@ -144,85 +144,6 @@ def show_user(user_id):
     return render_template("show_user.html", user=user, aquariums=user_aquariums,
                            critter_counts=critter_counts)
 
-@app.route("/search")
-def search():
-    """Renders the search page and results based on user query."""
-    query = request.args.get("query")
-    results = aquariums.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
-
-@app.route("/images/<int:aquarium_id>")
-def manage_images(aquarium_id):
-    """Renders the page for adding and removing images of an aquarium."""
-    require_login()
-
-    aquarium = aquariums.get_aquarium(aquarium_id)
-    require_owner(aquarium)
-
-    images = aquariums.get_images(aquarium_id)
-    image_count = aquariums.count_images(aquarium_id)
-    return render_template("images.html", aquarium=aquarium, images=images,
-                           image_count=image_count)
-
-@app.route("/add_image", methods=["POST"])
-def add_image():
-    """Adds an image to the aquarium."""
-    require_login()
-    check_csrf()
-
-    aquarium_id = request.form["aquarium_id"]
-    aquarium = aquariums.get_aquarium(aquarium_id)
-    require_owner(aquarium)
-
-    max_images = 6
-    max_file_size = 100 * 1024
-    allowed_file_type = ".png"
-
-    count = aquariums.count_images(aquarium_id)
-    if count >= max_images:
-        flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.")
-        return redirect("/images/" + str(aquarium_id))
-
-    file = request.files["image"]
-    if not file.filename.lower().endswith(allowed_file_type):
-        flash("VIRHE: väärä tiedostomuoto")
-        return redirect("/images/" + str(aquarium_id))
-
-    image = file.read()
-    if len(image) > max_file_size:
-        flash("VIRHE: liian suuri kuva")
-        return redirect("/images/" + str(aquarium_id))
-
-    aquariums.add_image(aquarium_id, image)
-    flash("Kuva lisätty!")
-    return redirect("/images/" + str(aquarium_id))
-
-@app.route("/remove_images", methods=["POST"])
-def remove_images():
-    """Removes one or multiple images from the aquarium."""
-    require_login()
-    check_csrf()
-
-    aquarium_id = request.form["aquarium_id"]
-    aquarium = aquariums.get_aquarium(aquarium_id)
-    require_owner(aquarium)
-
-    for image_id in request.form.getlist("image_id"):
-        aquariums.remove_image(image_id, aquarium_id)
-
-    flash("Kuva(t) poistettu!")
-    return redirect("/images/" + str(aquarium_id))
-
-@app.route("/image/<int:image_id>")
-def show_image(image_id):
-    image = aquariums.get_image(image_id)
-    if not image:
-        abort(404)
-
-    response = make_response(bytes(image))
-    response.headers.set("Content-Type", "image/png")
-    return response
-
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
     """Renders the page for a specific aquarium."""
@@ -463,6 +384,85 @@ def remove_comment(comment_id):
         aquariums.remove_comment(comment_id)
         flash("Poistettu!")
         return redirect("/aquarium/" + str(comment["aquarium_id"]))
+
+@app.route("/image/<int:image_id>")
+def show_image(image_id):
+    image = aquariums.get_image(image_id)
+    if not image:
+        abort(404)
+
+    response = make_response(bytes(image))
+    response.headers.set("Content-Type", "image/png")
+    return response
+
+@app.route("/images/<int:aquarium_id>")
+def manage_images(aquarium_id):
+    """Renders the page for adding and removing images of an aquarium."""
+    require_login()
+
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
+
+    images = aquariums.get_images(aquarium_id)
+    image_count = aquariums.count_images(aquarium_id)
+    return render_template("images.html", aquarium=aquarium, images=images,
+                           image_count=image_count)
+
+@app.route("/add_image", methods=["POST"])
+def add_image():
+    """Adds an image to the aquarium."""
+    require_login()
+    check_csrf()
+
+    aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
+
+    max_images = 6
+    max_file_size = 100 * 1024
+    allowed_file_type = ".png"
+
+    count = aquariums.count_images(aquarium_id)
+    if count >= max_images:
+        flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.")
+        return redirect("/images/" + str(aquarium_id))
+
+    file = request.files["image"]
+    if not file.filename.lower().endswith(allowed_file_type):
+        flash("VIRHE: väärä tiedostomuoto")
+        return redirect("/images/" + str(aquarium_id))
+
+    image = file.read()
+    if len(image) > max_file_size:
+        flash("VIRHE: liian suuri kuva")
+        return redirect("/images/" + str(aquarium_id))
+
+    aquariums.add_image(aquarium_id, image)
+    flash("Kuva lisätty!")
+    return redirect("/images/" + str(aquarium_id))
+
+@app.route("/remove_images", methods=["POST"])
+def remove_images():
+    """Removes one or multiple images from the aquarium."""
+    require_login()
+    check_csrf()
+
+    aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
+
+    for image_id in request.form.getlist("image_id"):
+        aquariums.remove_image(image_id, aquarium_id)
+
+    flash("Kuva(t) poistettu!")
+    return redirect("/images/" + str(aquarium_id))
+
+@app.route("/search")
+def search():
+    """Renders the search page and results based on user query."""
+    query = request.args.get("query")
+    results = aquariums.search(query) if query else []
+    return render_template("search.html", query=query, results=results)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
