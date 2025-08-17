@@ -151,14 +151,17 @@ def show_aquarium(aquarium_id):
     if not aquarium:
         abort(404)
 
+    max_comments = 10
     classes = aquariums.get_selected_classes(aquarium_id)
     critters = aquariums.get_critters(aquarium_id)
-    comments = aquariums.get_comments(aquarium_id)
+    newest_comments = aquariums.get_newest_comments(aquarium_id, max_comments)
+    total_comments = aquariums.count_comments(aquarium_id)
     images = aquariums.get_images(aquarium_id)
 
     return render_template("show_aquarium.html",
-                           aquarium=aquarium, classes=classes, critters=critters, comments=comments,
-                           images=images)
+                           aquarium=aquarium, classes=classes, critters=critters,
+                           comments=newest_comments, total_comments=total_comments,
+                           max_comments=max_comments, images=images)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -364,6 +367,10 @@ def create_comment():
 
     aquariums.add_comment(aquarium_id, user_id, content)
 
+    # If comment was sent from page showing all comments, return to that page
+    if "show_comments" in request.form:
+        return redirect("/aquarium/" + str(aquarium_id) + "/comments")
+    # Otherwise return to aquarium page
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/remove_comment/<int:comment_id>", methods=["GET", "POST"])
@@ -378,12 +385,27 @@ def remove_comment(comment_id):
     if request.method == "GET":
         return render_template("remove_comment.html", comment=comment)
 
-    # Remove comment or cancel action
+    # Remove comment
     if request.method == "POST":
         check_csrf()
         aquariums.remove_comment(comment_id)
         flash("Poistettu!")
-        return redirect("/aquarium/" + str(comment["aquarium_id"]))
+        # Redirect back depending on which page the removal was initiated
+        next_url = request.args.get('next')
+        return redirect(next_url or ("/aquarium/" + str(comment["aquarium_id"])))
+
+@app.route("/aquarium/<int:aquarium_id>/comments")
+def show_comments(aquarium_id):
+    """Renders the page for a specific aquarium."""
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    if not aquarium:
+        abort(404)
+
+    comments = aquariums.get_comments(aquarium_id)
+    total_comments = aquariums.count_comments(aquarium_id)
+
+    return render_template("show_comments.html",
+                           aquarium=aquarium, comments=comments, total_comments=total_comments)
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):

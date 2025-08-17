@@ -150,6 +150,24 @@ def get_comments(aquarium_id):
              ORDER BY comments.id DESC;"""
     return db.query(sql, [aquarium_id])
 
+def get_newest_comments(aquarium_id, limit):
+    """Gets all comments related to a specific aquarium."""
+    sql = """SELECT comments.id,
+                    comments.content,
+                    comments.sent_at,
+                    users.id AS user_id,
+                    users.username
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.aquarium_id = ?
+             ORDER BY comments.id DESC LIMIT ?;"""
+    return db.query(sql, [aquarium_id, limit])
+
+def count_comments(aquarium_id):
+    """Gets the number of comments for a specific aquarium."""
+    sql = "SELECT COUNT(*) FROM comments WHERE aquarium_id = ?"
+    return db.query(sql, [aquarium_id])[0][0]
+
 def get_comment(comment_id):
     """Gets the details of a specific comment."""
     sql = """SELECT id, content, sent_at, aquarium_id, user_id

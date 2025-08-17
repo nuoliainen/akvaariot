@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Kommentit: {{ aquarium.name }}</title>
+</head>
+
+<body>
+  {% include "session_info.html" %}
+  {% include "navigation_bar.html" %}
+
+  <h1>Akvaarion {{ aquarium.name }} kaikki kommentit ({{ total_comments }} kpl)</h1>
+
+  {% for message in get_flashed_messages() %}
+    <p>
+      <b>{{ message }}</b>
+    </p>
+  {% endfor %}
+
+  <p>
+    <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
+  </p>
+
+  {% if session.username %}
+    <h2>Lisää kommentti</h2>
+    <form action="/create_comment" method="post">
+      <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+      <input type="submit" name="show_comments" value="Lähetä" />
+    </form>
+  {% endif %}
+
+  {% if comments %}
+    <hr />
+    {% for comment in comments %}
+      <p>
+        <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> ({{ comment.sent_at }}):
+      </p>
+      <p>
+        {{ comment.content | show_lines }}
+      </p>
+      {% if session.user_id == comment.user_id %}
+        <a href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}/comments">Poista</a>
+      {% endif %}
+      <hr />
+    {% endfor %}
+  {% else %}
+    <p>Ei vielä kommentteja</p>
+  {% endif %}
+
+</body>
+
+</html>
