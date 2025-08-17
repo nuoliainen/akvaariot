@@ -25,6 +25,13 @@ def check_csrf():
     if request.form["csrf_token"] != session["csrf_token"]:
         abort(403)
 
+def require_owner(item):
+    """Ensures that the current user is the owner of the item and that the item exists."""
+    if not item:
+        abort(404)
+    if item["user_id"] != session["user_id"]:
+        abort(403)
+
 def validate_input(name, description, dims):
     """Validates the input from a form to an aquarium."""
     # Validate length of aquarium name
@@ -131,11 +138,7 @@ def edit_images(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     images = aquariums.get_images(aquarium_id)
     image_count = aquariums.count_images(aquarium_id)
@@ -150,11 +153,7 @@ def add_image():
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     count = aquariums.count_images(aquarium_id)
     if count >= 6:
@@ -183,11 +182,7 @@ def remove_images():
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     for image_id in request.form.getlist("image_id"):
         aquariums.remove_image(image_id, aquarium_id)
@@ -252,11 +247,7 @@ def edit_aquarium(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     # Get all classes to display the available options in the form
     all_classes = aquariums.get_all_classes()
@@ -277,11 +268,7 @@ def update_aquarium():
 
     aquarium_id = request.form["aquarium_id"]
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     name, date, description, dims, volume = get_aquarium_data()
     classes = get_validated_classes()
@@ -296,11 +283,7 @@ def remove_aquarium(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     # Show the removal confirmation/cancellation page
     if request.method == "GET":
@@ -347,11 +330,7 @@ def create_critter():
 
     # Check if the aquarium exists
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     # Validate length of species name
     if len(species) < 1 or len(species) > 100:
@@ -374,11 +353,7 @@ def edit_critter(critter_id):
     require_login()
 
     critter = aquariums.get_critter(critter_id)
-    if not critter:
-        abort(404)
-    # Ensure the logged-in user is the owner of the critter
-    if critter["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(critter)
 
     # Get all aquariums of the user to display options for changing the target aquarium
     user_aquariums = users.get_aquariums(session["user_id"])
@@ -392,23 +367,14 @@ def update_critter():
 
     critter_id = request.form["critter_id"]
     critter = aquariums.get_critter(critter_id)
-    if not critter:
-        abort(404)
-    # Ensure the logged-in user is the owner of the critter
-    if critter["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(critter)
 
     aquarium_id = request.form["aquarium_id"]
     species = request.form["species"]
     count = request.form["count"]
 
-    # Check if the aquarium exists
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the aquarium
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     # Validate length of species name
     if len(species) < 1 or len(species) > 100:
@@ -432,11 +398,7 @@ def remove_critter(critter_id):
     require_login()
 
     critter = aquariums.get_critter(critter_id)
-    if not critter:
-        abort(404)
-    # Ensure the logged-in user is the owner of the critter
-    if critter["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(critter)
 
     # Show the removal confirmation/cancellation page
     if request.method == "GET":
@@ -454,11 +416,7 @@ def remove_critters(aquarium_id):
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
-    if not aquarium:
-        abort(404)
-    # Ensure the logged-in user is the owner of the critter
-    if aquarium["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(aquarium)
 
     critters = aquariums.get_critters(aquarium_id)
 
@@ -500,11 +458,7 @@ def remove_comment(comment_id):
     require_login()
 
     comment = aquariums.get_comment(comment_id)
-    if not comment:
-        abort(404)
-    # Ensure the logged-in user is the author of the comment
-    if comment["user_id"] != session["user_id"]:
-        abort(403)
+    require_owner(comment)
 
     # Show the removal confirmation/cancellation page
     if request.method == "GET":
