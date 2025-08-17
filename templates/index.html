@@ -7,14 +7,6 @@
 
 <body>
   {% include "session_info.html" %}
-
-  {% for message in get_flashed_messages() %}
-    <p>
-      <b>{{ message }}</b>
-    </p>
-  {% endfor %}
-
-  <h1>Akvaariot</h1>
   {% include "navigation_bar.html" %}
 
   <h2>Kaikki akvaariot</h2>

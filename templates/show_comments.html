@@ -11,12 +11,6 @@
 
   <h1>Akvaarion {{ aquarium.name }} kaikki kommentit ({{ total_comments }} kpl)</h1>
 
-  {% for message in get_flashed_messages() %}
-    <p>
-      <b>{{ message }}</b>
-    </p>
-  {% endfor %}
-
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
   </p>

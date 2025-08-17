@@ -1,3 +1,5 @@
+<h1>Akvaariot</h1>
+
 <p>
   <a href="/">Etusivu</a>
   <a href="/search">Haku</a>
@@ -7,3 +9,9 @@
     <a href="/new_critter">Lisää uusi eläin</a>
   {% endif %}
 </p>
+
+{% for message in get_flashed_messages() %}
+  <p>
+    <b>{{ message }}</b>
+  </p>
+{% endfor %}

@@ -85,11 +85,6 @@
   </p>
 
   <h2>Kommentit ({{ total_comments }} kpl)</h2>
-  {% for message in get_flashed_messages() %}
-    <p>
-      <b>{{ message }}</b>
-    </p>
-  {% endfor %}
 
   {% if session.username %}
     <h3>Lisää kommentti</h3>
