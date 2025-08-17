@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Lisää uusi eläin</title>
-</head>
+{% block title %}Lisää uusi eläin{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Uusi eläin</h1>
+{% block content %}
+<h2>Uusi eläin</h2>
   <form action="/create_critter" method="post">
     <p>
       <label for="species">Laji</label>:<br />
@@ -31,7 +25,4 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" name="submit" value="Lisää eläin" />
   </form>
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Poista eläin</title>
-</head>
+{% block title %}Poista eläimet{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Haluatko varmasti poistaa kaikki eläimet akvaariosta {{ aquarium.name }}?</h1>
+{% block content %}
+  <h2>Haluatko varmasti poistaa kaikki eläimet akvaariosta {{ aquarium.name }}?</h2>
 
   <p>
     Eläimet:
@@ -31,7 +25,4 @@
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin (peruuta)</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Poista akvaario</title>
-</head>
+{% block title %}Poista akvaario{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Haluatko varmasti poistaa akvaarion "{{ aquarium.name }} ({{ aquarium.volume }} litraa)"?</h1>
+{% block content %}
+  <h2>Haluatko varmasti poistaa akvaarion "{{ aquarium.name }} ({{ aquarium.volume }} litraa)"?</h2>
 
   <form action="/remove_aquarium/{{ aquarium.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -19,7 +13,4 @@
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin (peruuta)</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

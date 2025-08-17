@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Kirjautuminen</title>
-</head>
+{% block title %}Kirjautuminen{% endblock %}
 
-<body>
-  <p>
-    <a href="/register">Luo tunnus</a>
-  </p>
-
-  {% include "navigation_bar.html" %}
-
+{% block content %}
   <form action="/login" method="post">
     <p>
       <label for="username">Tunnus</label>:<br />
@@ -21,10 +12,6 @@
       <label for="password">Salasana</label>:<br />
       <input type="password" name="password" minlength="1" maxlength="50" required />
     </p>
-
     <input type="submit" value="Kirjaudu" />
   </form>
-
-</body>
-
-</html>
+{% endblock %}

@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Luo akvaario</title>
-</head>
+{% block title %}Luo akvaario{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Uusi akvaario</h1>
+{% block content %}
+  <h2>Uusi akvaario</h2>
   <form action="/create_aquarium" method="post">
     <p>
       <label for="name">Akvaarion nimi</label>:<br />
@@ -51,7 +45,4 @@
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     <input type="submit" value="Luo akvaario" />
   </form>
-
-</body>
-
-</html>
+{% endblock %}

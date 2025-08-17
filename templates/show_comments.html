@@ -1,22 +1,16 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Kommentit: {{ aquarium.name }}</title>
-</head>
+{% block title %}Kommentit: {{ aquarium.name }}{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Akvaarion {{ aquarium.name }} kaikki kommentit ({{ total_comments }} kpl)</h1>
+{% block content %}
+  <h2>Akvaarion {{ aquarium.name }} kaikki kommentit ({{ total_comments }} kpl)</h2>
 
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
   </p>
 
   {% if session.username %}
-    <h2>Lisää kommentti</h2>
+    <h3>Lisää kommentti</h3>
     <form action="/create_comment" method="post">
       <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -48,7 +42,4 @@
     Sivu {{ page }}/{{ page_count }}
     <a href="/aquarium/{{ aquarium.id }}/comments/{{ page + 1 }}">&gt;&gt;</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

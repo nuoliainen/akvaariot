@@ -1,21 +1,15 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Akvaarion kuvat</title>
-</head>
+{% block title %}Akvaarion kuvat{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
+{% block content %}
+<h2>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h2>
 
-  <h1>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h1>
+<p>
+  Kuvia: {{ image_count }}/6 kpl
+</p>
 
-  <p>
-    Kuvia: {{ image_count }}/6 kpl
-  </p>
-
-  {% if images %}
+{% if images %}
   <form action="/remove_images" method="post">
     {% for image in images %}
       <input type="checkbox" name="image_id" value="{{ image.id }}" />
@@ -32,7 +26,7 @@
   {% endif %}
 
   {% if image_count < 6 %}
-    <h2>Lisää uusi kuva</h2>
+    <h3>Lisää uusi kuva</h3>
     <p>
       <i>Vaadittu tiedostomuoto .png ja maksimikoko 100MB</i>
     </p>
@@ -52,7 +46,4 @@
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

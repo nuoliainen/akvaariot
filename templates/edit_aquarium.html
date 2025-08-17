@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Muokkaa akvaariota</title>
-</head>
+{% block title %}Muokkaa akvaariota{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Muokkaa akvaariota</h1>
+{% block content %}
+  <h2>Muokkaa akvaariota</h2>
   <form action="/update_aquarium" method="post">
     <p>
       Akvaarion nimi: <br />
@@ -59,7 +53,4 @@
   <p>
     <a href="/aquarium/{{ aquarium.id }}">Takaisin (peruuta muutokset)</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

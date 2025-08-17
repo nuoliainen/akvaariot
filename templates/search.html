@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Haku</title>
-</head>
+{% block title %}Haku{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Haku</h1>
+{% block content %}
+  <h2>Haku</h2>
   <form action="/search" method="get">
     <p>
       <label for="query">Hakusana</label>:
@@ -23,7 +17,7 @@
   </form>
 
   {% if query %}
-    <h2>Tulokset ({{ result_count }} kpl)</h2>
+    <h3>Tulokset ({{ result_count }} kpl)</h3>
     <ul>
       {% if results %}
         {% for result in results %}
@@ -41,7 +35,4 @@
       <a href="/search/{{ page + 1 }}?query={{ query }}">&gt;&gt;</a>
     </p>
   {% endif %}
-
-</body>
-
-</html>
+{% endblock %}

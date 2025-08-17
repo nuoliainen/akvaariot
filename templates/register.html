@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Rekisteröinti</title>
-</head>
+{% block title %}Luo tunnus{% endblock %}
 
-<body>
-  <p>
-    <a href="/login">Kirjaudu sisään</a>
-  </p>
-
-  {% include "navigation_bar.html" %}
-
+{% block content %}
   <form action="/register" method="post">
     <p>
       <label for="username">Tunnus</label>:<br />
@@ -28,7 +19,4 @@
 
     <input type="submit" value="Luo tunnus" />
   </form>
-
-</body>
-
-</html>
+{% endblock %}

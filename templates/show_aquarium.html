@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Akvaario: {{ aquarium.name }}</title>
-</head>
+{% block title %}Akvaario: {{ aquarium.name }}{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Akvaario: {{ aquarium.name }}</h1>
+{% block content %}
+  <h2>Akvaario: {{ aquarium.name }}</h2>
   {% if session.user_id == aquarium.user_id %}
     <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
     <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a> <br />
@@ -56,7 +50,7 @@
     <p>{{ aquarium.description | show_lines }}</p>
   </p>
 
-  <h2>Eläimet:</h2>
+  <h3>Eläimet:</h3>
   <p>
     {% if critters %}
     <ul>
@@ -84,10 +78,10 @@
     {% endif %}
   </p>
 
-  <h2>Kommentit ({{ total_comments }} kpl)</h2>
+  <h3>Kommentit ({{ total_comments }} kpl)</h3>
 
   {% if session.username %}
-    <h3>Lisää kommentti</h3>
+    <h4>Lisää kommentti</h4>
     <form action="/create_comment" method="post">
       <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
@@ -116,7 +110,4 @@
   {% else %}
     <p>Ei vielä kommentteja</p>
   {% endif %}
-
-</body>
-
-</html>
+{% endblock %}

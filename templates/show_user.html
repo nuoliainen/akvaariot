@@ -1,21 +1,14 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Käyttäjä: {{ user.username }}</title>
-</head>
+{% block title %}Käyttäjä: {{ user.username }}{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Käyttäjä: {{ user.username }}</h1>
+{% block content %}
+  <h2>Käyttäjän {{ user.username }} akvaariot</h2>
 
   {% if session.user_id == user.id %}
     Oma sivu!!
   {% endif %}
 
-  <h2>Käyttäjän akvaariot</h2>
   <p>
     {% if aquariums | count == 0 %}
       Käyttäjällä ei ole akvaaarioita.
@@ -46,7 +39,4 @@
       </li>
     {% endfor %}
   </ul>
-
-</body>
-
-</html>
+{% endblock %}

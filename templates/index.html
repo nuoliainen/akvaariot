@@ -1,14 +1,8 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Tosi hyvä akvaariosovellus</title>
-</head>
+{% block title %}Akvaariot{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
+{% block content %}
   <h2>Kaikki akvaariot</h2>
   <ul>
     {% for aquarium in aquariums %}
@@ -23,7 +17,4 @@
     Sivu {{ page }}/{{ page_count }}
     <a href="/{{ page + 1 }}">&gt;&gt;</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}

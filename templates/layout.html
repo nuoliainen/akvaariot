@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" href="/static/main.css">
+</head>
+
+<body>
+  <div class="header">
+    <div class="session-info">
+      {% if session.username %}
+        Olet kirjautunut nimellä {{ session.username }} <a href="/logout">Kirjaudu ulos</a>
+      {% else %}
+        <a href="/login">Kirjaudu sisään</a>
+        <a href="/register">Luo tunnus</a>
+      {% endif %}
+    </div>
+
+    <h1>Akvaariot</h1>
+
+    <div class="nav">
+      <a href="/">Etusivu</a>
+      <a href="/search">Haku</a>
+      {% if session.username %}
+        <a href="/user/{{ session.user_id }}">Omat akvaariot</a>
+        <a href="/new_aquarium">Luo uusi akvaario</a>
+        <a href="/new_critter">Lisää uusi eläin</a>
+      {% endif %}
+    </div>
+
+    <div class="flash-msg">
+      {% for message in get_flashed_messages() %}
+        <p>
+          <b>{{ message }}</b>
+        </p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="content">
+    {% block content %}{% endblock %}
+  </div>
+
+</body>
+
+</html>

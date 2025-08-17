@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
 
-<head>
-  <title>Muokkaa eläintä</title>
-</head>
+{% block title %}Muokkaa eläintä{% endblock %}
 
-<body>
-  {% include "session_info.html" %}
-  {% include "navigation_bar.html" %}
-
-  <h1>Muokkaa eläintä</h1>
+{% block content %}
+  <h2>Muokkaa eläintä</h2>
   <form action="/update_critter" method="post">
     <p>
       <label for="species">Laji</label>:<br />
@@ -39,7 +33,4 @@
   <p>
     <a href="/aquarium/{{ critter.aquarium_id }}">Takaisin (peruuta)</a>
   </p>
-
-</body>
-
-</html>
+{% endblock %}
