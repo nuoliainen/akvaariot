@@ -7,9 +7,9 @@ Sovellus, jolla voit pitää kirjaa akvaarioistasi ja niiden asukkaista, sekä s
 
 - [x] Käyttäjä pystyy luomaan tunnuksen ja kirjautumaan sisään sovellukseen.
 - [x] Käyttäjä pystyy lisäämään sovellukseen akvaarioita. Lisäksi käyttäjä pystyy muokkaamaan ja poistamaan lisäämiään akvaarioita.
-- [ ] Akvaarioon voi lisätä asukkeja ja muuta tietoa sekä kuvia.
+- [x] Akvaarioon voi lisätä asukkeja sekä kuvia.
 - [x] Käyttäjä näkee sovellukseen lisätyt akvaariot. Käyttäjä näkee sekä itse lisäämänsä että muiden käyttäjien lisäämät akvaariot.
-- [x] Käyttäjä pystyy etsimään omia ja muiden akvaarioita hakusanan perusteella.
+- [x] Käyttäjä pystyy etsimään omia ja muiden akvaarioita hakusanan perusteella (ei vielä päivitetty hakemaan kaikista soveltuvista sarakkeista/taulukoista).
 - [ ] Käyttäjä pystyy etsimään/rajaamaan omia ja muiden akvaariota lajin, koon jne. perusteella.
 - [x] Sovelluksessa on käyttäjäsivut, jotka näyttävät jokaisesta käyttäjästä tilastoja (akvaarioiden lukumäärä, lajien ja yksilöiden lukumäärä jne.) ja käyttäjän lisäämät akvaariot.
 - [x] Käyttäjä pystyy valitsemaan akvaariolle yhden tai useamman luokittelun.
@@ -24,12 +24,22 @@ Kloonaa repositorio komennolla `git clone https://github.com/nuoliainen/akvaario
 
 ## Sovelluksen testaaminen
 
+Suuren määrän testidataa voi halutessaan luoda tiedostolla seed.py.
+
 1. Käynnistä sovellus (yllä olevien ohjeiden mukaisesti)
 2. Avaa selain ja siirry osoitteeseen http://127.0.0.1:5000
 3. Luo uusi käyttäjätunnus valitsemalla *Luo tunnus*
 4. Kirjaudu sisään ja käytä sovelluksen toimintoja:
    - Lisää uusia akvaarioita
-   - Muokkaa akvaarioita tai poista niitä
+   - Muokkaa (ja poista) akvaarioita
+   - Lisää eläimiä akvaariohin, sekä muokkaa ja poista niitä
+   - Lisää (ja poista) kuvia
+   - Lisää (ja poista) kommentteja
    - Kokeile hakutoimintoa kirjoittamalla jokin hakusana
    - Käy omalla ja muiden käyttäjäsivuilla
 5. Kirjaudu ulos
+
+
+## Suuri tietomäärä
+
+*(Raportoi tulokset)*
