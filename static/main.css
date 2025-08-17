@@ -112,3 +112,7 @@ a.active {
 .pages {
     text-align: center;
 }
+
+img {
+    max-width: 55em;
+}
