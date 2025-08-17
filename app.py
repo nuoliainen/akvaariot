@@ -395,17 +395,29 @@ def remove_comment(comment_id):
         return redirect(next_url or ("/aquarium/" + str(comment["aquarium_id"])))
 
 @app.route("/aquarium/<int:aquarium_id>/comments")
-def show_comments(aquarium_id):
-    """Renders the page for a specific aquarium."""
+@app.route("/aquarium/<int:aquarium_id>/comments/<int:page>")
+def show_comments(aquarium_id, page=1):
+    """Renders the page for showing all comments of a specific aquarium."""
     aquarium = aquariums.get_aquarium(aquarium_id)
     if not aquarium:
         abort(404)
 
-    comments = aquariums.get_comments(aquarium_id)
+    page_size = 20
+    comment_count = aquariums.count_comments(aquarium_id)
+    page_count = math.ceil(comment_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect(f"/aquarium/{aquarium_id}/comments/1")
+    if page > page_count:
+        return redirect(f"/aquarium/{aquarium_id}/comments/{page_count}")
+
+    comments = aquariums.get_comments_page(aquarium_id, page, page_size)
     total_comments = aquariums.count_comments(aquarium_id)
 
     return render_template("show_comments.html",
-                           aquarium=aquarium, comments=comments, total_comments=total_comments)
+                           aquarium=aquarium, comments=comments, total_comments=total_comments,
+                           page=page, page_count=page_count)
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):

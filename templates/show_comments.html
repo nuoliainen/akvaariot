@@ -49,6 +49,12 @@
     <p>Ei vielä kommentteja</p>
   {% endif %}
 
+  <p>
+    <a href="/aquarium/{{ aquarium.id }}/comments/{{ page - 1 }}">&lt;&lt;</a>
+    Sivu {{ page }}/{{ page_count }}
+    <a href="/aquarium/{{ aquarium.id }}/comments/{{ page + 1 }}">&gt;&gt;</a>
+  </p>
+
 </body>
 
 </html>

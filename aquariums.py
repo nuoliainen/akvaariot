@@ -168,6 +168,21 @@ def count_comments(aquarium_id):
     sql = "SELECT COUNT(*) FROM comments WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])[0][0]
 
+def get_comments_page(aquarium_id, page, page_size):
+    """Gets all comments related to a specific aquarium in a page."""
+    limit = page_size
+    offset = page_size * (page - 1)
+    sql = """SELECT comments.id,
+                    comments.content,
+                    comments.sent_at,
+                    users.id AS user_id,
+                    users.username
+             FROM comments
+             JOIN users ON comments.user_id = users.id
+             WHERE comments.aquarium_id = ?
+             ORDER BY comments.id DESC LIMIT ? OFFSET ?;"""
+    return db.query(sql, [aquarium_id, limit, offset])
+
 def get_comment(comment_id):
     """Gets the details of a specific comment."""
     sql = """SELECT id, content, sent_at, aquarium_id, user_id
