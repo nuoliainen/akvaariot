@@ -17,7 +17,7 @@ def get_all_classes():
 
     return classes
 
-def get_aquarium_classes(aquarium_id):
+def get_selected_classes(aquarium_id):
     """Gets all classes of a specific aquarium."""
     sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])

@@ -211,7 +211,7 @@ def show_aquarium(aquarium_id):
     if not aquarium:
         abort(404)
 
-    classes = aquariums.get_aquarium_classes(aquarium_id)
+    classes = aquariums.get_selected_classes(aquarium_id)
     critters = aquariums.get_critters(aquarium_id)
     comments = aquariums.get_comments(aquarium_id)
     images = aquariums.get_images(aquarium_id)
@@ -257,7 +257,7 @@ def edit_aquarium(aquarium_id):
     all_classes = aquariums.get_all_classes()
     # Get the classes of the specific aquarium to display as default values
     classes = {class_title: "" for class_title in all_classes}
-    for entry in aquariums.get_aquarium_classes(aquarium_id):
+    for entry in aquariums.get_selected_classes(aquarium_id):
         classes[entry["title"]] = entry["value"]
 
     return render_template("edit_aquarium.html",
