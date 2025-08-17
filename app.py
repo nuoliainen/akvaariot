@@ -239,7 +239,7 @@ def remove_aquarium(aquarium_id):
     # Remove aquarium
     if request.method == "POST":
         check_csrf()
-        aquariums.remove_images(aquarium_id)
+        aquariums.remove_all_images(aquarium_id)
         aquariums.remove_critters(aquarium_id)
         aquariums.remove_aquarium(aquarium_id)
         flash("Poistettu!")
@@ -485,10 +485,10 @@ def remove_images():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
-    for image_id in request.form.getlist("image_id"):
-        aquariums.remove_image(image_id, aquarium_id)
-
-    flash("Kuva(t) poistettu!")
+    image_ids = request.form.getlist("image_id")
+    if image_ids:
+        aquariums.remove_images(image_ids, aquarium_id)
+        flash("Kuva(t) poistettu!")
     return redirect("/images/" + str(aquarium_id))
 
 @app.route("/search")

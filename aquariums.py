@@ -217,12 +217,13 @@ def get_image(image_id):
     result = db.query(sql, [image_id])
     return  result[0][0] if result else None
 
-def remove_image(image_id, aquarium_id):
-    """Removes an image from the database."""
-    sql = "DELETE FROM images WHERE id = ? AND aquarium_id = ?"
-    db.execute(sql, [image_id, aquarium_id])
+def remove_images(image_ids, aquarium_id):
+    """Removes one or multiple images from the database."""
+    placeholders = ",".join("?" for id in image_ids)
+    sql = f"DELETE FROM images WHERE id IN ({placeholders}) AND aquarium_id = ?"
+    db.execute(sql, image_ids + [aquarium_id])
 
-def remove_images(aquarium_id):
+def remove_all_images(aquarium_id):
     """Removes all images of an aquarium."""
     sql = "DELETE FROM images WHERE aquarium_id = ?"
     db.execute(sql, [aquarium_id])
