@@ -155,18 +155,22 @@ def add_image():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
+    max_images = 6
+    max_file_size = 100 * 1024
+    allowed_file_type = ".png"
+
     count = aquariums.count_images(aquarium_id)
-    if count >= 6:
+    if count >= max_images:
         flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.")
         return redirect("/images/" + str(aquarium_id))
 
     file = request.files["image"]
-    if not file.filename.endswith((".png")):
+    if not file.filename.lower().endswith(allowed_file_type):
         flash("VIRHE: väärä tiedostomuoto")
         return redirect("/images/" + str(aquarium_id))
 
     image = file.read()
-    if len(image) > 100 * 1024:
+    if len(image) > max_file_size:
         flash("VIRHE: liian suuri kuva")
         return redirect("/images/" + str(aquarium_id))
 
