@@ -491,6 +491,25 @@ def remove_images():
         flash("Kuva(t) poistettu!")
     return redirect("/images/" + str(aquarium_id))
 
+@app.route("/remove_all_images/<int:aquarium_id>", methods=["GET", "POST"])
+def remove_all_images(aquarium_id):
+    """Removes all images from the aquarium."""
+    require_login()
+
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
+
+    if request.method == "GET":
+        return render_template("remove_all_images.html", aquarium=aquarium)
+
+    if request.method == "POST":
+        check_csrf()
+        images = aquariums.get_images(aquarium_id)
+        if images:
+            aquariums.remove_all_images(aquarium_id)
+            flash("Kaikku kuvat poistettu!")
+        return redirect("/images/" + str(aquarium_id))
+
 @app.route("/search")
 @app.route("/search/<int:page>")
 def search(page=1):
