@@ -152,8 +152,8 @@ def search():
     return render_template("search.html", query=query, results=results)
 
 @app.route("/images/<int:aquarium_id>")
-def edit_images(aquarium_id):
-    """Renders the page for editing images of an aquarium."""
+def manage_images(aquarium_id):
+    """Renders the page for adding and removing images of an aquarium."""
     require_login()
 
     aquarium = aquariums.get_aquarium(aquarium_id)
