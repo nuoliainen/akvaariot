@@ -38,6 +38,9 @@
 
   {% if image_count < 6 %}
     <h2>Lisää uusi kuva</h2>
+    <p>
+      <i>Vaadittu tiedostomuoto .png ja maksimikoko 100MB</i>
+    </p>
     <form action="/add_image" method="post" enctype="multipart/form-data">
       <p>
         <label for="image">Kuva</label>:
