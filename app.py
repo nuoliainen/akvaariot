@@ -458,11 +458,24 @@ def remove_images():
     return redirect("/images/" + str(aquarium_id))
 
 @app.route("/search")
-def search():
+@app.route("/search/<int:page>")
+def search(page=1):
     """Renders the search page and results based on user query."""
     query = request.args.get("query")
-    results = aquariums.search(query) if query else []
-    return render_template("search.html", query=query, results=results)
+    if not query:
+        return render_template("search.html", query=None, results=[], page=1, page_count=1)
+    page_size = 10
+    result_count = aquariums.count_search_results(query)
+    page_count = math.ceil(result_count / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect(f"/search/1?query={query}")
+    if page > page_count:
+        return redirect(f"/search/{page_count}?query={query}")
+
+    results = aquariums.search_page(query, page, page_size)
+    return render_template("search.html", query=query, results=results, page=page, page_count=page_count)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

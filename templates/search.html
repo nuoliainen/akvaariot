@@ -35,6 +35,11 @@
         Ei tuloksia hakusanalla {{ query }}
       {% endif %}
     </ul>
+    <p>
+      <a href="/search/{{ page - 1 }}?query={{ query }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a href="/search/{{ page + 1 }}?query={{ query }}">&gt;&gt;</a>
+    </p>
   {% endif %}
 
 </body>
