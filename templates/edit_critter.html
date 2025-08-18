@@ -19,7 +19,7 @@
         {% for aquarium in aquariums %}
           <!-- Show the current aquarium of the critter as the default value-->
           <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == critter.aquarium_id %}selected{% endif %}>
-            {{ aquarium['name'] }}
+            {{ aquarium["name"] }}
           </option>
         {% endfor %}
       </select>

@@ -392,7 +392,7 @@ def remove_comment(comment_id):
         aquariums.remove_comment(comment_id)
         flash("Poistettu!")
         # Redirect back depending on which page the removal was initiated
-        next_url = request.args.get('next')
+        next_url = request.args.get("next")
         return redirect(next_url or ("/aquarium/" + str(comment["aquarium_id"])))
 
 @app.route("/aquarium/<int:aquarium_id>/comments")
