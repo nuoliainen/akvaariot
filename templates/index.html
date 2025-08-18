@@ -8,7 +8,11 @@
     {% for aquarium in aquariums %}
       <li >
         <a class="aquarium" href="/aquarium/{{ aquarium.id }}">
-          <img>
+          {% if aquarium.main_image_id %}
+            <img class="main-image" src="/image/{{ aquarium.main_image_id }}" alt="Aquarium main image">
+          {% else %}
+            <div class="main-image">Ei kuvia</div>
+          {% endif %}
           <div class="aquarium-content">
             <h3>{{ aquarium.name }}</h3>
             <p>

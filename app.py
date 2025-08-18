@@ -473,6 +473,10 @@ def add_image():
         return redirect("/images/" + str(aquarium_id))
 
     aquariums.add_image(aquarium_id, image)
+    image_id = db.last_insert_id()
+    # Set the first image uploaded as the main image
+    if count == 0:
+        aquariums.set_main_image(aquarium_id, image_id)
     flash("Kuva lisätty!")
     return redirect("/images/" + str(aquarium_id))
 

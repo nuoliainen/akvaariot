@@ -12,7 +12,11 @@ def get_aquariums():
 
 def get_aquariums_page(page, page_size):
     """Gets the details of all aquariums in a page."""
-    sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC LIMIT ? OFFSET ?"
+    sql = """SELECT a.id, a.name, a.volume, m.image_id as main_image_id
+             FROM aquariums a
+             LEFT JOIN main_images m ON a.id = m.aquarium_id
+             ORDER BY a.id DESC
+             LIMIT ? OFFSET ?"""
     limit = page_size
     offset = page_size * (page - 1)
     return db.query(sql, [limit, offset])
@@ -227,6 +231,24 @@ def remove_all_images(aquarium_id):
     """Removes all images of an aquarium."""
     sql = "DELETE FROM images WHERE aquarium_id = ?"
     db.execute(sql, [aquarium_id])
+
+def set_main_image(aquarium_id, image_id):
+    """Sets the chosen image as the main image.
+    Updates the main image if the aquarium already has one.
+    """
+    sql = """INSERT INTO main_images (aquarium_id, image_id)
+             VALUES(?, ?)
+             ON CONFLICT(aquarium_id) DO UPDATE SET image_id=excluded.image_id"""
+    db.execute(sql, [aquarium_id, image_id])
+
+def get_main_image(aquarium_id):
+    """Gets the main image of an aquarium."""
+    sql = """SELECT i.image
+             FROM images i
+             JOIN main_images m ON m.image_id = i.id
+             WHERE m.aquarium_id = ?"""
+    result = db.query(sql, [aquarium_id])
+    return result[0][0] if result else None
 
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""

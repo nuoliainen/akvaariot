@@ -35,6 +35,13 @@ CREATE TABLE images (
     image BLOB
 );
 
+CREATE TABLE main_images (
+    id INTEGER PRIMARY KEY,
+    aquarium_id INTEGER REFERENCES aquariums,
+    image_id INTEGER REFERENCES images(id) ON DELETE CASCADE,
+    UNIQUE(aquarium_id)
+);
+
 CREATE TABLE critters (
     id INTEGER PRIMARY KEY,
     user_id INTEGER REFERENCES users,
@@ -56,6 +63,7 @@ CREATE INDEX idx_aquariums_user_id ON aquariums(user_id);
 
 -- Indexes for images
 CREATE INDEX idx_images_aquarium_id ON images(aquarium_id);
+CREATE INDEX idx_main_images_aquarium_id ON main_images(aquarium_id);
 
 -- Indexes for critters
 CREATE INDEX idx_critters_user_id ON critters(user_id);
