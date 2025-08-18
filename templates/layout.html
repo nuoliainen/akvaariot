@@ -10,7 +10,7 @@
   <div class="header">
     <div class="session-info">
       {% if session.username %}
-        <p class="user-info">Olet kirjautunut nimellä <strong>{{ session.username }}</strong></p>
+        <p class="user-info">Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a></p>
         <nav class="session-nav">
           <ul>
             <li><a href="/logout">Kirjaudu ulos</a></li>
