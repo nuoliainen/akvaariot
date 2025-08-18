@@ -565,8 +565,8 @@ def register():
             filled = {"username": username}
             return render_template("register.html", filled=filled, current_page="register")
 
-        flash("Tunnuksen luonti onnistui!")
-        return redirect("/")
+        flash("Tunnuksen luonti onnistui! Voit nyt kirjautua sisään.")
+        return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
