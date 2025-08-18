@@ -134,7 +134,7 @@ def remove_critters(aquarium_id):
 def add_comment(aquarium_id, user_id, content):
     """Adds a new comment into the database."""
     sql = """INSERT INTO comments (aquarium_id, user_id, content, sent_at)
-             VALUES (?, ?, ?, datetime('now'))"""
+             VALUES (?, ?, ?, datetime('now', 'localtime'))"""
     db.execute(sql, [aquarium_id, user_id, content])
 
 def get_comments(aquarium_id):
