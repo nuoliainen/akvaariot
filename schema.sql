@@ -71,3 +71,7 @@ CREATE INDEX idx_critters_aquarium_id ON critters(aquarium_id);
 
 -- Indexes for comments
 CREATE INDEX idx_comments_aquarium_id ON comments(aquarium_id);
+
+-- Indexes for aquarium_classes
+CREATE INDEX idx_aquarium_classes_aquarium_id_title_value
+ON aquarium_classes (aquarium_id, title, value);
