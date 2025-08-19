@@ -5,18 +5,30 @@
 {% block content %}
   <h2>Haku</h2>
   <form action="/search" method="get">
-    <p>
+    <div>
       <label for="query">Hakusana</label>:
-      {% if query %}
-        <input type="text" id="query" name="query" value="{{ query }}" />
-      {% else %}
-        <input type="text" id="query" name="query" />
-      {% endif %}
-    </p>
+      <input type="text" id="query" name="query" value="{{ filters.query or '' }}" />
+    </div>
+    <div>
+      <label for="volume_min">Tilavuus (min):</label>
+      <input type="number" id="volume_min" name="volume_min" value="{{ filters.volume_min or '' }}">
+    </div>
+    <div>
+      <label for="volume_max">Tilavuus (max):</label>
+      <input type="number" id="volume_max" name="volume_max" value="{{ filters.volume_max or '' }}">
+    </div>
+    <div>
+      <label for="date_min">Päivämäärä (alkaen):</label>
+      <input type="date" id="date_min" name="date_min" value="{{ filters.date_min or '' }}">
+    </div>
+    <div>
+      <label for="date_max">Päivämäärä (asti):</label>
+      <input type="date" id="date_max" name="date_max" value="{{ filters.date_max or '' }}">
+    </div>
     <input type="submit" value="Hae" />
   </form>
 
-  {% if query %}
+  {% if result_count is defined %}
     <h3>Tulokset ({{ result_count }} kpl)</h3>
     <ul class="aquarium-list">
       {% if results %}
@@ -42,16 +54,17 @@
           </li>
         {% endfor %}
       {% else %}
-        Ei tuloksia hakusanalla {{ query }}
+        <p>Ei tuloksia hakuehdoilla</p>
       {% endif %}
     </ul>
 
     <div class="pages">
-      <a href="/search/{{ 1 }}?query={{ query }}">ensimmäinen</a>
-      <a href="/search/{{ page - 1 }}?query={{ query }}">&lt;&lt;</a>
+      {% set query_string = filters | urlencode %}
+      <a href="/search/1?{{ query_string }}">ensimmäinen</a>
+      <a href="/search/{{ page - 1 }}?{{ query_string }}">&lt;&lt;</a>
       Sivu {{ page }}/{{ page_count }}
-      <a href="/search/{{ page - 1 }}?query={{ query }}">&gt;&gt;</a>
-      <a href="/search/{{ page_count }}?query={{ query }}">viimeinen</a>
+      <a href="/search/{{ page + 1 }}?{{ query_string }}">&gt;&gt;</a>
+      <a href="/search/{{ page_count }}?{{ query_string }}">viimeinen</a>
     </div>
   {% endif %}
 {% endblock %}

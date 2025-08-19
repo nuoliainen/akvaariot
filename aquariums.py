@@ -273,22 +273,41 @@ def search(query):
                    a.description LIKE ? OR
                    u.username LIKE ?
              ORDER BY a.id DESC"""
-    return db.query(sql, ["%" + query + "%"]*3)
+    return db.query(sql, ["%" + query + "%"] * 3)
 
-def count_search_results(query):
+def count_search_results(filters):
     """Gets the number of aquariums that contain a keyword in any column."""
     sql = """SELECT COUNT(*)
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
-             WHERE a.name LIKE ? OR
+             WHERE 1=1"""
+    params = []
+
+    query = filters.get("query")
+    if query:
+        sql += """ AND (a.name LIKE ? OR
                    a.description LIKE ? OR
-                   u.username LIKE ?"""
-    if query == None:
-        query = ""
-    result = db.query(sql, ["%" + query + "%"]*3)[0][0]
+                   u.username LIKE ?)"""
+        params.extend(["%" + query + "%"] * 3)
+
+    if filters.get("volume_min"):
+        sql += " AND a.volume >= ?"
+        params.append(filters["volume_min"])
+    if filters.get("volume_max"):
+        sql += " AND a.volume <= ?"
+        params.append(filters["volume_max"])
+
+    if filters.get("date_min"):
+        sql += " AND date(a.date) >= date(?)"
+        params.append(filters["date_min"])
+    if filters.get("date_max"):
+        sql += " AND date(a.date) <= date(?)"
+        params.append(filters["date_max"])
+
+    result = db.query(sql, params)[0][0]
     return result if result else 0
 
-def search_page(query, page, page_size):
+def search_page(filters, page, page_size):
     """Selects all aquariums that contain a keyword in any column divided in pages."""
     sql = """SELECT a.id,
                     a.name,
@@ -297,10 +316,31 @@ def search_page(query, page, page_size):
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id
-             WHERE a.name LIKE ? OR
+             WHERE 1=1"""
+    params = []
+
+    query = filters.get("query")
+    if query:
+        sql += """ AND (a.name LIKE ? OR
                    a.description LIKE ? OR
-                   u.username LIKE ?
-             ORDER BY a.id DESC LIMIT ? OFFSET ?"""
+                   u.username LIKE ?)"""
+        params.extend(["%" + query + "%"] * 3)
+    if filters.get("volume_min"):
+        sql += " AND (a.volume >= ?)"
+        params.append(filters["volume_min"])
+    if filters.get("volume_max"):
+        sql += " AND (a.volume <= ?)"
+        params.append(filters["volume_max"])
+
+    if filters.get("date_min"):
+        sql += " AND date(a.date) >= date(?)"
+        params.append(filters["date_min"])
+    if filters.get("date_max"):
+        sql += " AND date(a.date) <= date(?)"
+        params.append(filters["date_max"])
+
+    sql += " ORDER BY a.id DESC LIMIT ? OFFSET ?"
     limit = page_size
     offset = page_size * (page - 1)
-    return db.query(sql, ["%" + query + "%"]*3 + [limit, offset])
+    params.extend([limit, offset])
+    return db.query(sql, params)

@@ -532,23 +532,43 @@ def remove_all_images(aquarium_id):
 @app.route("/search/<int:page>")
 def search(page=1):
     """Renders the search page and results based on user query."""
-    query = request.args.get("query")
-    if not query:
-        return render_template("search.html", query=None, results=[], page=1, page_count=1,
+    filters = {
+        "query": request.args.get("query"),
+        "volume_min": request.args.get("volume_min", type=int),
+        "volume_max": request.args.get("volume_max", type=int),
+        "date_min": request.args.get("date_min"),
+        "date_max": request.args.get("date_max")
+    }
+
+    if not any(filters.values()):
+        return render_template("search.html",
+                               results=[],
+                               filters=filters,
+                               page=1,
+                               page_count=1,
                                current_page="search")
+
     page_size = 10
-    result_count = aquariums.count_search_results(query)
+    result_count = aquariums.count_search_results(filters)
     page_count = math.ceil(result_count / page_size)
     page_count = max(page_count, 1)
 
     if page < 1:
-        return redirect(f"/search/1?query={query}")
+        query_string = request.query_string.decode()
+        return redirect(f"/search/1?{query_string}")
     if page > page_count:
-        return redirect(f"/search/{page_count}?query={query}")
+        query_string = request.query_string.decode()
+        return redirect(f"/search/{page_count}?{query_string}")
 
-    results = aquariums.search_page(query, page, page_size)
-    return render_template("search.html", query=query, results=results, page=page, page_count=page_count,
-                           result_count=result_count, current_page="search")
+    results = aquariums.search_page(filters, page, page_size)
+    print(results)
+    return render_template("search.html",
+                           results=results,
+                           result_count=result_count,
+                           filters=filters,
+                           page=page,
+                           page_count=page_count,
+                           current_page="search")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
