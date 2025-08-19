@@ -539,6 +539,7 @@ def search(page=1):
 
     filters = {
         "query": request.args.get("query"),
+        "species_query": request.args.get("species_query"),
         "volume_min": request.args.get("volume_min", type=int),
         "volume_max": request.args.get("volume_max", type=int),
         "date_min": request.args.get("date_min"),

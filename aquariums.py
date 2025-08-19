@@ -297,6 +297,14 @@ def create_filter_sql(filters):
                              u.username LIKE ?)""")
         params.extend(["%" + query + "%"] * 3)
 
+    species_query = filters.get("species_query")
+    if species_query:
+        sql_parts.append(""" AND EXISTS (SELECT 1
+                                        FROM critters c
+                                        WHERE c.aquarium_id = a.id
+                                        AND c.species LIKE ?)""")
+        params.append("%" + species_query + "%")
+
     if filters.get("volume_min"):
         sql_parts.append(" AND a.volume >= ?")
         params.append(filters["volume_min"])

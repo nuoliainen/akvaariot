@@ -7,7 +7,13 @@
   <form action="/search" method="get">
     <div>
       <label for="query">Hakusana</label>:
-      <input type="text" id="query" name="query" value="{{ filters.query or '' }}" />
+      <input type="text" id="query" name="query" value="{{ filters.query or '' }}"
+       placeholder="Akvaarion nimi, kuvaus, käyttäjätunnus tai niiden osa..." size="50" />
+    </div>
+    <div>
+      <label for="species_query">Laji</label>:
+      <input type="text" id="species_query" name="species_query" value="{{ filters.species_query or '' }}"
+       placeholder="Hae lajin nimen tai sen osan perusteella..." size="50" />
     </div>
     <div>
       <label for="volume_min">Tilavuus (min):</label>
