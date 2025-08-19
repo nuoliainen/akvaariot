@@ -113,7 +113,7 @@ a.active {
 }
 
 .pages {
-    text-align: center;
+  text-align: center;
 }
 
 .aquarium-image {
@@ -123,10 +123,6 @@ a.active {
 
 .aquarium-images {
   margin: 10px 0;
-}
-
-.aquarium-images .main-image {
-  border: 3px solid darkred;
 }
 
 .aquarium-images .image-row {
