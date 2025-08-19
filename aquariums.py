@@ -249,6 +249,19 @@ def get_main_image(aquarium_id):
     result = db.query(sql, [aquarium_id])
     return result[0][0] if result else None
 
+def remove_main_image(aquarium_id):
+    """Removes the main image of an aquarium."""
+    sql = "DELETE FROM main_images WHERE aquarium_id = ?"
+    db.execute(sql, [aquarium_id])
+
+def get_oldest_image(aquarium_id):
+    sql = """SELECT id FROM images
+             WHERE aquarium_id = ?
+             ORDER BY id
+             LIMIT 1"""
+    result = db.query(sql, [aquarium_id])
+    return result[0][0] if result else None
+
 def search(query):
     """Selects all aquariums that contain a keyword in any column."""
     sql = """SELECT a.id,

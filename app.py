@@ -494,7 +494,18 @@ def remove_images():
 
     image_ids = request.form.getlist("image_id")
     if image_ids:
+        current_main_image_id = aquariums.get_main_image(aquarium_id)
         aquariums.remove_images(image_ids, aquarium_id)
+
+        # If main image was removed, set a new one
+        if str(current_main_image_id) in image_ids:
+            # Find the oldest remaining image
+            oldest_image_id = aquariums.get_oldest_image(aquarium_id)
+            if oldest_image_id:
+                aquariums.set_main_image(aquarium_id, oldest_image_id)
+            else:
+                aquariums.remove_main_image(aquarium_id)
+
         flash("Kuva(t) poistettu!")
     return redirect("/images/" + str(aquarium_id))
 
