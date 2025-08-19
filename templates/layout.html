@@ -40,7 +40,9 @@
         {% endif %}
       </ul>
     </nav>
+  </div>
 
+  <div class="content">
     <div class="flash-msg">
       {% for message in get_flashed_messages() %}
         <p>
@@ -48,9 +50,7 @@
         </p>
       {% endfor %}
     </div>
-  </div>
 
-  <div class="content">
     {% block content %}{% endblock %}
   </div>
 

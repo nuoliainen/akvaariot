@@ -167,3 +167,16 @@ a.active {
   font-size: 14px;
   border-radius: 4px;
 }
+
+.flash-msg {
+  background-color: #3d152a;
+  color: #fff;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.flash-msg p {
+  padding: 15px;
+  margin: 0;
+}
