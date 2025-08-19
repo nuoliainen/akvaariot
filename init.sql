@@ -14,10 +14,7 @@ INSERT INTO classes (title, value) VALUES ('Tyyppi', 'lajiakvaario');
 INSERT INTO classes (title, value) VALUES ('Tyyppi', 'riutta-akvaario');
 INSERT INTO classes (title, value) VALUES ('Tyyppi', 'kasviakvaario');
 INSERT INTO classes (title, value) VALUES ('Tyyppi', 'biotooppi');
-INSERT INTO classes (title, value) VALUES ('Tyyppi', 'aquascaping');
+INSERT INTO classes (title, value) VALUES ('Tyyppi', 'aquascape');
 
 INSERT INTO classes (title, value) VALUES ('Tekniikka', 'low tech');
 INSERT INTO classes (title, value) VALUES ('Tekniikka', 'high tech');
-
-INSERT INTO classes (title, value) VALUES ('Sijainti', 'yksityinen');
-INSERT INTO classes (title, value) VALUES ('Sijainti', 'julkinen');
