@@ -18,21 +18,40 @@
 
   {% if query %}
     <h3>Tulokset ({{ result_count }} kpl)</h3>
-    <ul>
+    <ul class="aquarium-list">
       {% if results %}
         {% for result in results %}
           <li>
-            <a href="/aquarium/{{ result.id }}"> {{ result.name }}</a>, {{ result.volume }} litraa
+            <a class="aquarium" href="/aquarium/{{ result.id }}">
+              {% if result.main_image_id %}
+                <img class="main-image" src="/image/{{ result.main_image_id }}" alt="Aquarium main image">
+              {% else %}
+                <div class="main-image">Ei kuvia</div>
+              {% endif %}
+              <div class="aquarium-content">
+                <h3>{{ result.name }}</h3>
+                <p>
+                  {{ result.volume }} litraa, mitat<br />
+                  eläinten ja lajien lukumäärä<br />
+                  luokat<br />
+                  omistaja jne.
+                  <!-- more info -->
+                </p>
+              </div>
+            </a>
           </li>
         {% endfor %}
       {% else %}
         Ei tuloksia hakusanalla {{ query }}
       {% endif %}
     </ul>
-    <p>
+
+    <div class="pages">
+      <a href="/search/{{ 1 }}?query={{ query }}">ensimmäinen</a>
       <a href="/search/{{ page - 1 }}?query={{ query }}">&lt;&lt;</a>
       Sivu {{ page }}/{{ page_count }}
-      <a href="/search/{{ page + 1 }}?query={{ query }}">&gt;&gt;</a>
-    </p>
+      <a href="/search/{{ page - 1 }}?query={{ query }}">&gt;&gt;</a>
+      <a href="/search/{{ page_count }}?query={{ query }}">viimeinen</a>
+    </div>
   {% endif %}
 {% endblock %}
