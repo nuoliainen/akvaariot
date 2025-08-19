@@ -10,7 +10,7 @@
   <div class="header">
     <div class="session-info">
       {% if session.username %}
-        <p class="user-info">Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a></p>
+        <div class="user-info">Olet kirjautunut nimellä <a href="/user/{{ session.user_id }}">{{ session.username }}</a></div>
         <nav class="session-nav">
           <ul>
             <li><a href="/logout">Kirjaudu ulos</a></li>
@@ -31,7 +31,7 @@
 
     <nav class="main-nav">
       <ul>
-        <li><a href="/" class="{% if current_page == 'index' %}active{% endif %}">Etusivu</a></li>
+        <li><a href="/" class="{% if current_page == 'index' %}active{% endif %}">Etusivu</li></a>
         <li><a href="/search" class="{% if current_page == 'search' %}active{% endif %}">Haku</a></li>
         {% if session.username %}
           <li><a href="/user/{{ session.user_id }}" class="{% if current_page == 'userpage' %}active{% endif %}">Omat akvaariot</a></li>

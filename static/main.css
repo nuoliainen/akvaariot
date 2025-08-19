@@ -1,32 +1,43 @@
 body {
   margin: auto;
   max-width: 62em;
-  padding: 2em 1em;
+  padding: 0 1em;
   font-family: sans-serif;
-  background-color: lightblue;
+  background-color: rgb(179, 194, 165);
+}
+
+h1 {
+  text-align: center;
+}
+
+.header {
+  background-color: #f9f9f9;
 }
 
 .content {
-  margin: 1em 0;
-  padding: 1em;
-  background-color: rgb(218, 229, 233);
+  padding: 15px;
+  background-color: rgb(226, 233, 218);
 }
 
 .session-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: rgb(226, 233, 218);
 }
 
-.session-nav {
-  text-align: right;
+.session-nav ul {
   display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 
-.session-info p,
+.session-info .user-info,
 .session-info .placeholder {
   min-width: 150px;
-  margin: 0;
+  padding: 0 15px;
 }
 
 .main-nav {
@@ -36,22 +47,38 @@ body {
 nav ul {
   padding: 0;
   margin: 0;
+  list-style-type: none;
+}
+
+.main-nav ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: rgb(145, 158, 133);
 }
 
 nav li {
-  display: inline-block;
-  padding: 0 1em;
+  padding: 0;
   margin: 0;
 }
 
+nav li a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;   /* remove underline */
+  color: black;
+}
+
 nav li:not(:last-of-type) {
-  border-right: 1px solid black;
+  border-right: 1px solid rgb(91, 99, 83);
+}
+
+nav li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 a.active {
-  font-weight: bold;
-  text-decoration: underline;
-  color: #000000;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .aquarium-list {
@@ -69,8 +96,8 @@ a.active {
   width: 450px;
   background-color: #f9f9f9;
   border-radius: 3px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  text-decoration: none; /* remove underline */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
   transition: transform 0.1s;
 }
 
@@ -104,12 +131,6 @@ a.active {
   margin: 5px 0 0;
   font-size: 0.95rem;
   color: #666;
-}
-
-.aquarium-content a {
-  text-decoration: none;
-  color: #0077cc;
-  font-weight: bold;
 }
 
 .pages {
