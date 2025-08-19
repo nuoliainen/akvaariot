@@ -129,7 +129,10 @@ def index(page=1):
         return redirect("/" + str(page_count))
 
     all_aquariums = aquariums.get_aquariums_page(page, page_size)
-    return render_template("index.html", aquariums=all_aquariums, page=page, page_count=page_count,
+    return render_template("index.html",
+                           aquariums=all_aquariums,
+                           page=page,
+                           page_count=page_count,
                            current_page="index")
 
 @app.route("/user/<int:user_id>")

@@ -1,0 +1,23 @@
+<ul class="aquarium-list">
+  {% for aquarium in aquariums %}
+    <li class="aquarium" >
+      <a class="aquarium-link" href="/aquarium/{{ aquarium.id }}">
+        {% if aquarium.main_image_id %}
+          <img class="main-image" src="/image/{{ aquarium.main_image_id }}" alt="Aquarium main image">
+        {% else %}
+          <div class="main-image">Ei kuvaa</div>
+        {% endif %}
+        <div class="aquarium-content">
+          <h3>{{ aquarium.name }}</h3>
+          <div class="aquarium-info">
+            {{ aquarium.volume }} litraa ({{ aquarium.length }}x{{ aquarium.depth }}x{{ aquarium.height }} cm)<br />
+            Pystytetty: <i>{{ aquarium.date or "ei ilmoitettu" }}</i>
+          </div>
+        </div>
+      </a>
+      {% if current_page != "userpage" %}
+        <p class="aquarium-owner">Omistaja <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a></p>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

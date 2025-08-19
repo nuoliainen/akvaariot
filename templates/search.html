@@ -30,33 +30,12 @@
 
   {% if result_count is defined %}
     <h3>Tulokset ({{ result_count }} kpl)</h3>
-    <ul class="aquarium-list">
-      {% if results %}
-        {% for result in results %}
-          <li>
-            <a class="aquarium" href="/aquarium/{{ result.id }}">
-              {% if result.main_image_id %}
-                <img class="main-image" src="/image/{{ result.main_image_id }}" alt="Aquarium main image">
-              {% else %}
-                <div class="main-image">Ei kuvia</div>
-              {% endif %}
-              <div class="aquarium-content">
-                <h3>{{ result.name }}</h3>
-                <p>
-                  {{ result.volume }} litraa, mitat<br />
-                  eläinten ja lajien lukumäärä<br />
-                  luokat<br />
-                  omistaja jne.
-                  <!-- more info -->
-                </p>
-              </div>
-            </a>
-          </li>
-        {% endfor %}
-      {% else %}
-        <p>Ei tuloksia hakuehdoilla</p>
-      {% endif %}
-    </ul>
+    {% if results %}
+      {% set aquariums = results %}
+      {% include "aquarium_list.html" %}
+    {% else %}
+      <p>Ei tuloksia hakuehdoilla</p>
+    {% endif %}
 
     <div class="pages">
       {% set query_string = filters | urlencode %}

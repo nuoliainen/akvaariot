@@ -36,10 +36,22 @@ def get_user(user_id):
 
 def get_aquariums(user_id):
     """Gets the details of all aquariums from the database that belong to the user."""
-    sql = """SELECT id, name, volume
-             FROM aquariums
-             WHERE user_id = ?
-             ORDER BY id DESC"""
+    sql = """SELECT a.id,
+                    a.name,
+                    a.length,
+                    a.depth,
+                    a.height,
+                    a.volume,
+                    a.date,
+                    u.id AS user_id,
+                    u.username,
+                    m.image_id as main_image_id
+             FROM aquariums a
+             JOIN users u ON a.user_id = u.id
+             LEFT JOIN main_images m ON a.id = m.aquarium_id
+             WHERE a.user_id = ?
+             ORDER BY a.id DESC
+             """
     return db.query(sql, [user_id])
 
 def count_critters(user_id):

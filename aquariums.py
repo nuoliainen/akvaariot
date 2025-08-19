@@ -12,8 +12,18 @@ def get_aquariums():
 
 def get_aquariums_page(page, page_size):
     """Gets the details of all aquariums in a page."""
-    sql = """SELECT a.id, a.name, a.volume, m.image_id as main_image_id
+    sql = """SELECT a.id,
+                    a.name,
+                    a.length,
+                    a.depth,
+                    a.height,
+                    a.volume,
+                    a.date,
+                    u.id AS user_id,
+                    u.username,
+                    m.image_id as main_image_id
              FROM aquariums a
+             JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id
              ORDER BY a.id DESC
              LIMIT ? OFFSET ?"""
@@ -311,8 +321,14 @@ def search_page(filters, page, page_size):
     """Selects all aquariums that contain a keyword in any column divided in pages."""
     sql = """SELECT a.id,
                     a.name,
+                    a.length,
+                    a.depth,
+                    a.height,
                     a.volume,
-                    m.image_id main_image_id
+                    a.date,
+                    u.id AS user_id,
+                    u.username,
+                    m.image_id as main_image_id
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id

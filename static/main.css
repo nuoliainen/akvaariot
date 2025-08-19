@@ -91,12 +91,32 @@ a.active {
 }
 
 .aquarium {
-  display: flex;
-  flex-direction: column; /* column: image above text -- row: image next to text */
   width: 450px;
   background-color: #f9f9f9;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aquarium-owner {
+  padding: 10px;
+  text-align: right;
+  margin: 0;
+  color: #666;
+  font-size: 0.85rem;
+}
+
+.aquarium-owner a {
+  color: #666;
+  width: 100px;
+}
+
+.aquarium-owner a:hover {
+  color: black;
+}
+
+.aquarium-link {
+  display: flex;
+  flex-direction: column; /* column: image above text -- row: image next to text */
   text-decoration: none;
   transition: transform 0.1s;
 }
@@ -127,7 +147,7 @@ a.active {
   color: #333;
 }
 
-.aquarium-content p {
+.aquarium-info {
   margin: 5px 0 0;
   font-size: 0.95rem;
   color: #666;

@@ -32,11 +32,6 @@
     {% endif %}
   </p>
 
-  <ul>
-    {% for aquarium in aquariums %}
-      <li>
-        <a href="/aquarium/{{ aquarium.id }}"> {{ aquarium.name }}</a>, {{ aquarium.volume }} litraa
-      </li>
-    {% endfor %}
-  </ul>
+  {% include "aquarium_list.html" %}
+
 {% endblock %}
