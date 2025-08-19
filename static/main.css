@@ -1,15 +1,15 @@
 body {
-    margin: auto;
-    max-width: 62em;
-    padding: 2em 1em;
-    font-family: sans-serif;
-    background-color: lightblue;
+  margin: auto;
+  max-width: 62em;
+  padding: 2em 1em;
+  font-family: sans-serif;
+  background-color: lightblue;
 }
 
 .content {
-    margin: 1em 0;
-    padding: 1em;
-    background-color: rgb(218, 229, 233);
+  margin: 1em 0;
+  padding: 1em;
+  background-color: rgb(218, 229, 233);
 }
 
 .session-info {
@@ -55,40 +55,38 @@ a.active {
 }
 
 .aquarium-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1em;
-    padding: 0;
-    list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1em;
+  padding: 0;
+  list-style-type: none;
 }
 
 .aquarium {
-    display: flex;
-    flex-direction: column;
-    width: 450px;
-    background-color: #f9f9f9;
-    border-radius: 3px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    overflow: hidden;
-    text-decoration: none;         /* remove underline */
-    color: inherit;                /* inherit text color */
-    transition: transform 0.1s;
+  display: flex;
+  flex-direction: column; /* column: image above text -- row: image next to text */
+  width: 450px;
+  background-color: #f9f9f9;
+  border-radius: 3px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-decoration: none; /* remove underline */
+  transition: transform 0.1s;
 }
 
 .aquarium:hover {
-    transform: scale(1.02);
+  transform: scale(1.02);
 }
 
 .aquarium .main-image {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    color: #8f8f8f;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(70, 70, 70);
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  color: #8f8f8f;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(70, 70, 70);
 }
 
 .aquarium-content {
@@ -97,21 +95,21 @@ a.active {
 }
 
 .aquarium-content h3 {
-    margin: 0;
-    font-size: 1.2rem;
-    color: #333;
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
 }
 
 .aquarium-content p {
-    margin: 5px 0 0;
-    font-size: 0.95rem;
-    color: #666;
+  margin: 5px 0 0;
+  font-size: 0.95rem;
+  color: #666;
 }
 
 .aquarium-content a {
-    text-decoration: none;
-    color: #0077cc;
-    font-weight: bold;
+  text-decoration: none;
+  color: #0077cc;
+  font-weight: bold;
 }
 
 .pages {
