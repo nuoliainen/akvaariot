@@ -285,40 +285,62 @@ def search(query):
              ORDER BY a.id DESC"""
     return db.query(sql, ["%" + query + "%"] * 3)
 
-def count_search_results(filters):
-    """Gets the number of aquariums that contain a keyword in any column."""
-    sql = """SELECT COUNT(*)
-             FROM aquariums a
-             JOIN users u ON a.user_id = u.id
-             WHERE 1=1"""
+def create_filter_sql(filters):
+    """Creates SQL filter clause and parameters from given filters."""
+    sql_parts = []
     params = []
 
     query = filters.get("query")
     if query:
-        sql += """ AND (a.name LIKE ? OR
-                   a.description LIKE ? OR
-                   u.username LIKE ?)"""
+        sql_parts.append(""" AND (a.name LIKE ? OR
+                             a.description LIKE ? OR
+                             u.username LIKE ?)""")
         params.extend(["%" + query + "%"] * 3)
 
     if filters.get("volume_min"):
-        sql += " AND a.volume >= ?"
+        sql_parts.append(" AND a.volume >= ?")
         params.append(filters["volume_min"])
     if filters.get("volume_max"):
-        sql += " AND a.volume <= ?"
+        sql_parts.append(" AND a.volume <= ?")
         params.append(filters["volume_max"])
 
     if filters.get("date_min"):
-        sql += " AND date(a.date) >= date(?)"
+        sql_parts.append(" AND date(a.date) >= date(?)")
         params.append(filters["date_min"])
     if filters.get("date_max"):
-        sql += " AND date(a.date) <= date(?)"
+        sql_parts.append(" AND date(a.date) <= date(?)")
         params.append(filters["date_max"])
+
+    class_filters = filters.get("classes")
+    if class_filters:
+        for title, value in class_filters.items():
+            sql_parts.append(""" AND EXISTS (SELECT 1
+                                            FROM aquarium_classes ac
+                                            WHERE ac.aquarium_id = a.id
+                                            AND ac.title = ?
+                                            AND ac.value = ?)""")
+            params.extend([title, value])
+
+    if sql_parts:
+        sql = "".join(sql_parts)
+        return sql, params
+    return "", params
+
+def count_search_results(filters):
+    """Gets the number of aquariums that match the filter conditions"""
+    sql = """SELECT COUNT(*)
+             FROM aquariums a
+             JOIN users u ON a.user_id = u.id
+             WHERE 1=1"""
+
+    filter_sql, params = create_filter_sql(filters)
+    sql += filter_sql
 
     result = db.query(sql, params)[0][0]
     return result if result else 0
 
 def search_page(filters, page, page_size):
-    """Selects all aquariums that contain a keyword in any column divided in pages."""
+    """Selects all aquariums that match the filter conditions."""
     sql = """SELECT a.id,
                     a.name,
                     a.length,
@@ -333,30 +355,13 @@ def search_page(filters, page, page_size):
              JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id
              WHERE 1=1"""
-    params = []
 
-    query = filters.get("query")
-    if query:
-        sql += """ AND (a.name LIKE ? OR
-                   a.description LIKE ? OR
-                   u.username LIKE ?)"""
-        params.extend(["%" + query + "%"] * 3)
-    if filters.get("volume_min"):
-        sql += " AND (a.volume >= ?)"
-        params.append(filters["volume_min"])
-    if filters.get("volume_max"):
-        sql += " AND (a.volume <= ?)"
-        params.append(filters["volume_max"])
-
-    if filters.get("date_min"):
-        sql += " AND date(a.date) >= date(?)"
-        params.append(filters["date_min"])
-    if filters.get("date_max"):
-        sql += " AND date(a.date) <= date(?)"
-        params.append(filters["date_max"])
+    filter_sql, params = create_filter_sql(filters)
+    sql += filter_sql
 
     sql += " ORDER BY a.id DESC LIMIT ? OFFSET ?"
     limit = page_size
     offset = page_size * (page - 1)
     params.extend([limit, offset])
+
     return db.query(sql, params)

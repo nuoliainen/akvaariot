@@ -534,7 +534,9 @@ def remove_all_images(aquarium_id):
 @app.route("/search")
 @app.route("/search/<int:page>")
 def search(page=1):
-    """Renders the search page and results based on user query."""
+    """Renders the search page and results based on user search conditions."""
+    all_classes = aquariums.get_all_classes()
+
     filters = {
         "query": request.args.get("query"),
         "volume_min": request.args.get("volume_min", type=int),
@@ -543,8 +545,18 @@ def search(page=1):
         "date_max": request.args.get("date_max")
     }
 
+    classes = {}
+    for class_title in all_classes.keys():
+        value = request.args.get(f"class_{class_title}")
+        if value:
+            classes[class_title] = value
+    filters["classes"] = classes
+
+    print(filters)
+
     if not any(filters.values()):
         return render_template("search.html",
+                               all_classes=all_classes,
                                results=[],
                                filters=filters,
                                page=1,
@@ -566,6 +578,7 @@ def search(page=1):
     results = aquariums.search_page(filters, page, page_size)
     print(results)
     return render_template("search.html",
+                           all_classes=all_classes,
                            results=results,
                            result_count=result_count,
                            filters=filters,

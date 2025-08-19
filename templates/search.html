@@ -25,6 +25,19 @@
       <label for="date_max">Päivämäärä (asti):</label>
       <input type="date" id="date_max" name="date_max" value="{{ filters.date_max or '' }}">
     </div>
+
+    {% for class in all_classes %}
+      <div>
+        {{ class }}:<br />
+        <select name="class_{{ class }}">
+          <option value="">(tyhjä)</option>
+          {% for option in all_classes[class] %}
+            <option value="{{ option }}" {% if filters.classes.get(class) == option %}selected{% endif %}>{{ option }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    {% endfor %}
+
     <input type="submit" value="Hae" />
   </form>
 
