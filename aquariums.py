@@ -243,10 +243,9 @@ def set_main_image(aquarium_id, image_id):
 
 def get_main_image(aquarium_id):
     """Gets the main image of an aquarium."""
-    sql = """SELECT i.image
-             FROM images i
-             JOIN main_images m ON m.image_id = i.id
-             WHERE m.aquarium_id = ?"""
+    sql = """SELECT image_id
+             FROM main_images
+             WHERE aquarium_id = ?"""
     result = db.query(sql, [aquarium_id])
     return result[0][0] if result else None
 

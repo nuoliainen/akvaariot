@@ -118,6 +118,37 @@ a.active {
     text-align: center;
 }
 
-img {
-    max-width: 55em;
+.aquarium-image {
+  max-width: 50em;
+  max-height: 50em;
+}
+
+.aquarium-images {
+  margin: 10px 0;
+}
+
+.aquarium-images .main-image {
+  border: 3px solid darkred;
+}
+
+.aquarium-images .image-row {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* spacing between checkbox and image */
+}
+
+.image-wrapper {
+  position: relative;
+  margin-bottom: 12px; /* vertical spacing between images/rows */
+}
+
+.image-overlay-text {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
 }

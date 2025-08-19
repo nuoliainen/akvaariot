@@ -11,11 +11,21 @@
 
 {% if images %}
   <form action="/remove_images" method="post">
-    {% for image in images %}
-      <input type="checkbox" name="image_id" value="{{ image.id }}" />
-      <img src="/image/{{ image.id }}" alt="Akvaarion kuva" />
-      <br />
-    {% endfor %}
+    <div class="aquarium-images">
+      {% for image in images %}
+        <div class="image-row">
+          <input type="checkbox" name="image_id" value="{{ image.id }}" />
+          <div class="image-wrapper">
+            <img class="aquarium-image{% if main_image == image.id %} main-image{% endif %}"
+              src="/image/{{ image.id }}"
+              alt="Akvaarion kuva" />
+            {% if main_image == image.id %}
+              <div class="image-overlay-text">Pääkuva</div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
     <p>
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />

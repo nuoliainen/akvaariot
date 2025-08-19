@@ -158,11 +158,12 @@ def show_aquarium(aquarium_id):
     newest_comments = aquariums.get_newest_comments(aquarium_id, max_comments)
     total_comments = aquariums.count_comments(aquarium_id)
     images = aquariums.get_images(aquarium_id)
+    main_image = aquariums.get_main_image(aquarium_id)
 
     return render_template("show_aquarium.html",
                            aquarium=aquarium, classes=classes, critters=critters,
                            comments=newest_comments, total_comments=total_comments,
-                           max_comments=max_comments, images=images)
+                           max_comments=max_comments, images=images, main_image=main_image)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -440,8 +441,9 @@ def manage_images(aquarium_id):
 
     images = aquariums.get_images(aquarium_id)
     image_count = aquariums.count_images(aquarium_id)
+    main_image = aquariums.get_main_image(aquarium_id)
     return render_template("images.html", aquarium=aquarium, images=images,
-                           image_count=image_count)
+                           image_count=image_count, main_image=main_image)
 
 @app.route("/add_image", methods=["POST"])
 def add_image():

@@ -10,11 +10,18 @@
     <a href="/images/{{ aquarium.id }}">Kuvat</a>
   {% endif %}
 
-  <p>
+  <div class="aquarium-images">
     {% for image in images %}
-      <img src="/image/{{ image.id }}" alt="Akvaarion kuva"/>
+      <div class="image-wrapper">
+        <img class="aquarium-image{% if main_image == image.id %} main-image{% endif %}"
+          src="/image/{{ image.id }}"
+          alt="Akvaarion kuva">
+        {% if main_image == image.id %}
+          <div class="image-overlay-text">Pääkuva</div>
+        {% endif %}
+      </div>
     {% endfor %}
-  </p>
+  </div>
 
   <p>
     Akvaarion omistaja: <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a>
