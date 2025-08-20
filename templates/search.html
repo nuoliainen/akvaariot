@@ -16,12 +16,14 @@
        placeholder="Hae lajin nimen tai sen osan perusteella..." size="50" />
     </div>
     <div>
-      <label for="volume_min">Tilavuus (min):</label>
-      <input type="number" id="volume_min" name="volume_min" value="{{ filters.volume_min or '' }}">
+      <label for="volume_min">Tilavuus (litraa, min):</label>
+      <input type="number" id="volume_min" name="volume_min" value="{{ filters.volume_min or '' }}"
+       placeholder="Esim. 300 litraa ja sitä suuremmat" size="30">
     </div>
     <div>
-      <label for="volume_max">Tilavuus (max):</label>
-      <input type="number" id="volume_max" name="volume_max" value="{{ filters.volume_max or '' }}">
+      <label for="volume_max">Tilavuus (litraa, max):</label>
+      <input type="number" id="volume_max" name="volume_max" value="{{ filters.volume_max or '' }}"
+       placeholder="Esim. 300 litraa ja sitä pienemmät" size="30">
     </div>
     <div>
       <label for="date_min">Päivämäärä (alkaen):</label>
@@ -38,7 +40,7 @@
         <select name="class_{{ class }}">
           <option value="">(tyhjä)</option>
           {% for option in all_classes[class] %}
-            <option value="{{ option }}" {% if filters.classes.get(class) == option %}selected{% endif %}>{{ option }}</option>
+            <option value="{{ option }}" {% if filters["class_" ~ class] == option %}selected{% endif %}>{{ option }}</option>
           {% endfor %}
         </select>
       </div>

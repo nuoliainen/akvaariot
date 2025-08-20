@@ -540,20 +540,15 @@ def search(page=1):
     filters = {
         "query": request.args.get("query"),
         "species_query": request.args.get("species_query"),
-        "volume_min": request.args.get("volume_min", type=int),
-        "volume_max": request.args.get("volume_max", type=int),
+        "volume_min": request.args.get("volume_min", "", type=int),
+        "volume_max": request.args.get("volume_max", "", type=int),
         "date_min": request.args.get("date_min"),
         "date_max": request.args.get("date_max")
     }
 
-    classes = {}
-    for class_title in all_classes.keys():
+    for class_title in aquariums.get_all_classes().keys():
         value = request.args.get(f"class_{class_title}")
-        if value:
-            classes[class_title] = value
-    filters["classes"] = classes
-
-    print(filters)
+        filters[f"class_{class_title}"] = value
 
     if not any(filters.values()):
         return render_template("search.html",
@@ -577,7 +572,6 @@ def search(page=1):
         return redirect(f"/search/{page_count}?{query_string}")
 
     results = aquariums.search_page(filters, page, page_size)
-    print(results)
     return render_template("search.html",
                            all_classes=all_classes,
                            results=results,

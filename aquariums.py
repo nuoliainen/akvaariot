@@ -319,15 +319,17 @@ def create_filter_sql(filters):
         sql_parts.append(" AND date(a.date) <= date(?)")
         params.append(filters["date_max"])
 
-    class_filters = filters.get("classes")
-    if class_filters:
-        for title, value in class_filters.items():
+    # Class filters
+    for key, value in filters.items():
+        if key.startswith("class_") and value:
+            # Get the class title (the part that comes after "class_")
+            class_title = key[len("class_"):]
             sql_parts.append(""" AND EXISTS (SELECT 1
                                             FROM aquarium_classes ac
                                             WHERE ac.aquarium_id = a.id
                                             AND ac.title = ?
                                             AND ac.value = ?)""")
-            params.extend([title, value])
+            params.extend([class_title, value])
 
     if sql_parts:
         sql = "".join(sql_parts)
