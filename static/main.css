@@ -216,17 +216,30 @@ nav li.active {
   border-radius: 4px;
 }
 
-.flash-msg {
-  background-color: #3d152a;
-  color: #fff;
-  border-radius: 4px;
+.flash {
+  padding: 15px;
+  margin-top: 0;
   margin-bottom: 10px;
-  overflow: hidden;
+  border-radius: 4px;
+  font-weight: bold;
+  color: white;
 }
 
-.flash-msg p {
-  padding: 15px;
-  margin: 0;
+.flash.success {
+  background-color: #1d8334;
+}
+
+.flash.error {
+  background-color: #9b2531;
+}
+
+.flash.info {
+  background-color: #17a2b8;
+}
+
+.flash.warning {
+  background-color: #d8a50d;
+  color: #212529;
 }
 
 .description {

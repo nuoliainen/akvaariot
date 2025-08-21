@@ -189,6 +189,8 @@ def create_aquarium():
 
     classes = get_validated_classes()
     aquariums.add_aquarium_classes(aquarium_id, classes)
+    flash("Akvaario luotu!", "success")
+    flash("Voit nyt lisätä akvaarioon eläimiä ja kuvia.", "info")
 
     # Redirect to the page of the new aquarium
     return redirect("/aquarium/" + str(aquarium_id))
@@ -226,6 +228,7 @@ def update_aquarium():
     classes = get_validated_classes()
 
     aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
+    flash("Akvaarion muokkaus onnistui!", "success")
 
     return redirect("/aquarium/" + str(aquarium_id))
 
@@ -245,7 +248,7 @@ def remove_aquarium(aquarium_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_aquarium(aquarium_id)
-        flash("Poistettu!")
+        flash("Poistettu!", "success")
         return redirect("/user/" + str(session["user_id"]))
 
 @app.route("/new_critter")
@@ -256,7 +259,7 @@ def new_critter():
     user_aquariums = users.get_aquariums(session["user_id"])
 
     if not user_aquariums:
-        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
+        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.", "warning")
         return redirect("/new_aquarium")
 
     # Get the default selected aquarium from query parameters (if present)
@@ -277,7 +280,7 @@ def create_critter():
     user_id = session["user_id"]
     user_aquariums = users.get_aquariums(user_id)
     if not user_aquariums:
-        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
+        flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.", "warning")
         return redirect("/new_aquarium")
 
     aquarium_id = request.form["aquarium_id"]
@@ -286,6 +289,7 @@ def create_critter():
 
     species, count = get_critter_data()
     aquariums.add_critter(user_id, aquarium_id, species, count)
+    flash("Eläin lisätty!", "success")
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/edit_critter/<int:critter_id>")
@@ -316,6 +320,7 @@ def update_critter():
 
     species, count = get_critter_data()
     aquariums.update_critter(species, count, aquarium_id, critter_id)
+    flash("Eläimen muokkaus onnistui!", "success")
     return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/remove_critter/<int:critter_id>", methods=["GET", "POST"])
@@ -334,6 +339,7 @@ def remove_critter(critter_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_critter(critter_id)
+        flash(f"{critter["species"]} ({critter["count"]} kpl) poistettu akvaariosta!", "success")
         return redirect("/aquarium/" + str(critter["aquarium_id"]))
 
 @app.route("/remove_critters/<int:aquarium_id>", methods=["GET", "POST"])
@@ -354,6 +360,7 @@ def remove_critters(aquarium_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_critters(aquarium_id)
+        flash(f"Kaikki eläimet poistettu akvaariosta!", "success")
         return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/create_comment", methods=["POST"])
@@ -398,7 +405,7 @@ def remove_comment(comment_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_comment(comment_id)
-        flash("Poistettu!")
+        flash("Poistettu!", "success")
         # Redirect back depending on which page the removal was initiated
         next_url = request.args.get("next")
         return redirect(next_url or ("/aquarium/" + str(comment["aquarium_id"])))
@@ -468,17 +475,17 @@ def add_image():
 
     count = aquariums.count_images(aquarium_id)
     if count >= max_images:
-        flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.")
+        flash("Olet lisännyt akvaariolle jo maksimimäärän kuvia.", "warning")
         return redirect("/images/" + str(aquarium_id))
 
     file = request.files["image"]
     if not file.filename.lower().endswith(allowed_file_type):
-        flash("VIRHE: väärä tiedostomuoto")
+        flash("Väärä tiedostomuoto!", "error")
         return redirect("/images/" + str(aquarium_id))
 
     image = file.read()
     if len(image) > max_file_size:
-        flash("VIRHE: liian suuri kuva")
+        flash("Liian suuri kuva!", "error")
         return redirect("/images/" + str(aquarium_id))
 
     aquariums.add_image(aquarium_id, image)
@@ -486,7 +493,7 @@ def add_image():
     # Set the first image uploaded as the main image
     if count == 0:
         aquariums.set_main_image(aquarium_id, image_id)
-    flash("Kuva lisätty!")
+    flash("Kuva lisätty!", "success")
     return redirect("/images/" + str(aquarium_id))
 
 @app.route("/remove_images", methods=["POST"])
@@ -511,7 +518,7 @@ def remove_images():
             if oldest_image_id:
                 aquariums.set_main_image(aquarium_id, oldest_image_id)
 
-        flash("Kuva(t) poistettu!")
+        flash("Kuva(t) poistettu!", "success")
     return redirect("/images/" + str(aquarium_id))
 
 @app.route("/remove_all_images/<int:aquarium_id>", methods=["GET", "POST"])
@@ -530,7 +537,7 @@ def remove_all_images(aquarium_id):
         images = aquariums.get_images(aquarium_id)
         if images:
             aquariums.remove_all_images(aquarium_id)
-            flash("Kaikki kuvat poistettu!")
+            flash("Kaikki akvaarion kuvat poistettu!", "success")
         return redirect("/images/" + str(aquarium_id))
 
 @app.route("/search")
@@ -604,18 +611,18 @@ def register():
             abort(400, description="Password is required and must be 50 characters or less.")
 
         if password1 != password2:
-            flash("VIRHE: salasanat eivät ole samat")
+            flash("Salasanat eivät ole samat!", "error")
             filled = {"username": username}
             return render_template("register.html", filled=filled, current_page="register")
 
         try:
             users.create_user(username, password1)
         except sqlite3.IntegrityError:
-            flash("VIRHE: tunnus on jo varattu")
+            flash("Tunnus on jo varattu!", "error")
             filled = {"username": username}
             return render_template("register.html", filled=filled, current_page="register")
 
-        flash("Tunnuksen luonti onnistui! Voit nyt kirjautua sisään.")
+        flash("Tunnuksen luonti onnistui! Voit nyt kirjautua sisään.", "success")
         return redirect("/login")
 
 @app.route("/login", methods=["GET", "POST"])
@@ -635,7 +642,7 @@ def login():
             session["username"] = username
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
-        flash("VIRHE: Väärä tunnus tai salasana!")
+        flash("Väärä tunnus tai salasana!", "error")
         return redirect("/login")
 
 @app.route("/logout")

@@ -79,9 +79,9 @@
 
   <div class="content">
     <div class="flash-msg">
-      {% for message in get_flashed_messages() %}
-        <p>
-          <b>{{ message }}</b>
+      {% for category, message in get_flashed_messages(with_categories=true) %}
+        <p class="flash {{ category }}">
+          {{ message }}
         </p>
       {% endfor %}
     </div>
