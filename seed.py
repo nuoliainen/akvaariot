@@ -9,6 +9,8 @@ db.execute("DELETE FROM aquariums")
 db.execute("DELETE FROM critters")
 db.execute("DELETE FROM aquarium_classes")
 db.execute("DELETE FROM comments")
+db.execute("DELETE FROM images")
+db.execute("DELETE FROM main_images")
 
 user_count = 1000
 aquarium_count = 10**5
@@ -69,7 +71,7 @@ for i in range(1, aquarium_count + 1):
     random_date = start_date + datetime.timedelta(days=rand_days)
 
     db.execute("""INSERT INTO aquariums (name, user_id, length, depth, height, volume, date, description)
-                  VALUES (?, ?, ?, ?, ?, ?, ?)""",
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
                ["tank" + str(i), user_id, l, d, h, volume, random_date, "description"])
 
     # Assign some classes
