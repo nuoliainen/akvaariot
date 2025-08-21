@@ -126,10 +126,14 @@ nav li.active {
 
 .aquarium-owner {
   padding: 10px;
+  padding-top: 0;
   text-align: right;
   margin: 0;
   color: #666;
   font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* add ... if text is too long */
 }
 
 .aquarium-owner a {
@@ -155,28 +159,57 @@ nav li.active {
 .aquarium .main-image {
   width: 100%;
   height: 250px;
-  object-fit: cover;
   color: #8f8f8f;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: rgb(70, 70, 70);
   border-radius: 3px 3px 0 0; /* round top corners */
+  position: relative;
+}
+
+.aquarium .main-image img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 3px 3px 0 0; /* round top corners */
+}
+
+.main-image .image-overlay {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 0.95rem;
+  border-radius: 3px 0px 0 0;
+}
+
+.aquarium h3 {
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+  margin: 15px;
+  margin-top: 0;
 }
 
 .aquarium-content {
   padding: 15px;
   text-align: center;
+  box-sizing: border-box;
+  height: 140px;
 }
 
-.aquarium-content h3 {
-  margin: 0;
-  font-size: 1.2rem;
-  color: #333;
+.aquarium-content ul {
+  list-style: none;
+  padding: 0;
 }
 
-.aquarium-info {
-  margin: 5px 0 0;
+.aquarium-info, .aquarium-classes {
+  display: inline-block;
+  vertical-align: top;
+  width: 45%;
   font-size: 0.95rem;
   color: #666;
 }

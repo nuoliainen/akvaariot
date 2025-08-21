@@ -10,14 +10,14 @@
   {% endif %}
 
   <p>
-    {% if aquariums | count == 0 %}
+    {% if aquarium_count.count == 0 %}
       Käyttäjällä ei ole akvaaarioita.
-    {% elif aquariums | count == 1 %}
-      Käyttäjällä on {{ aquariums | count }} akvaario.</br>
-      Käyttäjän akvaariossa on {{ aquariums[0].volume }} litraa vettä.
+    {% elif aquarium_count.count == 1 %}
+      Käyttäjällä on 1 akvaario.</br>
+      Käyttäjän akvaariossa on {{ aquarium_count.volume }} litraa vettä.
     {% else %}
-      Käyttäjällä on yhteensä {{ aquariums | count }} akvaariota.</br>
-      Käyttäjän akvaarioissa on yhteensä {{ aquariums | sum(attribute="volume") }} litraa vettä.
+      Käyttäjällä on yhteensä {{ aquarium_count.count }} akvaariota.</br>
+      Käyttäjän akvaarioissa on yhteensä {{ aquarium_count.volume }} litraa vettä.
     {% endif %}
   </p>
   <p>
@@ -33,5 +33,13 @@
   </p>
 
   {% include "aquarium_list.html" %}
+
+  <div class="pages">
+    <a href="/user/{{ user.id }}/{{ 1 }}">ensimmäinen</a>
+    <a href="/user/{{ user.id }}/{{ page - 1 }}">&lt;&lt;</a>
+    Sivu {{ page }}/{{ page_count }}
+    <a href="/user/{{ user.id }}/{{ page + 1 }}">&gt;&gt;</a>
+    <a href="/user/{{ user.id }}/{{ page_count }}">viimeinen</a>
+  </div>
 
 {% endblock %}

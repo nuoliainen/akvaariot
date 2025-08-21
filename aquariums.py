@@ -21,10 +21,16 @@ def get_aquariums_page(page, page_size):
                     a.date,
                     u.id AS user_id,
                     u.username,
-                    m.image_id as main_image_id
+                    m.image_id as main_image_id,
+                    GROUP_CONCAT(ac.title || ': ' || ac.value, ', ') AS selected_classes,
+                    (SELECT COUNT(*) FROM comments c WHERE c.aquarium_id = a.id) AS comment_count,
+                    (SELECT COUNT(DISTINCT species) FROM critters cr WHERE cr.aquarium_id = a.id) AS species_count,
+                    (SELECT COALESCE(SUM(count), 0) FROM critters cr WHERE cr.aquarium_id = a.id) AS total_individuals
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id
+             LEFT JOIN aquarium_classes ac ON a.id = ac.aquarium_id
+             GROUP BY a.id
              ORDER BY a.id DESC
              LIMIT ? OFFSET ?"""
     limit = page_size
@@ -363,16 +369,21 @@ def search_page(filters, page, page_size):
                     a.date,
                     u.id AS user_id,
                     u.username,
-                    m.image_id as main_image_id
+                    m.image_id as main_image_id,
+                    GROUP_CONCAT(ac.title || ': ' || ac.value, ', ') AS selected_classes,
+                    (SELECT COUNT(*) FROM comments c WHERE c.aquarium_id = a.id) AS comment_count,
+                    (SELECT COUNT(DISTINCT species) FROM critters cr WHERE cr.aquarium_id = a.id) AS species_count,
+                    (SELECT COALESCE(SUM(count), 0) FROM critters cr WHERE cr.aquarium_id = a.id) AS total_individuals
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
              LEFT JOIN main_images m ON a.id = m.aquarium_id
+             LEFT JOIN aquarium_classes ac ON a.id = ac.aquarium_id
              WHERE 1=1"""
 
     filter_sql, params = create_filter_sql(filters)
     sql += filter_sql
 
-    sql += " ORDER BY a.id DESC LIMIT ? OFFSET ?"
+    sql += " GROUP BY a.id ORDER BY a.id DESC LIMIT ? OFFSET ?"
     limit = page_size
     offset = page_size * (page - 1)
     params.extend([limit, offset])

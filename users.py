@@ -54,6 +54,48 @@ def get_aquariums(user_id):
              """
     return db.query(sql, [user_id])
 
+def get_aquariums_page(user_id, page, page_size):
+    """Gets the details of all aquariums in a page that belong to the user."""
+    sql = """SELECT a.id,
+                    a.name,
+                    a.length,
+                    a.depth,
+                    a.height,
+                    a.volume,
+                    a.date,
+                    u.id AS user_id,
+                    u.username,
+                    m.image_id as main_image_id,
+                    GROUP_CONCAT(ac.title || ': ' || ac.value, ', ') AS selected_classes,
+                    (SELECT COUNT(*) FROM comments c WHERE c.aquarium_id = a.id) AS comment_count,
+                    (SELECT COUNT(DISTINCT species) FROM critters cr WHERE cr.aquarium_id = a.id) AS species_count,
+                    (SELECT COALESCE(SUM(count), 0) FROM critters cr WHERE cr.aquarium_id = a.id) AS total_individuals
+             FROM aquariums a
+             JOIN users u ON a.user_id = u.id
+             LEFT JOIN main_images m ON a.id = m.aquarium_id
+             LEFT JOIN aquarium_classes ac ON a.id = ac.aquarium_id
+             WHERE a.user_id = ?
+             GROUP BY a.id
+             ORDER BY a.id DESC
+             LIMIT ? OFFSET ?"""
+    limit = page_size
+    offset = page_size * (page - 1)
+    return db.query(sql, [user_id, limit, offset])
+
+def count_aquariums(user_id):
+    """Counts the number and total volume of aquariums user has."""
+    sql = """SELECT COUNT(*), SUM(volume)
+             FROM aquariums
+             WHERE user_id = ?"""
+    result = db.query(sql, [user_id])
+    if result:
+        species_count, critter_count = result[0]
+        return {
+            "count": species_count,
+            "volume": critter_count
+        }
+    return {"count": 0, "volume": 0}
+
 def count_critters(user_id):
     """Counts the number of species and individuals that belong to a user."""
     sql = """SELECT COUNT(DISTINCT species), SUM(count)

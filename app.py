@@ -136,17 +136,34 @@ def index(page=1):
                            current_page="index")
 
 @app.route("/user/<int:user_id>")
-def show_user(user_id):
+@app.route("/user/<int:user_id>/<int:page>")
+def show_user(user_id, page=1):
     """Renders the page for a specific user showing their aquariums."""
     user = users.get_user(user_id)
     # Check if the user exists
     if not user:
         abort(404)
 
-    user_aquariums = users.get_aquariums(user_id)
+    page_size = 10
+    aquarium_count = users.count_aquariums(user_id)
+    page_count = math.ceil(aquarium_count["count"] / page_size)
+    page_count = max(page_count, 1)
+
+    if page < 1:
+        return redirect("/1")
+    if page > page_count:
+        return redirect("/" + str(page_count))
+
+    user_aquariums = users.get_aquariums_page(user_id, page, page_size)
     critter_counts = users.count_critters(user_id)
-    return render_template("show_user.html", user=user, aquariums=user_aquariums,
-                           critter_counts=critter_counts, current_page="userpage")
+    return render_template("show_user.html",
+                           user=user,
+                           aquarium_count=aquarium_count,
+                           aquariums=user_aquariums,
+                           critter_counts=critter_counts,
+                           page=page,
+                           page_count=page_count,
+                           current_page="userpage")
 
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
