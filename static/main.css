@@ -112,13 +112,13 @@ nav li.active {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 1em;
+  gap: 15px;
   padding: 0;
   list-style-type: none;
 }
 
 .aquarium {
-  width: 450px;
+  width: 48%;
   background-color: #f9f9f9;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -145,11 +145,11 @@ nav li.active {
   display: flex;
   flex-direction: column; /* column: image above text -- row: image next to text */
   text-decoration: none;
-  transition: transform 0.1s;
 }
 
 .aquarium:hover {
   transform: scale(1.02);
+  transition: transform 0.2s ease;
 }
 
 .aquarium .main-image {
@@ -161,6 +161,7 @@ nav li.active {
   justify-content: center;
   align-items: center;
   background-color: rgb(70, 70, 70);
+  border-radius: 3px 3px 0 0; /* round top corners */
 }
 
 .aquarium-content {
