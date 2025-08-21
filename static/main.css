@@ -1,40 +1,48 @@
 body {
-  margin: auto;
-  max-width: 62em;
+  margin: 0;
   min-height: 100vh;
-  padding: 0 1em;
   font-family: sans-serif;
   background-image: linear-gradient(
     180deg,
     rgba(185, 194, 165, 1) 0%,
-    rgba(143, 156, 131, 1) 50%, 
+    rgba(143, 156, 131, 1) 70%,
     rgba(121, 146, 126, 1) 100%);
 }
 
-h1 {
-  text-align: center;
-  margin: 0;
-  padding: 20px 0;
-}
+
+/* ---- Header ---- */
 
 .header {
+  width: 100%;
+}
+
+.header h1 {
+  text-align: center;
+  margin: 0;
+  padding: 40px 0;
   background-color: #f9f9f9;
 }
 
-.content {
-  padding: 15px;
-  background-color: rgb(226, 233, 218);
-}
-
-.session-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: rgb(196, 204, 180);
+.sticky {
+  position: sticky;
+  z-index: 1000;
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.session-nav ul {
+.user-bar {
+  background-color: rgb(196, 204, 180);
+  top: 0px; /* position when scrolling: top of page */
+}
+
+.nav-bar {
+  background-color: rgb(145, 158, 133);
+  top: 38px; /* position when scrolling: height of user bar */
+}
+
+
+/* -- Navigation -- */
+
+nav ul {
   display: flex;
   flex-direction: row;
   list-style: none;
@@ -42,55 +50,62 @@ h1 {
   margin: 0;
 }
 
-.session-info .user-info,
-.session-info .placeholder {
-  min-width: 150px;
-  padding: 0 15px;
-}
-
-.main-nav {
-  text-align: center;
-}
-
-nav ul {
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-}
-
-.main-nav ul {
-  display: flex;
-  flex-direction: row;
+.primary-nav ul {
   justify-content: center;
-  background-color: rgb(145, 158, 133);
-}
-
-nav li {
-  padding: 0;
-  margin: 0;
 }
 
 nav li a {
   display: block;
   padding: 10px 15px;
-  text-decoration: none;   /* remove underline */
+  text-decoration: none; /* remove underline */
   color: black;
-}
-
-.session-nav li:not(:last-of-type) {
-  border-right: 3px solid rgb(143, 156, 131);
 }
 
 nav li:not(:last-of-type) {
   border-right: 3px solid rgb(101, 110, 92);
 }
 
-nav li:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.user-nav li:not(:last-of-type) {
+  border-right: 3px solid rgb(143, 156, 131);
 }
 
-a.active {
+nav li:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.2s ease;
+}
+
+nav li.active {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+/* -- User info -- */
+
+.user-bar-wrapper {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-bar .user-info,
+.user-bar .user-placeholder {
+  min-width: 150px;
+  padding-left: 15px;
+}
+
+
+/* ---- Main content ---- */
+
+.content {
+  padding: 15px;
+  padding-bottom: 30px;
+  margin: auto;
+  max-width: 980px;
+  background-color: rgb(226, 233, 218);
+  z-index: 1;
+  box-sizing: border-box;
 }
 
 .aquarium-list {
