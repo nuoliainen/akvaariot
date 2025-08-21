@@ -437,12 +437,12 @@ def show_comments(aquarium_id, page=1):
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):
-    image = aquariums.get_image(image_id)
+    image, file_type = aquariums.get_image(image_id)
     if not image:
         abort(404)
 
     response = make_response(bytes(image))
-    response.headers.set("Content-Type", "image/png")
+    response.headers.set("Content-Type", file_type)
     return response
 
 @app.route("/images/<int:aquarium_id>")
@@ -471,7 +471,7 @@ def add_image():
 
     max_images = 6
     max_file_size = 100 * 1024
-    allowed_file_type = ".png"
+    allowed_file_types = [".png", ".jpg", ".jpeg"]
 
     count = aquariums.count_images(aquarium_id)
     if count >= max_images:
@@ -479,16 +479,18 @@ def add_image():
         return redirect("/images/" + str(aquarium_id))
 
     file = request.files["image"]
-    if not file.filename.lower().endswith(allowed_file_type):
-        flash("Väärä tiedostomuoto!", "error")
+    if not any(file.filename.lower().endswith(file_type) for file_type in allowed_file_types):
+        flash("Väärä tiedostomuoto! Sallitut tiedostot: .png, .jpg ja .jpeg", "error")
         return redirect("/images/" + str(aquarium_id))
 
     image = file.read()
+    file_type = file.content_type # image/png or image/jpg etc.
+    print(file_type)
     if len(image) > max_file_size:
         flash("Liian suuri kuva!", "error")
         return redirect("/images/" + str(aquarium_id))
 
-    aquariums.add_image(aquarium_id, image)
+    aquariums.add_image(aquarium_id, image, file_type)
     image_id = db.last_insert_id()
     # Set the first image uploaded as the main image
     if count == 0:

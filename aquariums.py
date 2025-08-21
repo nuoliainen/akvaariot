@@ -210,10 +210,10 @@ def remove_comment(comment_id):
     sql = "DELETE FROM comments WHERE id = ?"
     db.execute(sql, [comment_id])
 
-def add_image(aquarium_id, image):
+def add_image(aquarium_id, image, file_type):
     """Adds an image into the database."""
-    sql = "INSERT INTO images (aquarium_id, image) VALUES (?, ?)"
-    db.execute(sql, [aquarium_id, image])
+    sql = "INSERT INTO images (aquarium_id, image, file_type) VALUES (?, ?, ?)"
+    db.execute(sql, [aquarium_id, image, file_type])
 
 def count_images(aquarium_id):
     """Counts how many images an aquarium currently has."""
@@ -227,9 +227,12 @@ def get_images(aquarium_id):
 
 def get_image(image_id):
     """Gets the data of an image."""
-    sql = "SELECT image FROM images WHERE id = ?"
+    sql = "SELECT image, file_type FROM images WHERE id = ?"
     result = db.query(sql, [image_id])
-    return  result[0][0] if result else None
+    if result:
+        row = result[0]
+        return row["image"], row["file_type"]
+    return None, None
 
 def remove_images(image_ids, aquarium_id):
     """Removes one or multiple images from the database."""

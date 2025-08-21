@@ -32,7 +32,8 @@ CREATE TABLE aquarium_classes (
 CREATE TABLE images (
     id INTEGER PRIMARY KEY,
     aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
-    image BLOB
+    image BLOB,
+    file_type TEXT
 );
 
 CREATE TABLE main_images (

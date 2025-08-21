@@ -38,12 +38,12 @@
   {% if image_count < 6 %}
     <h3>Lisää uusi kuva</h3>
     <p>
-      <i>Vaadittu tiedostomuoto .png ja maksimikoko 100MB</i>
+      <i>Vaadittu tiedostomuoto .png, .jpg tai .jpeg ja maksimikoko 100MB</i>
     </p>
     <form action="/add_image" method="post" enctype="multipart/form-data">
       <p>
         <label for="image">Kuva</label>:
-        <input type="file" id="image" name="image" accept=".png" />
+        <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" />
       </p>
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
