@@ -228,3 +228,7 @@ nav li.active {
   padding: 15px;
   margin: 0;
 }
+
+.description {
+  word-wrap: break-word;
+}
