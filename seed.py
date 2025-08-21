@@ -72,7 +72,7 @@ for i in range(1, aquarium_count + 1):
 
     db.execute("""INSERT INTO aquariums (name, user_id, length, depth, height, volume, date, description)
                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-               ["tank" + str(i), user_id, l, d, h, volume, random_date, "description"])
+               ["tank" + str(i), user_id, l, d, h, volume, str(random_date), "description "*random.randint(1, 100)])
 
     # Assign some classes
     if random.random() < 0.95:
