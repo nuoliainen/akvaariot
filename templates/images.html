@@ -11,7 +11,6 @@
 
 {% if images %}
   <form id="remove_images" action="/remove_images" method="post"></form>
-  <form id="set_main_image" action="/set_main_image" method="post"></form>
 
   <div class="aquarium-images">
     {% for image in images %}
@@ -27,10 +26,12 @@
               Pääkuva
             </div>
           {% else %}
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="set_main_image" />
-            <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="set_main_image" />
-            <input type="hidden" name="image_id" value="{{ image.id }}" form="set_main_image" />
-            <input type="submit" class="image-overlay-text" value="Valitse pääkuvaksi" form="set_main_image" />
+            <form action="/set_main_image" method="post">
+              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+              <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+              <input type="hidden" name="image_id" value="{{ image.id }}" />
+              <input type="submit" class="image-overlay-text" value="Valitse pääkuvaksi" />
+            </form>
           {% endif %}
         </div>
       </div>
