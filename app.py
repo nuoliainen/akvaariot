@@ -261,7 +261,13 @@ def new_critter():
         flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.")
         return redirect("/new_aquarium")
 
-    return render_template("new_critter.html", aquariums=user_aquariums, current_page="new_critter")
+    # Get the default selected aquarium from query parameters (if present)
+    selected_aquarium_id = request.args.get("aquarium_id", type=int)
+
+    return render_template("new_critter.html",
+                           aquariums=user_aquariums,
+                           selected_aquarium_id=selected_aquarium_id,
+                           current_page="new_critter")
 
 @app.route("/create_critter", methods=["POST"])
 def create_critter():

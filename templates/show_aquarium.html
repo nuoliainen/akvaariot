@@ -77,7 +77,7 @@
 
     {% if session.user_id == aquarium.user_id %}
       <p>
-        <a href="/new_critter">Lisää eläin</a>
+        <a href="/new_critter?aquarium_id={{ aquarium.id }}">Lisää eläin</a>
         {% if critters %}
         <a href="/remove_critters/{{ aquarium.id }}">Tyhjennä akvaario</a>
         {% endif %}

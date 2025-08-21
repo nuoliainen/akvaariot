@@ -17,7 +17,9 @@
       <label for="aquarium">Akvaario</label>: <br />
       <select id="aquarium" name="aquarium_id">
         {% for aquarium in aquariums %}
-          <option value="{{ aquarium['id'] }}">{{ aquarium["name"] }}</option>
+          <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == selected_aquarium_id %}selected{% endif %}>
+            {{ aquarium["name"] }}
+          </option>
         {% endfor %}
       </select>
     </p>
