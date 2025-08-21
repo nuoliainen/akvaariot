@@ -36,7 +36,7 @@
 
     {% for class in all_classes %}
       <div>
-        {{ class }}:<br />
+        <label for="class_{{ class }}">{{ class }}:</label>
         <select name="class_{{ class }}">
           <option value="">(tyhjä)</option>
           {% for option in all_classes[class] %}
