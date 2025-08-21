@@ -6,7 +6,7 @@ CREATE TABLE users (
 
 CREATE TABLE aquariums (
     id INTEGER PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     name TEXT,
     length INTEGER,
     depth INTEGER,
@@ -24,28 +24,28 @@ CREATE TABLE classes (
 
 CREATE TABLE aquarium_classes (
     id INTEGER PRIMARY KEY,
-    aquarium_id INTEGER REFERENCES aquariums,
+    aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     title TEXT,
     value TEXT
 );
 
 CREATE TABLE images (
     id INTEGER PRIMARY KEY,
-    aquarium_id INTEGER REFERENCES aquariums,
+    aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     image BLOB
 );
 
 CREATE TABLE main_images (
     id INTEGER PRIMARY KEY,
-    aquarium_id INTEGER REFERENCES aquariums,
+    aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     image_id INTEGER REFERENCES images(id) ON DELETE CASCADE,
     UNIQUE(aquarium_id)
 );
 
 CREATE TABLE critters (
     id INTEGER PRIMARY KEY,
-    user_id INTEGER REFERENCES users,
-    aquarium_id INTEGER REFERENCES aquariums,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+    aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     species TEXT,
     count INTEGER
 );

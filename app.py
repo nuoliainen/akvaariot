@@ -244,8 +244,6 @@ def remove_aquarium(aquarium_id):
     # Remove aquarium
     if request.method == "POST":
         check_csrf()
-        aquariums.remove_all_images(aquarium_id)
-        aquariums.remove_critters(aquarium_id)
         aquariums.remove_aquarium(aquarium_id)
         flash("Poistettu!")
         return redirect("/user/" + str(session["user_id"]))
@@ -512,8 +510,6 @@ def remove_images():
             oldest_image_id = aquariums.get_oldest_image(aquarium_id)
             if oldest_image_id:
                 aquariums.set_main_image(aquarium_id, oldest_image_id)
-            else:
-                aquariums.remove_main_image(aquarium_id)
 
         flash("Kuva(t) poistettu!")
     return redirect("/images/" + str(aquarium_id))
