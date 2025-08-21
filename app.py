@@ -498,6 +498,23 @@ def add_image():
     flash("Kuva lisätty!", "success")
     return redirect("/images/" + str(aquarium_id))
 
+@app.route("/set_main_image", methods=["POST"])
+def set_main_image():
+    """Sets the chosen image as the main image."""
+    require_login()
+    check_csrf()
+
+    aquarium_id = request.form["aquarium_id"]
+    image_id = request.form["image_id"]
+
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
+
+    aquariums.set_main_image(aquarium_id, image_id)
+
+    flash("Pääkuva vaihdettu!", "success")
+    return redirect("/images/" + str(aquarium_id))
+
 @app.route("/remove_images", methods=["POST"])
 def remove_images():
     """Removes one or multiple images from the aquarium."""
