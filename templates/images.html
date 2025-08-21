@@ -3,46 +3,46 @@
 {% block title %}Akvaarion kuvat{% endblock %}
 
 {% block content %}
-<h2>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h2>
+  <h2>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h2>
 
-<p>
-  Kuvia: {{ image_count }}/6 kpl
-</p>
+  <p>
+    Kuvia: {{ image_count }}/6 kpl
+  </p>
 
-{% if images %}
-  <form id="remove_images" action="/remove_images" method="post"></form>
+  {% if images %}
+    <form id="remove_images" action="/remove_images" method="post"></form>
 
-  <div class="aquarium-images">
-    {% for image in images %}
-      <div class="image-row">
-        <input type="checkbox" name="image_id" value="{{ image.id }}" form="remove_images" />
-        <div class="image-wrapper">
-          <img class="aquarium-image{% if main_image == image.id %} main-image{% endif %}"
-            src="/image/{{ image.id }}"
-            alt="Akvaarion kuva" />
+    <div class="aquarium-images">
+      {% for image in images %}
+        <div class="image-row">
+          <input type="checkbox" name="image_id" value="{{ image.id }}" form="remove_images" />
+          <div class="image-wrapper">
+            <img class="aquarium-image{% if main_image == image.id %} main-image{% endif %}"
+              src="/image/{{ image.id }}"
+              alt="Akvaarion kuva" />
 
-          {% if main_image == image.id %}
-            <div class="image-overlay-text">
-              Pääkuva
-            </div>
-          {% else %}
-            <form action="/set_main_image" method="post">
-              <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-              <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-              <input type="hidden" name="image_id" value="{{ image.id }}" />
-              <input type="submit" class="image-overlay-text" value="Valitse pääkuvaksi" />
-            </form>
-          {% endif %}
+            {% if main_image == image.id %}
+              <div class="image-overlay-text">
+                Pääkuva
+              </div>
+            {% else %}
+              <form action="/set_main_image" method="post">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+                <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+                <input type="hidden" name="image_id" value="{{ image.id }}" />
+                <input type="submit" class="image-overlay-text" value="Valitse pääkuvaksi" />
+              </form>
+            {% endif %}
+          </div>
         </div>
-      </div>
-    {% endfor %}
-  </div>
+      {% endfor %}
+    </div>
 
-  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="remove_images" />
-  <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="remove_images" />
-  <input type="submit" value="Poista valitut" form="remove_images" />
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="remove_images" />
+    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="remove_images" />
+    <input type="submit" value="Poista valitut" form="remove_images" />
 
-  <a href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
+    <a href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
   {% endif %}
 
   {% if image_count < 6 %}
