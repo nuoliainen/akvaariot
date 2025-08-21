@@ -530,7 +530,7 @@ def remove_all_images(aquarium_id):
         images = aquariums.get_images(aquarium_id)
         if images:
             aquariums.remove_all_images(aquarium_id)
-            flash("Kaikku kuvat poistettu!")
+            flash("Kaikki kuvat poistettu!")
         return redirect("/images/" + str(aquarium_id))
 
 @app.route("/search")
