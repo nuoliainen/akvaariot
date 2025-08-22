@@ -1,7 +1,11 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  font-family: sans-serif;
+  font-family: "Ubuntu Sans", sans-serif;
   background-image: linear-gradient(
     180deg,
     rgba(185, 194, 165, 1) 0%,
@@ -10,6 +14,9 @@ body {
   word-wrap: break-word;
 }
 
+h1, h2 {
+  font-family: Spectral, Georgia, serif;
+}
 
 /* ---- Header ---- */
 
@@ -22,6 +29,7 @@ body {
   margin: 0;
   padding: 40px 0;
   background-color: #f9f9f9;
+  font-size: 3rem;
 }
 
 .sticky {
@@ -37,7 +45,7 @@ body {
 
 .nav-bar {
   background-color: rgb(145, 158, 133);
-  top: 38px; /* position when scrolling: height of user bar */
+  top: 39px; /* position when scrolling: height of user bar */
 }
 
 
@@ -103,13 +111,12 @@ nav li.active {
 /* ---- Main content ---- */
 
 .content {
-  padding: 15px;
+  padding: 15px 30px;
   padding-bottom: 30px;
   margin: auto;
   max-width: 980px;
   background-color: rgb(226, 233, 218);
   z-index: 1;
-  box-sizing: border-box;
 }
 
 .aquarium-list {
