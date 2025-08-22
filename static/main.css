@@ -27,6 +27,10 @@ h1, h2 {
   font-family: Spectral, Georgia, serif;
 }
 
+h2 {
+  border-bottom: 2px solid rgb(100, 112, 103);
+}
+
 /* ---- Header ---- */
 
 .header {
