@@ -212,7 +212,7 @@ nav li.active {
   padding: 15px;
   text-align: center;
   box-sizing: border-box;
-  height: 140px;
+  min-height: 140px;
 }
 
 .aquarium-content ul {
