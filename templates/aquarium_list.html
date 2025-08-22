@@ -6,7 +6,7 @@
           {% if aquarium.main_image_id %}
             <img src="/image/{{ aquarium.main_image_id }}" alt="Aquarium main image">
           {% else %}
-            Ei kuvaa
+            <div class="no-image">Ei kuvaa</div>
           {% endif %}
           <div class="image-overlay">
             Kommentteja: {{ aquarium.comment_count }}
@@ -27,7 +27,7 @@
               {{ aquarium.species_count }} lajia ({{ aquarium.total_individuals }} yksilöä)
             {% endif %}
           </div>
-          <div class="aquarium-classes hide">
+          <div class="aquarium-classes">
             {% if aquarium.selected_classes %}
               <ul>
                 {% for item in aquarium.selected_classes.split(', ') %}

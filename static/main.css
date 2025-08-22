@@ -1,3 +1,9 @@
+:root {
+  --shared-width: 80%;
+  --shared-max-width: 1200px;
+  --shared-min-width: 450px;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -91,7 +97,9 @@ nav li.active {
 /* -- User info -- */
 
 .user-bar-wrapper {
-  max-width: 980px;
+  width: var(--shared-width);
+  min-width: var(--shared-min-width);
+  max-width: var(--shared-max-width);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -100,7 +108,6 @@ nav li.active {
 
 .user-bar .user-info,
 .user-bar .user-placeholder {
-  min-width: 150px;
   padding-left: 15px;
   white-space: nowrap;
   overflow: hidden;
@@ -114,7 +121,9 @@ nav li.active {
   padding: 15px 30px;
   padding-bottom: 30px;
   margin: auto;
-  max-width: 980px;
+  width: var(--shared-width);
+  min-width: var(--shared-min-width);
+  max-width: var(--shared-max-width);
   background-color: rgb(226, 233, 218);
   z-index: 1;
 }
@@ -122,14 +131,15 @@ nav li.active {
 .aquarium-list {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: space-between;
   gap: 15px;
   padding: 0;
   list-style-type: none;
 }
 
 .aquarium {
-  width: 48%;
+  flex: 1 1 48%; /* flex-grow, flex-shrink, width */
+  min-width: 320px; /* min width until switches to 1 column */
   background-color: #f9f9f9;
   border-radius: 3px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -148,8 +158,7 @@ nav li.active {
 }
 
 .aquarium-owner a {
-  color: #666;
-  width: 100px;
+  color: inherit;
 }
 
 .aquarium-owner a:hover {
@@ -171,19 +180,28 @@ nav li.active {
   width: 100%;
   height: 250px;
   color: #8f8f8f;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: rgb(70, 70, 70);
   border-radius: 3px 3px 0 0; /* round top corners */
   position: relative;
+  padding-top: 56.25%; /* 16:9 aspect ratio (9 / 16 = 0.5625) */
 }
 
 .aquarium .main-image img {
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
   width: 100%;
-  height: 250px;
+  height: 100%;
   object-fit: cover;
   border-radius: 3px 3px 0 0; /* round top corners */
+}
+
+.aquarium .main-image .no-image {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 .main-image .image-overlay {
@@ -215,17 +233,17 @@ nav li.active {
   min-height: 140px;
 }
 
-.aquarium-content ul {
-  list-style: none;
-  padding: 0;
-}
-
 .aquarium-info, .aquarium-classes {
   display: inline-block;
   vertical-align: top;
   width: 45%;
   font-size: 0.95rem;
   color: #666;
+}
+
+.aquarium-classes ul {
+  list-style: none;
+  padding: 0;
 }
 
 .pages {
