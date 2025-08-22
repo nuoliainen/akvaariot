@@ -356,7 +356,7 @@ def remove_critter(critter_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_critter(critter_id)
-        flash(f"{critter["species"]} ({critter["count"]} kpl) poistettu akvaariosta!", "success")
+        flash(f"{critter['species']} ({critter['count']} kpl) poistettu akvaariosta!", "success")
         return redirect("/aquarium/" + str(critter["aquarium_id"]))
 
 @app.route("/remove_critters/<int:aquarium_id>", methods=["GET", "POST"])
@@ -377,7 +377,7 @@ def remove_critters(aquarium_id):
     if request.method == "POST":
         check_csrf()
         aquariums.remove_critters(aquarium_id)
-        flash(f"Kaikki eläimet poistettu akvaariosta!", "success")
+        flash("Kaikki eläimet poistettu akvaariosta!", "success")
         return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/create_comment", methods=["POST"])
