@@ -1,3 +1,6 @@
+/* import google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Spectral&family=Ubuntu+Sans&display=swap");
+
 :root {
   --shared-width: 80%;
   --shared-max-width: 1200px;
