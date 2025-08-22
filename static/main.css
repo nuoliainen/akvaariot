@@ -301,3 +301,35 @@ input.image-overlay-text:hover {
   background-color: #d8a50d;
   color: #212529;
 }
+
+input,
+textarea,
+select {
+  padding: 8px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  border: 2px solid rgb(178, 185, 163);
+  background-color: #f9f9f9;
+}
+
+textarea {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+input[type="submit"] {
+  background-color: rgb(158, 170, 146);
+  border: 2px solid rgb(135, 145, 126);
+  border-radius: 6px;
+  padding: 6px 15px;
+  font-family: Spectral, Georgia, serif;
+  font-size: 1rem;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+input[type="submit"]:hover {
+  background-color: rgb(189, 199, 179);
+  box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.25);
+}
