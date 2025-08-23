@@ -6,11 +6,6 @@ def count_aquariums():
     sql = "SELECT COUNT(*) FROM aquariums"
     return db.query(sql)[0][0]
 
-def get_aquariums():
-    """Gets the details of all aquariums from the database."""
-    sql = "SELECT id, name, volume FROM aquariums ORDER BY id DESC"
-    return db.query(sql)
-
 def get_aquariums_page(page, page_size):
     """Gets the details of all aquariums in a page."""
     sql = """SELECT a.id,
@@ -72,7 +67,7 @@ def get_aquarium(aquarium_id):
     aquarium_dict["age_years"] = years
     aquarium_dict["age_days"] = days
 
-    return aquarium_dict if aquarium else None
+    return aquarium_dict
 
 def update_aquarium(name, dims, volume, date, description, aquarium_id, classes):
     """Updates the information of an aquarium into the database."""
@@ -95,8 +90,6 @@ def update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
 
 def remove_aquarium(aquarium_id):
     """Removes a specific aquarium from the database."""
-    sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
-    db.execute(sql, [aquarium_id])
     sql = "DELETE FROM aquariums WHERE id = ?"
     db.execute(sql, [aquarium_id])
 
@@ -118,17 +111,18 @@ def get_selected_classes(aquarium_id):
     sql = "SELECT title, value FROM aquarium_classes WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])
 
-def add_aquarium(user_id, name, dims, volume, date, description):
+def add_aquarium(user_id, name, dims, volume, date, description, classes):
     """Adds a new aquarium into the database."""
     sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
     db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
+    aquarium_id = db.last_insert_id()
 
-def add_aquarium_classes(aquarium_id, classes):
-    """Assigns classes for an aquarium."""
     sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
     for title, value in classes:
         db.execute(sql, [aquarium_id, title, value])
+
+    return aquarium_id
 
 def add_critter(user_id, aquarium_id, species, count):
     """Adds a new animal into the aquarium."""
@@ -177,21 +171,8 @@ def add_comment(aquarium_id, user_id, content):
              VALUES (?, ?, ?, datetime('now', 'localtime'))"""
     db.execute(sql, [aquarium_id, user_id, content])
 
-def get_comments(aquarium_id):
-    """Gets all comments related to a specific aquarium."""
-    sql = """SELECT comments.id,
-                    comments.content,
-                    comments.sent_at,
-                    users.id AS user_id,
-                    users.username
-             FROM comments
-             JOIN users ON comments.user_id = users.id
-             WHERE comments.aquarium_id = ?
-             ORDER BY comments.id DESC"""
-    return db.query(sql, [aquarium_id])
-
 def get_newest_comments(aquarium_id, limit):
-    """Gets all comments related to a specific aquarium."""
+    """Gets the newest comments related to a specific aquarium."""
     sql = """SELECT comments.id,
                     comments.content,
                     comments.sent_at,
@@ -301,19 +282,6 @@ def get_oldest_image(aquarium_id):
     result = db.query(sql, [aquarium_id])
     return result[0][0] if result else None
 
-def search(query):
-    """Selects all aquariums that contain a keyword in any column."""
-    sql = """SELECT a.id,
-                    a.name,
-                    a.volume
-             FROM aquariums a
-             JOIN users u ON a.user_id = u.id
-             WHERE a.name LIKE ? OR
-                   a.description LIKE ? OR
-                   u.username LIKE ?
-             ORDER BY a.id DESC"""
-    return db.query(sql, ["%" + query + "%"] * 3)
-
 def create_filter_sql(filters):
     """Creates SQL filter clause and parameters from given filters."""
     sql_parts = []
@@ -366,7 +334,7 @@ def create_filter_sql(filters):
     return "", params
 
 def count_search_results(filters):
-    """Gets the number of aquariums that match the filter conditions"""
+    """Gets the number of aquariums that match the filter conditions."""
     sql = """SELECT COUNT(*)
              FROM aquariums a
              JOIN users u ON a.user_id = u.id
@@ -375,8 +343,7 @@ def count_search_results(filters):
     filter_sql, params = create_filter_sql(filters)
     sql += filter_sql
 
-    result = db.query(sql, params)[0][0]
-    return result if result else 0
+    return db.query(sql, params)[0][0]
 
 def search_page(filters, page, page_size):
     """Selects all aquariums that match the filter conditions."""

@@ -207,11 +207,9 @@ def create_aquarium():
 
     user_id = session["user_id"]
     name, date, description, dims, volume = get_aquarium_data()
-    aquariums.add_aquarium(user_id, name, dims, volume, date, description)
-    aquarium_id = db.last_insert_id()
-
     classes = get_validated_classes()
-    aquariums.add_aquarium_classes(aquarium_id, classes)
+    aquarium_id = aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
+
     flash("Akvaario luotu!", "success")
     flash("Voit nyt lisätä akvaarioon eläimiä ja kuvia.", "info")
 
