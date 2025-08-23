@@ -1,5 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 import db
+import helpers as h
 
 def create_user(username, password):
     """Creates a new user into the database."""
@@ -80,7 +81,17 @@ def get_aquariums_page(user_id, page, page_size):
              LIMIT ? OFFSET ?"""
     limit = page_size
     offset = page_size * (page - 1)
-    return db.query(sql, [user_id, limit, offset])
+
+    aquariums = db.query(sql, [user_id, limit, offset])
+    aquariums_dicts = [dict(row) for row in aquariums]
+
+    # Calculate age for each aquarium
+    for aquarium in aquariums_dicts:
+        years, days = h.date_difference(aquarium["date"])
+        aquarium["age_years"] = years
+        aquarium["age_days"] = days
+
+    return aquariums_dicts
 
 def count_aquariums(user_id):
     """Counts the number and total volume of aquariums user has."""
@@ -109,3 +120,13 @@ def count_critters(user_id):
             "individuals": critter_count
         }
     return {"species": 0, "individuals": 0}
+
+def get_oldest_aquarium(user_id):
+    """Gets the date of the oldest aquarium from the user."""
+    sql = """SELECT a.date
+             FROM aquariums a
+             WHERE a.user_id = ? AND a.date IS NOT NULL AND date <> ''
+             ORDER BY a.date
+             LIMIT 1"""
+    result = db.query(sql, [user_id])
+    return result[0][0] if result else None

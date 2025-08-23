@@ -9,6 +9,7 @@ import config
 import aquariums
 import users
 import db
+import helpers as h
 
 app = Flask(__name__)
 app.secret_key = config.secret_key
@@ -156,11 +157,16 @@ def show_user(user_id, page=1):
 
     user_aquariums = users.get_aquariums_page(user_id, page, page_size)
     critter_counts = users.count_critters(user_id)
+
+    date = users.get_oldest_aquarium(user_id)
+    years, days = h.date_difference(date)
+    age = {"date": date, "years": years, "days": days}
     return render_template("show_user.html",
                            user=user,
                            aquarium_count=aquarium_count,
                            aquariums=user_aquariums,
                            critter_counts=critter_counts,
+                           age=age,
                            page=page,
                            page_count=page_count,
                            current_page="userpage")

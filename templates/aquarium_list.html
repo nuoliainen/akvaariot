@@ -16,7 +16,17 @@
           <h3>{{ aquarium.name }}</h3>
           <div class="aquarium-info">
             {{ aquarium.volume }} litraa ({{ aquarium.length }}x{{ aquarium.depth }}x{{ aquarium.height }} cm)<br />
-            Pystytetty: <i>{{ aquarium.date or "ei ilmoitettu" }}</i><br />
+            Pystytetty:
+            {% if aquarium.date %}
+              {{ aquarium.date }}<br />
+              {% if aquarium.age_years > 0 %}
+                ({{ aquarium.age_years }} vuotta ja {{ aquarium.age_days }} päivää sitten)
+              {% else %}
+                ({{ aquarium.age_days }} päivää sitten)
+              {% endif %}
+            {% else %}
+              <i>ei ilmoitettu</i>
+            {% endif %}<br />
             {% if aquarium.species_count == 0 %}
               <i>ei eläimiä</i>
             {% elif aquarium.species_count == 1 and aquarium.total_individuals == 1 %}

@@ -1,4 +1,5 @@
 import db
+import helpers as h
 
 def count_aquariums():
     """Gets the number of all aquariums in the database."""
@@ -35,7 +36,17 @@ def get_aquariums_page(page, page_size):
              LIMIT ? OFFSET ?"""
     limit = page_size
     offset = page_size * (page - 1)
-    return db.query(sql, [limit, offset])
+
+    aquariums = db.query(sql, [limit, offset])
+    aquariums_dicts = [dict(row) for row in aquariums]
+
+    # Calculate age for each aquarium
+    for aquarium in aquariums_dicts:
+        years, days = h.date_difference(aquarium["date"])
+        aquarium["age_years"] = years
+        aquarium["age_days"] = days
+
+    return aquariums_dicts
 
 def get_aquarium(aquarium_id):
     """Gets the details of an aquarium from the database."""
@@ -51,8 +62,17 @@ def get_aquarium(aquarium_id):
                     u.id user_id
              FROM aquariums a, users u
              WHERE a.user_id = u.id AND a.id = ?"""
-    result = db.query(sql, [aquarium_id])
-    return result[0] if result else None
+    aquarium = db.query(sql, [aquarium_id])
+
+    if not aquarium:
+        return None
+    aquarium_dict = dict(aquarium[0])
+
+    years, days = h.date_difference(aquarium_dict["date"])
+    aquarium_dict["age_years"] = years
+    aquarium_dict["age_days"] = days
+
+    return aquarium_dict if aquarium else None
 
 def update_aquarium(name, dims, volume, date, description, aquarium_id, classes):
     """Updates the information of an aquarium into the database."""
@@ -388,4 +408,13 @@ def search_page(filters, page, page_size):
     offset = page_size * (page - 1)
     params.extend([limit, offset])
 
-    return db.query(sql, params)
+    aquariums = db.query(sql, params)
+    aquariums_dicts = [dict(row) for row in aquariums]
+
+    # Calculate age for each aquarium
+    for aquarium in aquariums_dicts:
+        years, days = h.date_difference(aquarium["date"])
+        aquarium["age_years"] = years
+        aquarium["age_days"] = days
+
+    return aquariums_dicts

@@ -37,6 +37,10 @@
     {% else %}
       {{ subject }} on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
     {% endif %}
+    </br>
+    {% if age.date %}
+      Vanhin akvaario on pystytetty {{ age.date }} ({{ age.years }} vuotta ja {{ age.days }} päivää sitten)
+    {% endif %}
 
   </div>
 
