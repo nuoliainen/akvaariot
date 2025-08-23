@@ -5,9 +5,9 @@
 {% block content %}
   <h2>Akvaario: {{ aquarium.name }}</h2>
   {% if session.user_id == aquarium.user_id %}
-    <a href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
-    <a href="/remove_aquarium/{{ aquarium.id }}">Poista</a> <br />
-    <a href="/images/{{ aquarium.id }}">Kuvat</a>
+    <a class="button" href="/edit_aquarium/{{ aquarium.id }}">Muokkaa</a>
+    <a class="button" href="/remove_aquarium/{{ aquarium.id }}">Poista</a>
+    <a class="button" href="/images/{{ aquarium.id }}">Hallinnoi kuvia</a>
   {% endif %}
 
   <div class="aquarium-images">
@@ -65,8 +65,8 @@
         <li>
           {{ critter.species }} ({{ critter.count }})
           {% if session.user_id == aquarium.user_id %}
-          <a href="/edit_critter/{{ critter.id }}">Muokkaa</a>
-            <a href="/remove_critter/{{ critter.id }}">Poista</a>
+            <a class="button small" href="/edit_critter/{{ critter.id }}">Muokkaa</a>
+            <a class="button small" href="/remove_critter/{{ critter.id }}">Poista</a>
           {% endif %}
         </li>
       {% endfor %}
@@ -77,9 +77,9 @@
 
     {% if session.user_id == aquarium.user_id %}
       <p>
-        <a href="/new_critter?aquarium_id={{ aquarium.id }}">Lisää eläin</a>
+        <a class="button" href="/new_critter?aquarium_id={{ aquarium.id }}">Lisää eläin</a>
         {% if critters %}
-        <a href="/remove_critters/{{ aquarium.id }}">Tyhjennä akvaario</a>
+        <a class="button" href="/remove_critters/{{ aquarium.id }}">Tyhjennä akvaario</a>
         {% endif %}
       </p>
     {% endif %}
@@ -93,7 +93,7 @@
       <textarea name="content" rows="10" cols="60" maxlength="5000" required></textarea> <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-      <input type="submit" name="show_aquarium" value="Lähetä" />
+      <input class="button" type="submit" name="show_aquarium" value="Lähetä" />
     </form>
   {% endif %}
 
@@ -107,12 +107,12 @@
         {{ comment.content | show_lines }}
       </p>
       {% if session.user_id == comment.user_id %}
-        <a href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}">Poista</a>
+        <a class="button small" href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}">Poista</a>
       {% endif %}
       <hr />
     {% endfor %}
     {% if total_comments > max_comments %}
-      <a href="/aquarium/{{ aquarium.id }}/comments">Näytä kaikki kommentit (+{{ total_comments - max_comments }})</a>
+      <a class="button" href="/aquarium/{{ aquarium.id }}/comments">Näytä kaikki kommentit (+{{ total_comments - max_comments }})</a>
     {% endif %}
   {% else %}
     <p>Ei vielä kommentteja</p>

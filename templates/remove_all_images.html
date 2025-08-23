@@ -7,10 +7,8 @@
 
   <form action="/remove_all_images/{{ aquarium.id }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="remove" value="Poista kaikki" />
+    <input class="button" type="submit" name="remove" value="Poista kaikki" />
   </form>
 
-  <p>
-    <a href="/images/{{ aquarium.id }}">Takaisin (peruuta)</a>
-  </p>
+  <a class="button return" href="/images/{{ aquarium.id }}">Peruuta</a>
 {% endblock %}

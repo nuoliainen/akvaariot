@@ -7,12 +7,12 @@
   <form action="/login" method="post">
     <p>
       <label for="username">Tunnus</label>:<br />
-      <input id="username" type="text" name="username" minlength="1" maxlength="50" required />
+      <input id="username" type="text" name="username" maxlength="50" required />
     </p>
     <p>
       <label for="password">Salasana</label>:<br />
-      <input type="password" name="password" minlength="1" maxlength="50" required />
+      <input type="password" name="password" maxlength="50" required />
     </p>
-    <input type="submit" value="Kirjaudu" />
+    <input class="button" type="submit" value="Kirjaudu" />
   </form>
 {% endblock %}

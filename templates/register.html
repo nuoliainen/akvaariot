@@ -7,17 +7,17 @@
   <form action="/register" method="post">
     <p>
       <label for="username">Tunnus</label>:<br />
-      <input type="text" id="username" name="username" value="{{ filled.username }}" minlength="1" maxlength="50" required />
+      <input type="text" id="username" name="username" value="{{ filled.username }}" maxlength="50" required />
     </p>
     <p>
       <label for="password1">Salasana</label>:<br />
-      <input type="password" id="password1" name="password1" minlength="1" maxlength="50" required />
+      <input type="password" id="password1" name="password1" maxlength="50" required />
     </p>
     <p>
       <label for="password2">Salasana uudestaan</label>:<br />
-      <input type="password" id="password2" name="password2" minlength="1" maxlength="50" required />
+      <input type="password" id="password2" name="password2" maxlength="50" required />
     </p>
 
-    <input type="submit" value="Luo tunnus" />
+    <input class="button" type="submit" value="Luo tunnus" />
   </form>
 {% endblock %}

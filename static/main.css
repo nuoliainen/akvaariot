@@ -351,7 +351,12 @@ textarea {
   max-width: 100%;
 }
 
-input[type="submit"] {
+form, .button.return {
+  display: inline;
+}
+
+.button {
+  display: inline-block;
   background-color: rgb(158, 170, 146);
   border: 2px solid rgb(135, 145, 126);
   border-radius: 6px;
@@ -361,9 +366,17 @@ input[type="submit"] {
   cursor: pointer;
   transition-duration: 0.3s;
   box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.25);
+  text-decoration: none;
+  color: inherit;
+  margin: 2px;
 }
 
-input[type="submit"]:hover {
+.button.small {
+  padding: 1px 5px;
+  font-size: 0.95rem;
+}
+
+.button:hover {
   background-color: rgb(189, 199, 179);
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.25);
 }

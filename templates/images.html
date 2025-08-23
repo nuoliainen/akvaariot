@@ -4,7 +4,7 @@
 
 {% block content %}
   <h2>Akvaarion <i>{{ aquarium.name }}</i> kuvat</h2>
-
+  <a class="button return" href="/aquarium/{{ aquarium.id }}">Takaisin</a>
   <p>
     Kuvia: {{ image_count }}/6 kpl
   </p>
@@ -40,9 +40,9 @@
 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="remove_images" />
     <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="remove_images" />
-    <input type="submit" value="Poista valitut" form="remove_images" />
+    <input class="button" type="submit" value="Poista valitut" form="remove_images" />
 
-    <a href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
+    <a class="button" href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
   {% endif %}
 
   {% if image_count < 6 %}
@@ -50,20 +50,14 @@
     <p>
       <i>Vaadittu tiedostomuoto .png, .jpg tai .jpeg ja maksimikoko 100MB</i>
     </p>
-    <form action="/add_image" method="post" enctype="multipart/form-data">
-      <p>
-        <label for="image">Kuva</label>:
-        <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" />
-      </p>
+    <form class="image-form" action="/add_image" method="post" enctype="multipart/form-data">
+      <label for="image">Kuva</label>:
+      <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-      <input type="submit" value="Lähetä" />
+      <input class="button" type="submit" value="Lähetä" />
     </form>
   {% else %}
     <p>Olet jo lisännyt maksimimäärän kuvia.</p>
   {% endif %}
-
-  <p>
-    <a href="/aquarium/{{ aquarium.id }}">Takaisin</a>
-  </p>
 {% endblock %}

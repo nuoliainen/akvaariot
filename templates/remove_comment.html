@@ -13,10 +13,8 @@
 
   <form action="/remove_comment/{{ comment.id }}?next={{ request.args.get('next') }}" method="post">
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input type="submit" name="remove" value="Poista" />
+    <input class="button" type="submit" name="remove" value="Poista" />
   </form>
 
-  <p>
-    <a href="{{ request.args.get('next', '/aquarium/' ~ comment.aquarium_id) }}">Takaisin (peruuta)</a>
-  </p>
+  <a class="button return" href="{{ request.args.get('next', '/aquarium/' ~ comment.aquarium_id) }}">Peruuta</a>
 {% endblock %}
