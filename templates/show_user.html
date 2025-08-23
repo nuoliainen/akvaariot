@@ -1,37 +1,46 @@
 {% extends "layout.html" %}
 
-{% block title %}Käyttäjä: {{ user.username }}{% endblock %}
+{% block title %}
+  {{ "Oma sivu" if session.user_id == user.id else "Käyttäjä: " ~ user.username }}
+{% endblock %}
 
 {% block content %}
-  <h2>Käyttäjän {{ user.username }} akvaariot</h2>
+  <h2>
+    {% if session.user_id == user.id %}
+      Oma profiili
+    {% else %}
+      Käyttäjän <span>{{ user.username }}</span> profiili
+    {% endif %}
+  </h2>
 
-  {% if session.user_id == user.id %}
-    Oma sivu!!
-  {% endif %}
+  <div class="user-stats">
+    {% if session.user_id == user.id %}
+      {% set subject = "Sinulla" %}
+    {% else %}
+      {% set subject = "Käyttäjällä" %}
+    {% endif %}
 
-  <p>
     {% if aquarium_count.count == 0 %}
-      Käyttäjällä ei ole akvaaarioita.
+      {{ subject }} ei ole akvaarioita.
     {% elif aquarium_count.count == 1 %}
-      Käyttäjällä on 1 akvaario.</br>
-      Käyttäjän akvaariossa on {{ aquarium_count.volume }} litraa vettä.
+      {{ subject }} on 1 akvaario, jossa on {{ aquarium_count.volume }} litraa vettä.
     {% else %}
-      Käyttäjällä on yhteensä {{ aquarium_count.count }} akvaariota.</br>
-      Käyttäjän akvaarioissa on yhteensä {{ aquarium_count.volume }} litraa vettä.
+      {{ subject }} on {{ aquarium_count.count }} akvaariota, joissa on yhteensä {{ aquarium_count.volume }} litraa vettä.
     {% endif %}
-  </p>
-  <p>
+    </br>
     {% if critter_counts.species == 0 %}
-      Käyttäjällä ei ole eläimiä.
+      {{ subject }} ei ole eläimiä.
     {% elif critter_counts.species == 1 and critter_counts.individuals == 1 %}
-      Käyttäjällä on 1 laji ja 1 yksilö.
+      {{ subject }} on 1 laji ja 1 yksilö.
     {% elif critter_counts.species == 1 and critter_counts.individuals > 1 %}
-      Käyttäjällä on 1 laji ja {{ critter_counts.individuals }} yksilöä.
+      {{ subject }} on 1 laji ja {{ critter_counts.individuals }} yksilöä.
     {% else %}
-      Käyttäjällä on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
+      {{ subject }} on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
     {% endif %}
-  </p>
 
+  </div>
+
+  <h3>Akvaariot</h3>
   {% include "aquarium_list.html" %}
 
   <div class="pages">
