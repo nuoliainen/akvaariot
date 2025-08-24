@@ -80,7 +80,7 @@ def get_validated_classes():
     return classes
 
 def get_critter_data():
-    """Gets and validates critter species name and inumber of individuals."""
+    """Gets and validates critter species name and number of individuals."""
     species = request.form["species"]
     count = request.form["count"]
 
