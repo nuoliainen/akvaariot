@@ -190,7 +190,7 @@ def show_aquarium(aquarium_id):
     critters = aquariums.get_critters(aquarium_id)
     newest_comments = aquariums.get_newest_comments(aquarium_id, max_comments)
     total_comments = aquariums.count_comments(aquarium_id)
-    images = aquariums.get_images(aquarium_id)
+    images = aquariums.get_image_ids(aquarium_id)
     main_image = aquariums.get_main_image(aquarium_id)
 
     return render_template("show_aquarium.html",
@@ -477,7 +477,7 @@ def show_comments(aquarium_id, page=1):
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):
-    image, file_type = aquariums.get_image(image_id)
+    image, file_type = aquariums.get_image_data(image_id)
     if not image:
         abort(404)
 
@@ -493,7 +493,7 @@ def manage_images(aquarium_id):
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
-    images = aquariums.get_images(aquarium_id)
+    images = aquariums.get_image_ids(aquarium_id)
     image_count = aquariums.count_images(aquarium_id)
     main_image = aquariums.get_main_image(aquarium_id)
     return render_template("images.html", aquarium=aquarium, images=images,
@@ -519,13 +519,15 @@ def add_image():
         return redirect("/images/" + str(aquarium_id))
 
     file = request.files["image"]
+    if not file:
+        flash("Et valinnut kuvaa.", "warning")
+        return redirect("/images/" + str(aquarium_id))
     if not any(file.filename.lower().endswith(file_type) for file_type in allowed_file_types):
         flash("Väärä tiedostomuoto! Sallitut tiedostot: .png, .jpg ja .jpeg", "error")
         return redirect("/images/" + str(aquarium_id))
 
     image = file.read()
     file_type = file.content_type # image/png or image/jpg etc.
-    print(file_type)
     if len(image) > max_file_size:
         flash("Liian suuri kuva!", "error")
         return redirect("/images/" + str(aquarium_id))
@@ -550,6 +552,12 @@ def set_main_image():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
+    image = aquariums.get_image(image_id)
+    if not image:
+        abort(404)
+    if image["aquarium_id"] != aquarium["id"]:
+        abort(403)
+
     aquariums.set_main_image(aquarium_id, image_id)
 
     flash("Pääkuva vaihdettu!", "success")
@@ -566,18 +574,26 @@ def remove_images():
     require_owner(aquarium)
 
     image_ids = request.form.getlist("image_id")
+    image_ids = [int(i) for i in image_ids]
     if image_ids:
-        current_main_image_id = aquariums.get_main_image(aquarium_id)
-        aquariums.remove_images(image_ids, aquarium_id)
+        # Ensure id's are valid (belong to the aquarium)
+        valid_image_ids = aquariums.get_image_ids(aquarium_id)
+        images_to_remove = [id for id in image_ids if id in valid_image_ids]
 
-        # If main image was removed, set a new one
-        if str(current_main_image_id) in image_ids:
-            # Find the oldest remaining image
-            oldest_image_id = aquariums.get_oldest_image(aquarium_id)
-            if oldest_image_id:
-                aquariums.set_main_image(aquarium_id, oldest_image_id)
+        if images_to_remove:
+            current_main_image_id = aquariums.get_main_image(aquarium_id)
+            aquariums.remove_images(images_to_remove, aquarium_id)
+
+            # If main image was removed, set a new one
+            if current_main_image_id in images_to_remove:
+                # Find the oldest remaining image
+                oldest_image_id = aquariums.get_oldest_image(aquarium_id)
+                if oldest_image_id:
+                    aquariums.set_main_image(aquarium_id, oldest_image_id)
 
         flash("Kuva(t) poistettu!", "success")
+    else:
+        flash("Valitse poistettavat kuvat.", "warning")
     return redirect("/images/" + str(aquarium_id))
 
 @app.route("/remove_all_images/<int:aquarium_id>", methods=["GET", "POST"])
@@ -593,10 +609,12 @@ def remove_all_images(aquarium_id):
 
     if request.method == "POST":
         check_csrf()
-        images = aquariums.get_images(aquarium_id)
+        images = aquariums.get_image_ids(aquarium_id)
         if images:
             aquariums.remove_all_images(aquarium_id)
             flash("Kaikki akvaarion kuvat poistettu!", "success")
+        else:
+            flash("Ei poistettavia kuvia.", "info")
         return redirect("/images/" + str(aquarium_id))
 
 @app.route("/search")

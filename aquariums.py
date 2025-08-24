@@ -244,12 +244,13 @@ def count_images(aquarium_id):
     sql = "SELECT COUNT(id) FROM images WHERE aquarium_id = ?"
     return db.query(sql, [aquarium_id])[0][0]
 
-def get_images(aquarium_id):
-    """Gets the id's of all images of an aquarium."""
+def get_image_ids(aquarium_id):
+    """Gets a list of all id's of an aquarium."""
     sql = "SELECT id FROM images WHERE aquarium_id = ?"
-    return db.query(sql, [aquarium_id])
+    results = db.query(sql, [aquarium_id])
+    return [row["id"] for row in results]
 
-def get_image(image_id):
+def get_image_data(image_id):
     """Gets the data of an image."""
     sql = "SELECT image, file_type FROM images WHERE id = ?"
     result = db.query(sql, [image_id])
@@ -258,9 +259,18 @@ def get_image(image_id):
         return row["image"], row["file_type"]
     return None, None
 
+def get_image(image_id):
+    """Gets the id and aquarium id of an image."""
+    sql = "SELECT id, aquarium_id FROM images WHERE id = ?"
+    result = db.query(sql, [image_id])
+    return result[0] if result else None
+
 def remove_images(image_ids, aquarium_id):
     """Removes one or multiple images from the database."""
-    placeholders = ",".join("?" for id in image_ids)
+    if not image_ids:
+        return
+
+    placeholders = ",".join("?" for _ in image_ids)
     sql = f"DELETE FROM images WHERE id IN ({placeholders}) AND aquarium_id = ?"
     db.execute(sql, image_ids + [aquarium_id])
 

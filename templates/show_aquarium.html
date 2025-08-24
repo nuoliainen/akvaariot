@@ -13,10 +13,10 @@
   <div class="aquarium-images">
     {% for image in images %}
       <div class="image-wrapper">
-        <img class="aquarium-image{% if main_image == image.id %} main-image{% endif %}"
-          src="/image/{{ image.id }}"
+        <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
+          src="/image/{{ image }}"
           alt="Akvaarion kuva">
-        {% if main_image == image.id %}
+        {% if main_image == image %}
           <div class="image-overlay-text">Pääkuva</div>
         {% endif %}
       </div>
