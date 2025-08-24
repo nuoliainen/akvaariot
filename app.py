@@ -510,7 +510,7 @@ def add_image():
     require_owner(aquarium)
 
     max_images = 6
-    max_file_size = 100 * 1024
+    max_file_size = 100 * 1024 # 100KB
     allowed_file_types = [".png", ".jpg", ".jpeg"]
 
     count = aquariums.count_images(aquarium_id)
