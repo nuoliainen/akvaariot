@@ -193,10 +193,13 @@ def show_aquarium(aquarium_id):
     images = aquariums.get_image_ids(aquarium_id)
     main_image = aquariums.get_main_image(aquarium_id)
 
+    draft_comment = session.pop("draft_comment", "")
+
     return render_template("show_aquarium.html",
                            aquarium=aquarium, classes=classes, critters=critters,
                            comments=newest_comments, total_comments=total_comments,
-                           max_comments=max_comments, images=images, main_image=main_image)
+                           max_comments=max_comments, draft_comment=draft_comment,
+                           images=images, main_image=main_image)
 
 @app.route("/new_aquarium")
 def new_aquarium():
@@ -418,10 +421,15 @@ def create_comment():
     if not aquarium:
         abort(403)
 
-    if len(content) > 5000:
-        abort(400, comment="Comment must be 5000 characters or less.")
-
-    aquariums.add_comment(aquarium_id, user_id, content)
+    if not content.strip():
+        flash("Kommentti ei saa olla tyhjä!", "warning")
+    elif len(content) > 5000:
+        session["draft_comment"] = content[:5000]
+        flash("Kommenttisi on liian pitkä! Maksimipituus on 5000 merkkiä.", "warning")
+    else:
+        aquariums.add_comment(aquarium_id, user_id, content)
+        session.pop("draft_comment", None)
+        flash("Kommentti lähetetty!", "success")
 
     # If comment was sent from page showing all comments, return to that page
     if "show_comments" in request.form:
@@ -471,9 +479,11 @@ def show_comments(aquarium_id, page=1):
     comments = aquariums.get_comments_page(aquarium_id, page, page_size)
     total_comments = aquariums.count_comments(aquarium_id)
 
+    draft_comment = session.pop("draft_comment", "")
+
     return render_template("show_comments.html",
                            aquarium=aquarium, comments=comments, total_comments=total_comments,
-                           page=page, page_count=page_count)
+                           draft_comment=draft_comment, page=page, page_count=page_count)
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):
