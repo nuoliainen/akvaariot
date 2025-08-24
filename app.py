@@ -14,6 +14,9 @@ import helpers as h
 app = Flask(__name__)
 app.secret_key = config.secret_key
 
+max_username_len = 32
+max_password_len = 128
+
 def require_login():
     """Ensures that the user is logged in."""
     if "user_id" not in session:
@@ -650,7 +653,11 @@ def search(page=1):
 def register():
     """Handles the creation of a new user account."""
     if request.method == "GET":
-        return render_template("register.html", filled={}, current_page="register")
+        return render_template("register.html",
+                                filled={},
+                                username_max=max_username_len,
+                                password_max=max_password_len,
+                                current_page="register")
 
     if request.method == "POST":
         username = request.form["username"]
@@ -658,25 +665,33 @@ def register():
         password2 = request.form["password2"]
 
         # Validate length of username
-        if not username or len(username) > 50:
-            abort(400, description="Name is required and must be 50 characters or less.")
+        if not username or len(username) > max_username_len:
+            abort(400, description=f"Name is required and must be {max_username_len} characters or less.")
         # Validate length of passwords
-        if not password1 or len(password1) > 50:
-            abort(400, description="Password is required and must be 50 characters or less.")
-        if not password2 or len(password2) > 50:
-            abort(400, description="Password is required and must be 50 characters or less.")
+        if not password1 or len(password1) > max_password_len:
+            abort(400, description=f"Password is required and must be {max_password_len} characters or less.")
+        if not password2 or len(password2) > max_password_len:
+            abort(400, description=f"Password is required and must be {max_password_len} characters or less.")
 
         if password1 != password2:
             flash("Salasanat eivät ole samat!", "error")
             filled = {"username": username}
-            return render_template("register.html", filled=filled, current_page="register")
+            return render_template("register.html",
+                                    filled=filled,
+                                    username_max=max_username_len,
+                                    password_max=max_password_len,
+                                    current_page="register")
 
         try:
             users.create_user(username, password1)
         except sqlite3.IntegrityError:
             flash("Tunnus on jo varattu!", "error")
             filled = {"username": username}
-            return render_template("register.html", filled=filled, current_page="register")
+            return render_template("register.html",
+                                    filled=filled,
+                                    username_max=max_username_len,
+                                    password_max=max_password_len,
+                                    current_page="register")
 
         flash("Tunnuksen luonti onnistui! Voit nyt kirjautua sisään.", "success")
         return redirect("/login")
@@ -686,7 +701,10 @@ def login():
     """Handles user login functionality."""
     # Display the login form
     if request.method == "GET":
-        return render_template("login.html", current_page="login")
+        return render_template("login.html",
+                                username_max=max_username_len,
+                                password_max=max_password_len,
+                                current_page="login")
 
     # Process the login
     if request.method == "POST":
