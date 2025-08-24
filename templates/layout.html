@@ -57,7 +57,7 @@
           </a>
         </li>
         {% if session.username %}
-          <li class="{% if current_page == 'userpage' %}active{% endif %}">
+          <li class="{% if current_page == 'own_userpage' %}active{% endif %}">
             <a href="/user/{{ session.user_id }}">
               Omat akvaariot
             </a>

@@ -161,6 +161,10 @@ def show_user(user_id, page=1):
     date = users.get_oldest_aquarium(user_id)
     years, days = h.date_difference(date)
     age = {"date": date, "years": years, "days": days}
+
+    # Check if own userpage for highlighting the correct nav button
+    current_page = "own_userpage" if user_id == session["user_id"] else "userpage"
+
     return render_template("show_user.html",
                            user=user,
                            aquarium_count=aquarium_count,
@@ -169,7 +173,7 @@ def show_user(user_id, page=1):
                            age=age,
                            page=page,
                            page_count=page_count,
-                           current_page="userpage")
+                           current_page=current_page)
 
 @app.route("/aquarium/<int:aquarium_id>")
 def show_aquarium(aquarium_id):
