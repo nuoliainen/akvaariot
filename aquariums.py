@@ -1,4 +1,3 @@
-from flask import g
 import db
 import helpers as h
 
