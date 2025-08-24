@@ -18,8 +18,10 @@
             {{ aquarium.volume }} litraa ({{ aquarium.length }}x{{ aquarium.depth }}x{{ aquarium.height }} cm)<br />
             Pystytetty:
             {% if aquarium.date %}
-              {{ aquarium.date }}<br />
-              {% if aquarium.age_years > 0 %}
+              {{ aquarium.date[8:10] }}-{{ aquarium.date[5:7] }}-{{ aquarium.date[:4] }}<br />
+              {% if aquarium.age_years == 1 %}
+                (1 vuosi ja {{ aquarium.age_days }} päivää sitten)
+              {% elif aquarium.age_years > 1 %}
                 ({{ aquarium.age_years }} vuotta ja {{ aquarium.age_days }} päivää sitten)
               {% else %}
                 ({{ aquarium.age_days }} päivää sitten)

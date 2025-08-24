@@ -39,7 +39,13 @@
     {% endif %}
     </br>
     {% if age.date %}
-      Vanhin akvaario on pystytetty {{ age.date }} ({{ age.years }} vuotta ja {{ age.days }} päivää sitten)
+      Vanhin akvaario on pystytetty {{ age.date[8:10] }}-{{ age.date[5:7] }}-{{ age.date[:4] }}:
+      {% if age.years == 1 %}
+        1 vuosi ja
+      {% elif age.years > 1 %}
+        {{ age.years }} vuotta ja
+      {% endif %}
+      {{ age.days }} päivää sitten.
     {% endif %}
 
   </div>
