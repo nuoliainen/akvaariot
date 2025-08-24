@@ -98,7 +98,7 @@ for i in range(1, critter_count + 1):
     user_id, volume = row
     species = random.choice(animals)
     count = random.randint(1, 30)
-    db.execute("INSERT INTO critters (species, count, aquarium_id, user_id) VALUES (?, ?, ?, ?)",
+    db.execute("INSERT OR IGNORE INTO critters (species, count, aquarium_id, user_id) VALUES (?, ?, ?, ?)",
                [species, count, aquarium_id, user_id])
 
 # Add comments

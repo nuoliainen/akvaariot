@@ -49,7 +49,8 @@ CREATE TABLE critters (
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
     aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     species TEXT,
-    count INTEGER
+    count INTEGER,
+    UNIQUE (aquarium_id, species)
 );
 
 CREATE TABLE comments (

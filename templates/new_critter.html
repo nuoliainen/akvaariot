@@ -4,14 +4,14 @@
 
 {% block content %}
   <h2>Uusi eläin</h2>
-  <form action="/create_critter" method="post">
+  <form action="/new_critter" method="post">
     <p>
       <label for="species">Laji</label>:<br />
-      <input type="text" id="species" name="species" size="50" maxlength="100" required />
+      <input type="text" id="species" name="species" value="{{ filled.species }}" size="50" maxlength="100" required />
     </p>
     <p>
       <label for="count">Eläinten lukumäärä</label>:<br />
-      <input type="number" id="count" name="count" size="5" min="1" max="9999" value="1" required />
+      <input type="number" id="count" name="count" value="{{ filled.count }}" size="5" min="1" max="9999" value="1" required />
     </p>
     <p>
       <label for="aquarium">Akvaario</label>: <br />
