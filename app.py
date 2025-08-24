@@ -162,7 +162,7 @@ def show_user(user_id, page=1):
     years, days = h.date_difference(date)
     age = {"date": date, "years": years, "days": days}
 
-    # Check if own userpage for highlighting the correct nav button
+    # Distinguish own userpage to highlight the correct nav button
     current_page = "own_userpage" if user_id == session["user_id"] else "userpage"
 
     return render_template("show_user.html",
