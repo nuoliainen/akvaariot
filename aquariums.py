@@ -1,3 +1,4 @@
+from flask import g
 import db
 import helpers as h
 
@@ -121,17 +122,24 @@ def get_selected_classes(aquarium_id):
 
 def add_aquarium(user_id, name, dims, volume, date, description, classes):
     """Adds a new aquarium into the database."""
+    con = db.get_connection()
+    try:
+        sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
+        result = con.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
+        aquarium_id = result.lastrowid
 
-    sql = """INSERT INTO aquariums (user_id, name, length, depth, height, volume, date, description)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?)"""
-    db.execute(sql, [user_id, name, dims[0], dims[1], dims[2], volume, date, description])
-    aquarium_id = db.last_insert_id()
+        sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
+        for title, value in classes:
+            con.execute(sql, [aquarium_id, title, value])
 
-    sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
-    for title, value in classes:
-        db.execute(sql, [aquarium_id, title, value])
-
-    return aquarium_id
+        con.commit()
+        return aquarium_id
+    except Exception:
+        con.rollback()
+        raise
+    finally:
+        con.close()
 
 def add_critter(user_id, aquarium_id, species, count):
     """Adds a new animal into the aquarium."""
