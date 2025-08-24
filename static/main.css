@@ -381,3 +381,13 @@ form, .button.return {
   background-color: rgb(189, 199, 179);
   box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.25);
 }
+
+.button.return {
+  background-color: rgb(89, 100, 78);
+  border: 2px solid rgb(79, 88, 70);
+  color: white;
+}
+
+.button.return:hover {
+  background-color: rgb(114, 126, 104);
+}
