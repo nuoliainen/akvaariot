@@ -16,6 +16,7 @@ app.secret_key = config.secret_key
 
 max_username_len = 32
 max_password_len = 128
+max_comment_length = 2000
 
 def require_login():
     """Ensures that the user is logged in."""
@@ -196,9 +197,14 @@ def show_aquarium(aquarium_id):
     draft_comment = session.pop("draft_comment", "")
 
     return render_template("show_aquarium.html",
-                           aquarium=aquarium, classes=classes, critters=critters,
-                           comments=newest_comments, total_comments=total_comments,
-                           max_comments=max_comments, draft_comment=draft_comment,
+                           aquarium=aquarium,
+                           classes=classes,
+                           critters=critters,
+                           comments=newest_comments,
+                           total_comments=total_comments,
+                           max_comments=max_comments,
+                           max_comment_length=max_comment_length,
+                           draft_comment=draft_comment,
                            images=images, main_image=main_image)
 
 @app.route("/new_aquarium")
@@ -423,9 +429,9 @@ def create_comment():
 
     if not content.strip():
         flash("Kommentti ei saa olla tyhjä!", "warning")
-    elif len(content) > 5000:
-        session["draft_comment"] = content[:5000]
-        flash("Kommenttisi on liian pitkä! Maksimipituus on 5000 merkkiä.", "warning")
+    elif len(content) > max_comment_length:
+        session["draft_comment"] = content[:max_comment_length]
+        flash(f"Kommenttisi on liian pitkä! Maksimipituus on {max_comment_length} merkkiä.", "warning")
     else:
         aquariums.add_comment(aquarium_id, user_id, content)
         session.pop("draft_comment", None)
@@ -482,8 +488,12 @@ def show_comments(aquarium_id, page=1):
     draft_comment = session.pop("draft_comment", "")
 
     return render_template("show_comments.html",
-                           aquarium=aquarium, comments=comments, total_comments=total_comments,
-                           draft_comment=draft_comment, page=page, page_count=page_count)
+                           aquarium=aquarium,
+                           comments=comments,
+                           total_comments=total_comments,
+                           max_comment_length=max_comment_length,
+                           draft_comment=draft_comment,
+                           page=page, page_count=page_count)
 
 @app.route("/image/<int:image_id>")
 def show_image(image_id):

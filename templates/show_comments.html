@@ -12,7 +12,7 @@
   {% if session.username %}
     <h3>Lisää kommentti</h3>
     <form action="/create_comment" method="post">
-      <textarea name="content" rows="10" cols="60" maxlength="5000" required>{{ draft_comment }}</textarea> <br />
+      <textarea name="content" rows="10" cols="60" maxlength="{{ max_comment_length }}" required>{{ draft_comment }}</textarea> <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
       <input class="button" type="submit" name="show_comments" value="Lähetä" />
