@@ -22,6 +22,19 @@ def execute(sql, params=[]):
 def last_insert_id():
     return g.last_insert_id    
     
+def execute_multiple(commands_with_params):
+    """Executes multiple different SQL commands in a single transaction."""
+    con = get_connection()
+    try:
+        for sql, params in commands_with_params:
+            con.execute(sql, params)
+        con.commit()
+    except sqlite3.Error:
+        con.rollback()
+        raise
+    finally:
+        con.close()
+
 def query(sql, params=[]):
     con = get_connection()
     result = con.execute(sql, params).fetchall()

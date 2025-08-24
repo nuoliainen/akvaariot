@@ -26,7 +26,8 @@ CREATE TABLE aquarium_classes (
     id INTEGER PRIMARY KEY,
     aquarium_id INTEGER REFERENCES aquariums(id) ON DELETE CASCADE,
     title TEXT,
-    value TEXT
+    value TEXT,
+    UNIQUE(aquarium_id, title)
 );
 
 CREATE TABLE images (

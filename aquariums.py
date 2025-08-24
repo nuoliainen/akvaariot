@@ -71,6 +71,7 @@ def get_aquarium(aquarium_id):
 
 def update_aquarium(name, dims, volume, date, description, aquarium_id, classes):
     """Updates the information of an aquarium into the database."""
+    sql_queries = []
     sql = """UPDATE aquariums
              SET name = ?,
                  length = ?,
@@ -80,13 +81,20 @@ def update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
                  date = ?,
                  description = ?
              WHERE id = ?"""
-    db.execute(sql, [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id])
+    params = [name, dims[0], dims[1], dims[2], volume, date, description, aquarium_id]
+    sql_queries.append((sql, params))
 
+    # Delete old classes
     sql = "DELETE FROM aquarium_classes WHERE aquarium_id = ?"
-    db.execute(sql, [aquarium_id])
-    sql = "INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"
+    params = [aquarium_id]
+    sql_queries.append((sql, params))
+
+    # Insert new classes
+    sql = """INSERT INTO aquarium_classes (aquarium_id, title, value) VALUES (?, ?, ?)"""
     for title, value in classes:
-        db.execute(sql, [aquarium_id, title, value])
+        sql_queries.append((sql, [aquarium_id, title, value]))
+
+    db.execute_multiple(sql_queries)
 
 def remove_aquarium(aquarium_id):
     """Removes a specific aquarium from the database."""
