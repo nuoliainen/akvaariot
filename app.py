@@ -690,57 +690,56 @@ def search(page=1):
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Handles the creation of a new user account."""
-    if request.method == "GET":
+    def render_register_page(filled=None):
         return render_template("register.html",
-                                filled={},
+                                filled=filled or {},
                                 username_max=max_username_len,
                                 password_max=max_password_len,
                                 current_page="register")
+
+    if request.method == "GET":
+        return render_register_page()
 
     if request.method == "POST":
         username = request.form["username"]
         password1 = request.form["password1"]
         password2 = request.form["password2"]
 
+        errors = []
+        filled = {"username": username}
+
         # Validate length of username
-        if not username or len(username) > max_username_len:
-            abort(400, description=f"Name is required and must be {max_username_len} characters or less.")
+        if not username :
+            errors.append(f"Käyttäjätunnus on vaadittu.")
+        elif len(username) > max_username_len:
+            errors.append(f"Käyttäjätunnuksen maksimipituus on {max_username_len} merkkiä.")
 
         # Do not allow using whitespaces in usernames
         if any(char.isspace() for char in username):
-            flash("Tunnus ei saa sisältää välilyöntejä.", "error")
-            filled = {"username": username}
-            return render_template("register.html",
-                                filled=filled,
-                                username_max=max_username_len,
-                                password_max=max_password_len,
-                                current_page="register")
+            errors.append("Tunnus ei saa sisältää välilyöntejä.")
 
         # Validate length of passwords
-        if not password1 or len(password1) > max_password_len:
-            abort(400, description=f"Password is required and must be {max_password_len} characters or less.")
-        if not password2 or len(password2) > max_password_len:
-            abort(400, description=f"Password is required and must be {max_password_len} characters or less.")
+        if not password1:
+            errors.append(f"Salasana on vaadittu.")
+        elif len(password1) > max_password_len:
+            errors.append(f"Salasanan maksimipituus on {max_password_len} merkkiä.")
+        if not password2:
+            errors.append(f"Salasanan vahvistus on vaadittu.")
+        elif len(password2) > max_password_len:
+            errors.append(f"Salasanan vahvistuksen maksimipituus on {max_password_len} merkkiä.")
+        if password1 and password2 and password1 != password2:
+            errors.append("Salasanat eivät täsmää.")
 
-        if password1 != password2:
-            flash("Salasanat eivät ole samat!", "error")
-            filled = {"username": username}
-            return render_template("register.html",
-                                    filled=filled,
-                                    username_max=max_username_len,
-                                    password_max=max_password_len,
-                                    current_page="register")
+        if errors:
+            for msg in errors:
+                flash(msg, "error")
+            return render_register_page(filled)
 
         try:
             users.create_user(username, password1)
         except sqlite3.IntegrityError:
-            flash("Tunnus on jo varattu!", "error")
-            filled = {"username": username}
-            return render_template("register.html",
-                                    filled=filled,
-                                    username_max=max_username_len,
-                                    password_max=max_password_len,
-                                    current_page="register")
+            flash("Tunnus on jo varattu.", "error")
+            return render_register_page(filled)
 
         flash("Tunnuksen luonti onnistui! Voit nyt kirjautua sisään.", "success")
         return redirect("/login")
