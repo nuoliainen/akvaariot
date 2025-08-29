@@ -233,6 +233,9 @@ def new_aquarium():
     return render_template("new_aquarium.html",
                            filled={},
                            all_classes=all_classes,
+                           form_action="/create_aquarium",
+                           submit_button="Luo akvaario",
+                           aquarium=None,
                            current_page="new_aquarium")
 
 @app.route("/create_aquarium", methods=["POST"])
@@ -254,6 +257,9 @@ def create_aquarium():
                                filled=filled,
                                classes=filled_classes,
                                all_classes=all_classes,
+                               form_action="/create_aquarium",
+                               submit_button="Luo akvaario",
+                               aquarium=None,
                                current_page="new_aquarium")
 
     name, dims, volume, date, description = data
@@ -284,7 +290,9 @@ def edit_aquarium(aquarium_id):
                            filled={},
                            aquarium=aquarium,
                            all_classes=all_classes,
-                           classes=classes)
+                           classes=classes,
+                           form_action="/update_aquarium",
+                           submit_button="Tallenna muutokset")
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
@@ -308,7 +316,9 @@ def update_aquarium():
                                filled=filled,
                                aquarium=aquarium,
                                all_classes=all_classes,
-                               classes=filled_classes)
+                               classes=filled_classes,
+                               form_action="/update_aquarium",
+                               submit_button="Tallenna muutokset")
 
     name, dims, volume, date, description = data
     aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)

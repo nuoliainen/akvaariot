@@ -4,47 +4,5 @@
 
 {% block content %}
   <h2>Uusi akvaario</h2>
-  <form action="/create_aquarium" method="post">
-    <p>
-      <label for="name">Akvaarion nimi</label>:<br />
-      <input type="text" id="name" name="name" value="{{ filled.name }}" size="50" maxlength="50" required />
-    </p>
-
-    <p>
-      Mitat
-      (<label for="length">pituus</label>,
-      <label for="depth">syvyys</label>,
-      <label for="height">korkeus</label>):<br />
-      <input type="number" id="length" name="length" size="5" min="1" max="9999" value="{{ filled.length if filled.length is defined else 100 }}" required /> x
-      <input type="number" id="depth" name="depth" size="5" min="1" max="9999" value="{{ filled.depth if filled.depth is defined else 40 }}" required /> x
-      <input type="number" id="height" name="height" size="5" min="1" max="9999" value="{{ filled.height if filled.height is defined else 40 }}" required /> cm
-    </p>
-
-    <p>
-      <label for="date">Akvaarion pystytyspäivämäärä</label>:<br />
-      <input type="date" id="date" name="date" value="{{ filled.date }}"/>
-    </p>
-
-    {% for class in all_classes %}
-      <p>
-        <label for="class:{{ class }}">{{ class }}</label>:<br />
-        <select id="class:{{ class }}" name="classes">
-          <option value="">(tyhjä)</option>
-          {% for option in all_classes[class] %}
-            <option value="{{ class }}:{{ option }}" {% if classes and classes.get(class) == option %}selected{% endif %}>
-              {{ option }}
-            </option>
-          {% endfor %}
-        </select>
-      </p>
-    {% endfor %}
-
-    <p>
-      <label for="description">Muuta</label>:<br />
-      <textarea id="description" name="description" rows="10" cols="60" maxlength="5000">{{ filled.description }}</textarea>
-    </p>
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input class="button" type="submit" value="Luo akvaario" />
-  </form>
+  {% include "aquarium_form.html" with context %}
 {% endblock %}

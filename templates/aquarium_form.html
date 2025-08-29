@@ -1,0 +1,46 @@
+<form action="{{ form_action }}" method="post">
+  <p>
+    <label for="name">Akvaarion nimi</label>:<br />
+    <input type="text" id="name" name="name" value="{{ filled.name | default(aquarium.name | default('')) }}" size="50" maxlength="50" required />
+  </p>
+
+  <p>
+    Mitat
+    (<label for="length">pituus</label>,
+    <label for="depth">syvyys</label>,
+    <label for="height">korkeus</label>):<br />
+    <input type="number" id="length" name="length" size="5" min="1" max="9999" value="{{ filled.length | default(aquarium.length | default(100)) }}" required /> x
+    <input type="number" id="depth" name="depth" size="5" min="1" max="9999" value="{{ filled.depth | default(aquarium.depth | default(40)) }}" required /> x
+    <input type="number" id="height" name="height" size="5" min="1" max="9999" value="{{ filled.height | default(aquarium.height | default(40)) }}" required /> cm
+  </p>
+
+  <p>
+    <label for="date">Akvaarion pystytyspäivämäärä</label>:<br />
+    <input type="date" id="date" name="date" value="{{ filled.date | default(aquarium.date | default('')) }}"/>
+  </p>
+
+  {% for class in all_classes %}
+    <p>
+      <label for="class:{{ class }}">{{ class }}</label>:<br />
+      <select id="class:{{ class }}" name="classes">
+        <option value="">(tyhjä)</option>
+        {% for option in all_classes[class] %}
+          <option value="{{ class }}:{{ option }}" {% if classes and classes.get(class) == option %}selected{% endif %}>
+            {{ option }}
+          </option>
+        {% endfor %}
+      </select>
+    </p>
+  {% endfor %}
+
+  <p>
+    <label for="description">Muuta</label>:<br />
+    <textarea id="description" name="description" rows="10" cols="60" maxlength="5000">{{ filled.description | default(aquarium.description | default('')) }}</textarea>
+  </p>
+
+  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    {% if aquarium %}
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+    {% endif %}
+  <input class="button" type="submit" value="{{ submit_button }}" />
+</form>
