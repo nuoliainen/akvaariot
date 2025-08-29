@@ -350,11 +350,7 @@ def remove_aquarium(aquarium_id):
         flash("Poistettu!", "success")
         return redirect("/user/" + str(session["user_id"]))
 
-@app.route("/new_critter")
-def new_critter():
-    """Renders the page for creating a new critter."""
-    require_login()
-
+def render_new_critter_form(original_aquarium_id=None, filled=None, errors=None):
     user_id = session["user_id"]
     # Get all aquariums of the user to display options for changing the target aquarium
     user_aquariums = users.get_aquariums(user_id)
@@ -363,11 +359,12 @@ def new_critter():
         flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.", "warning")
         return redirect("/new_aquarium")
 
-    # Get the original selected aquarium from URL query parameters
-    # (present if adding a new critter through the aquarium's page)
-    original_aquarium_id = request.args.get("aquarium_id", type=int)
+    if filled is None:
+        filled = {"count": 1}
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
 
-    filled = {"count": 1}
     return render_template("new_critter.html",
                             aquariums=user_aquariums,
                             original_aquarium_id=original_aquarium_id,
@@ -376,6 +373,17 @@ def new_critter():
                             submit_button="Lisää eläin",
                             critter=None,
                             current_page="new_critter")
+
+@app.route("/new_critter")
+def new_critter():
+    """Renders the page for creating a new critter."""
+    require_login()
+
+    # Get the original selected aquarium from URL query parameters
+    # (present if adding a new critter through the aquarium's page)
+    original_aquarium_id = request.args.get("aquarium_id", type=int)
+
+    return render_new_critter_form(original_aquarium_id=original_aquarium_id)
 
 @app.route("/create_critter", methods=["POST"])
 def create_critter():
@@ -388,8 +396,6 @@ def create_critter():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
-    # Get all aquariums of the user to display options for changing the target aquarium
-    user_aquariums = users.get_aquariums(user_id)
     original_aquarium_id = request.form.get("original_aquarium_id")
 
     species, count, filled, errors = get_critter_data()
@@ -397,29 +403,15 @@ def create_critter():
     filled["original_aquarium_id"] = original_aquarium_id
 
     if errors:
-        for msg in errors:
-            flash(msg, "error")
-            return render_template("new_critter.html",
-                                    aquariums=user_aquariums,
-                                    original_aquarium_id=original_aquarium_id,
-                                    filled=filled,
-                                    form_action="/create_critter",
-                                    submit_button="Lisää eläin",
-                                    critter=None,
-                                    current_page="new_critter")
+        return render_new_critter_form(original_aquarium_id=original_aquarium_id,
+                               filled=filled,
+                               errors=errors)
 
     try:
         aquariums.add_critter(user_id, aquarium_id, species, count)
     except sqlite3.IntegrityError:
         flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
-        return render_template("new_critter.html",
-                                aquariums=user_aquariums,
-                                original_aquarium_id=original_aquarium_id,
-                                filled=filled,
-                                form_action="/create_critter",
-                                submit_button="Lisää eläin",
-                                critter=None,
-                                current_page="new_critter")
+        return render_new_critter_form(original_aquarium_id=original_aquarium_id, filled=filled)
 
     flash("Eläin lisätty!", "success")
     return redirect("/aquarium/" + str(aquarium_id))
