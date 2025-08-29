@@ -7,19 +7,19 @@
   <form action="/update_aquarium" method="post">
     <p>
       Akvaarion nimi: <br />
-      <input type="text" name="name" size="50" maxlength="50" value="{{ aquarium.name }}" required />
+      <input type="text" name="name" size="50" maxlength="50" value="{{ filled.name if filled.name is defined else aquarium.name }}" required />
     </p>
 
     <p>
       Mitat (leveys x syvyys x korkeus): <br />
-      <input type="number" name="length" size="5" min="1" max="9999" value="{{ aquarium.length }}" required /> x
-      <input type="number" name="depth" size="5" min="1" max="9999" value="{{ aquarium.depth }}" required /> x
-      <input type="number" name="height" size="5" min="1" max="9999" value="{{ aquarium.height }}" required /> cm
+      <input type="number" name="length" size="5" min="1" max="9999" value="{{ filled.length if filled and filled.length is defined else aquarium.length }}" required /> x
+      <input type="number" name="depth" size="5" min="1" max="9999" value="{{ filled.depth if filled and filled.depth is defined else aquarium.depth }}" required /> x
+      <input type="number" name="height" size="5" min="1" max="9999" value="{{ filled.height if filled and filled.height is defined else aquarium.height }}" required /> cm
     </p>
 
     <p>
       Akvaarion pystytyspäivämäärä: <br />
-      <input type="date" name="date" value="{{ aquarium.date }}" />
+      <input type="date" name="date" value="{{ filled.date if filled and filled.date is defined else aquarium.date }}" />
     </p>
 
     {% for class in all_classes %}
@@ -28,13 +28,9 @@
         <select name="classes">
           <option value="">(tyhjä)</option>
           {% for option in all_classes[class] %}
-            {% if classes[class] == option %}
-              <!-- if an option was selected previously, display that one as the default -->
-              <option value="{{ class }}:{{ option }}" selected>{{ option }}</option>
-            {% else %}
-              <!-- if an option was not selected previously, display empty as the default -->
-              <option value="{{ class }}:{{ option }}">{{ option }}</option>
-            {% endif %}
+            <option value="{{ class }}:{{ option }}" {% if classes.get(class) == option %}selected{% endif %}>
+              {{ option }}
+            </option>
           {% endfor %}
         </select>
       </p>
@@ -42,7 +38,7 @@
 
     <p>
       Muuta: <br />
-      <textarea name="description" rows="10" cols="60" maxlength="5000">{{ aquarium.description }}</textarea>
+      <textarea name="description" rows="10" cols="60" maxlength="5000">{{ filled.description if filled and filled.description is defined else aquarium.description }}</textarea>
     </p>
 
     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />

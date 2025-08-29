@@ -39,22 +39,27 @@ def require_owner(item):
 
 def validate_input(name, description, dims):
     """Validates the input from a form to an aquarium."""
+    errors = []
     # Validate length of aquarium name
     if not name or len(name) > 50:
-        abort(400, description="Name is required and must be 50 characters or less.")
+        errors.append("Akvaariolla täytyy olla nimi.")
+    elif len(name) > 50:
+        errors.append("Akvaarion nimen pituus voi olla enintään 50 merkkiä.")
 
     # Validate length of description
     if len(description) > 5000:
-        abort(400, description="Description must be 5000 characters or less.")
+        errors.append("Kuvauksen pituus voi olla enintään 5000 merkkiä.")
 
     # Validate dimensions:
     try:
         l, d, h = int(dims[0]), int(dims[1]), int(dims[2])
         # Check that each dimension is within a correct range
         if not 0 < l < 10000 or not 0 < d < 10000 or not 0 < h < 10000:
-            abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
+            errors.append("Akvaarion mittojen tulee olla positiivisia kokonaislukuja väliltä 1\u20139999.")
     except (ValueError, KeyError):
-        abort(400, description="Dimensions must be positive integers from 1 to 9999 cm.")
+        errors.append("Akvaarion mittojen tulee olla positiivisia kokonaislukuja.")
+
+    return errors
 
 def get_aquarium_data():
     """Gets and validates aquarium name, date, description and dimensions from the form."""
@@ -63,25 +68,38 @@ def get_aquarium_data():
     description = request.form["description"]
     dims = [request.form["length"], request.form["depth"], request.form["height"]]
 
-    validate_input(name, description, dims)
+    filled = {"name": name,
+            "length": dims[0],
+            "depth": dims[1],
+            "height": dims[2],
+            "date": date,
+            "description": description}
+
+    errors = validate_input(name, description, dims)
+    if errors:
+        return None, filled, errors
+
     # Calculate volume in liters using the provided dimensions (cm)
     volume = int(dims[0])*int(dims[1])*int(dims[2]) // 1000
 
-    return name, date, description, dims, volume
+    return (name, dims, volume, date, description), filled, None
 
 def get_validated_classes():
     all_classes = aquariums.get_all_classes()
     classes = []
+    filled_classes = {}
 
     # Get and validate all submitted class entries (title, value) from the form
     for entry in request.form.getlist("classes"):
         if entry:
             title, value = entry.split(":")
+            filled_classes[title] = value
+
             if title not in all_classes or value not in all_classes[title]:
                 abort(403)
             classes.append((title, value))
 
-    return classes
+    return classes, filled_classes
 
 def get_critter_data():
     """Gets and validates critter species name and number of individuals."""
@@ -211,8 +229,11 @@ def show_aquarium(aquarium_id):
 def new_aquarium():
     """Renders the page for creating a new aquarium."""
     require_login()
-    classes = aquariums.get_all_classes()
-    return render_template("new_aquarium.html", classes=classes, current_page="new_aquarium")
+    all_classes = aquariums.get_all_classes()
+    return render_template("new_aquarium.html",
+                           filled={},
+                           all_classes=all_classes,
+                           current_page="new_aquarium")
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
@@ -222,8 +243,20 @@ def create_aquarium():
     check_csrf()
 
     user_id = session["user_id"]
-    name, date, description, dims, volume = get_aquarium_data()
-    classes = get_validated_classes()
+    all_classes = aquariums.get_all_classes()
+    classes, filled_classes = get_validated_classes()
+    data, filled, errors = get_aquarium_data()
+
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
+        return render_template("new_aquarium.html",
+                               filled=filled,
+                               classes=filled_classes,
+                               all_classes=all_classes,
+                               current_page="new_aquarium")
+
+    name, dims, volume, date, description = data
     aquarium_id = aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
 
     flash("Akvaario luotu!", "success")
@@ -248,7 +281,10 @@ def edit_aquarium(aquarium_id):
         classes[entry["title"]] = entry["value"]
 
     return render_template("edit_aquarium.html",
-                           aquarium=aquarium, all_classes=all_classes, classes=classes)
+                           filled={},
+                           aquarium=aquarium,
+                           all_classes=all_classes,
+                           classes=classes)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
@@ -261,9 +297,20 @@ def update_aquarium():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
-    name, date, description, dims, volume = get_aquarium_data()
-    classes = get_validated_classes()
+    classes, filled_classes = get_validated_classes()
+    data, filled, errors = get_aquarium_data()
 
+    if errors:
+        all_classes = aquariums.get_all_classes()
+        for msg in errors:
+            flash(msg, "error")
+        return render_template("edit_aquarium.html",
+                               filled=filled,
+                               aquarium=aquarium,
+                               all_classes=all_classes,
+                               classes=filled_classes)
+
+    name, dims, volume, date, description = data
     aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
     flash("Akvaarion muokkaus onnistui!", "success")
 
