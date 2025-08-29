@@ -705,6 +705,17 @@ def register():
         # Validate length of username
         if not username or len(username) > max_username_len:
             abort(400, description=f"Name is required and must be {max_username_len} characters or less.")
+
+        # Do not allow using whitespaces in usernames
+        if any(char.isspace() for char in username):
+            flash("Tunnus ei saa sisältää välilyöntejä.", "error")
+            filled = {"username": username}
+            return render_template("register.html",
+                                filled=filled,
+                                username_max=max_username_len,
+                                password_max=max_password_len,
+                                current_page="register")
+
         # Validate length of passwords
         if not password1 or len(password1) > max_password_len:
             abort(400, description=f"Password is required and must be {max_password_len} characters or less.")
