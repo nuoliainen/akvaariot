@@ -5,4 +5,7 @@
 {% block content %}
   <h2>Uusi eläin</h2>
   {% include "critter_form.html" with context %}
+  {% if selected_aquarium_id %}
+    <a class="button return" href="/aquarium/{{ selected_aquarium_id }}">Peruuta</a>
+  {% endif %}
 {% endblock %}
