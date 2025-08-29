@@ -416,6 +416,24 @@ def create_critter():
     flash("Eläin lisätty!", "success")
     return redirect("/aquarium/" + str(aquarium_id))
 
+def render_edit_critter_form(critter, filled=None, errors=None):
+    user_id = session["user_id"]
+    # Get all aquariums of the user to display options for changing the target aquarium
+    user_aquariums = users.get_aquariums(user_id)
+
+    if filled is None:
+        filled = {}
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
+
+    return render_template("edit_critter.html",
+                           critter=critter,
+                           aquariums=user_aquariums,
+                           filled=filled,
+                           form_action="/update_critter",
+                           submit_button="Tallenna muutokset")
+
 @app.route("/edit_critter/<int:critter_id>")
 def edit_critter(critter_id):
     """Renders the page for editing a specific critter."""
@@ -424,14 +442,7 @@ def edit_critter(critter_id):
     critter = aquariums.get_critter(critter_id)
     require_owner(critter)
 
-    # Get all aquariums of the user to display options for changing the target aquarium
-    user_aquariums = users.get_aquariums(session["user_id"])
-    return render_template("edit_critter.html",
-                           critter=critter,
-                           aquariums=user_aquariums,
-                           filled={},
-                           form_action="/update_critter",
-                           submit_button="Tallenna muutokset")
+    return render_edit_critter_form(critter=critter)
 
 @app.route("/update_critter", methods=["POST"])
 def update_critter():
@@ -447,31 +458,16 @@ def update_critter():
     aquarium = aquariums.get_aquarium(aquarium_id)
     require_owner(aquarium)
 
-    # Get all aquariums of the user to display options for changing the target aquarium
-    user_aquariums = users.get_aquariums(session["user_id"])
-
     species, count, filled, errors = get_critter_data()
     filled["aquarium_id"] = int(aquarium_id)
     if errors:
-        for msg in errors:
-            flash(msg, "error")
-            return render_template("edit_critter.html",
-                                   critter=critter,
-                                   aquariums=user_aquariums,
-                                   filled=filled,
-                                   form_action="/update_critter",
-                                   submit_button="Tallenna muutokset")
+        return render_edit_critter_form(critter=critter, filled=filled, errors=errors)
 
     try:
         aquariums.update_critter(species, count, aquarium_id, critter_id)
     except sqlite3.IntegrityError:
         flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
-        return render_template("edit_critter.html",
-                               critter=critter,
-                               aquariums=user_aquariums,
-                               filled=filled,
-                               form_action="/update_critter",
-                               submit_button="Tallenna muutokset")
+        return render_edit_critter_form(critter=critter, filled=filled)
 
     flash("Eläimen muokkaus onnistui!", "success")
     return redirect("/aquarium/" + str(aquarium_id))
