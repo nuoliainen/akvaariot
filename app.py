@@ -372,6 +372,9 @@ def new_critter():
                                 aquariums=user_aquariums,
                                 selected_aquarium_id=selected_aquarium_id,
                                 filled=filled,
+                                form_action="/new_critter",
+                                submit_button="Lisää eläin",
+                                critter=None,
                                 current_page="new_critter")
 
     if request.method == "POST":
@@ -391,6 +394,9 @@ def new_critter():
                                         aquariums=user_aquariums,
                                         selected_aquarium_id=selected_aquarium_id,
                                         filled=filled,
+                                        form_action="/new_critter",
+                                        submit_button="Lisää eläin",
+                                        critter=None,
                                         current_page="new_critter")
 
         try:
@@ -401,6 +407,9 @@ def new_critter():
                                     aquariums=user_aquariums,
                                     selected_aquarium_id=selected_aquarium_id,
                                     filled=filled,
+                                    form_action="/new_critter",
+                                    submit_button="Lisää eläin",
+                                    critter=None,
                                     current_page="new_critter")
 
         flash("Eläin lisätty!", "success")
@@ -416,7 +425,12 @@ def edit_critter(critter_id):
 
     # Get all aquariums of the user to display options for changing the target aquarium
     user_aquariums = users.get_aquariums(session["user_id"])
-    return render_template("edit_critter.html", critter=critter, aquariums=user_aquariums, filled={})
+    return render_template("edit_critter.html",
+                           critter=critter,
+                           aquariums=user_aquariums,
+                           filled={},
+                           form_action="/update_critter",
+                           submit_button="Tallenna muutokset")
 
 @app.route("/update_critter", methods=["POST"])
 def update_critter():
@@ -440,13 +454,23 @@ def update_critter():
     if errors:
         for msg in errors:
             flash(msg, "error")
-            return render_template("edit_critter.html", critter=critter, aquariums=user_aquariums, filled=filled)
+            return render_template("edit_critter.html",
+                                   critter=critter,
+                                   aquariums=user_aquariums,
+                                   filled=filled,
+                                   form_action="/update_critter",
+                                   submit_button="Tallenna muutokset")
 
     try:
         aquariums.update_critter(species, count, aquarium_id, critter_id)
     except sqlite3.IntegrityError:
         flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
-        return render_template("edit_critter.html", critter=critter, aquariums=user_aquariums, filled=filled)
+        return render_template("edit_critter.html",
+                               critter=critter,
+                               aquariums=user_aquariums,
+                               filled=filled,
+                               form_action="/update_critter",
+                               submit_button="Tallenna muutokset")
 
     flash("Eläimen muokkaus onnistui!", "success")
     return redirect("/aquarium/" + str(aquarium_id))

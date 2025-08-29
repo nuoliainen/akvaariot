@@ -4,27 +4,5 @@
 
 {% block content %}
   <h2>Uusi eläin</h2>
-  <form action="/new_critter" method="post">
-    <p>
-      <label for="species">Laji</label>:<br />
-      <input type="text" id="species" name="species" value="{{ filled.species }}" size="50" maxlength="100" required />
-    </p>
-    <p>
-      <label for="count">Eläinten lukumäärä</label>:<br />
-      <input type="number" id="count" name="count" value="{{ filled.count }}" size="5" min="1" max="9999" value="1" required />
-    </p>
-    <p>
-      <label for="aquarium">Akvaario</label>: <br />
-      <select id="aquarium" name="aquarium_id">
-        {% for aquarium in aquariums %}
-          <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == (filled.aquarium_id | default(selected_aquarium_id)) %}selected{% endif %}>
-            {{ aquarium["name"] }}
-          </option>
-        {% endfor %}
-      </select>
-    </p>
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-    <input class="button" type="submit" name="submit" value="Lisää eläin" />
-  </form>
+  {% include "critter_form.html" with context %}
 {% endblock %}
