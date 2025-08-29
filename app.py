@@ -750,6 +750,7 @@ def login():
     # Display the login form
     if request.method == "GET":
         return render_template("login.html",
+                                filled={},
                                 username_max=max_username_len,
                                 password_max=max_password_len,
                                 current_page="login")
@@ -765,7 +766,12 @@ def login():
             session["csrf_token"] = secrets.token_hex(16)
             return redirect("/")
         flash("Väärä tunnus tai salasana!", "error")
-        return redirect("/login")
+        filled = {"username": username}
+        return render_template("login.html",
+                                filled=filled,
+                                username_max=max_username_len,
+                                password_max=max_password_len,
+                                current_page="login")
 
 @app.route("/logout")
 def logout():
