@@ -58,7 +58,7 @@ def validate_input(name, description, dims):
 
 def get_aquarium_data():
     """Gets and validates aquarium name, date, description and dimensions from the form."""
-    name = request.form["name"]
+    name = request.form["name"].strip()
     date = request.form["date"]
     description = request.form["description"]
     dims = [request.form["length"], request.form["depth"], request.form["height"]]
@@ -85,7 +85,7 @@ def get_validated_classes():
 
 def get_critter_data():
     """Gets and validates critter species name and number of individuals."""
-    species = request.form["species"]
+    species = request.form["species"].strip()
     count = request.form["count"]
 
     # Validate length of species name
