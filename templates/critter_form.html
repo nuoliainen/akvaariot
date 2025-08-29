@@ -22,5 +22,6 @@
   {% if critter %}
     <input type="hidden" name="critter_id" value="{{ critter.id }}" />
   {% endif %}
+  <input type="hidden" name="selected_aquarium_id" value="{{ filled.selected_aquarium_id | default(selected_aquarium_id) }}">
   <input class="button" type="submit" name="submit" value="{{ submit_button }}" />
 </form>

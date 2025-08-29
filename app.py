@@ -350,7 +350,7 @@ def remove_aquarium(aquarium_id):
         flash("Poistettu!", "success")
         return redirect("/user/" + str(session["user_id"]))
 
-@app.route("/new_critter", methods=["GET", "POST"])
+@app.route("/new_critter")
 def new_critter():
     """Renders the page for creating a new critter."""
     require_login()
@@ -366,54 +366,63 @@ def new_critter():
     # Get the default selected aquarium from query parameters (if present)
     selected_aquarium_id = request.args.get("aquarium_id", type=int)
 
-    if request.method == "GET":
-        filled = {"count": 1}
-        return render_template("new_critter.html",
-                                aquariums=user_aquariums,
-                                selected_aquarium_id=selected_aquarium_id,
-                                filled=filled,
-                                form_action="/new_critter",
-                                submit_button="Lisää eläin",
-                                critter=None,
-                                current_page="new_critter")
+    filled = {"count": 1}
+    return render_template("new_critter.html",
+                            aquariums=user_aquariums,
+                            selected_aquarium_id=selected_aquarium_id,
+                            filled=filled,
+                            form_action="/create_critter",
+                            submit_button="Lisää eläin",
+                            critter=None,
+                            current_page="new_critter")
 
-    if request.method == "POST":
-        check_csrf()
+@app.route("/create_critter", methods=["POST"])
+def create_critter():
+    """Creates a new critter."""
+    require_login()
+    check_csrf()
 
-        aquarium_id = request.form["aquarium_id"]
-        aquarium = aquariums.get_aquarium(aquarium_id)
-        require_owner(aquarium)
+    user_id = session["user_id"]
+    aquarium_id = request.form["aquarium_id"]
+    aquarium = aquariums.get_aquarium(aquarium_id)
+    require_owner(aquarium)
 
-        species, count, filled, errors = get_critter_data()
-        filled["aquarium_id"] = int(aquarium_id)
+    # Get all aquariums of the user to display options for changing the target aquarium
+    user_aquariums = users.get_aquariums(user_id)
+    # Get the default selected aquarium
+    selected_aquarium_id = request.form.get("selected_aquarium_id")
 
-        if errors:
-            for msg in errors:
-                flash(msg, "error")
-                return render_template("new_critter.html",
-                                        aquariums=user_aquariums,
-                                        selected_aquarium_id=selected_aquarium_id,
-                                        filled=filled,
-                                        form_action="/new_critter",
-                                        submit_button="Lisää eläin",
-                                        critter=None,
-                                        current_page="new_critter")
+    species, count, filled, errors = get_critter_data()
+    filled["aquarium_id"] = int(aquarium_id)
+    filled["selected_aquarium_id"] = selected_aquarium_id
 
-        try:
-            aquariums.add_critter(user_id, aquarium_id, species, count)
-        except sqlite3.IntegrityError:
-            flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
+    if errors:
+        for msg in errors:
+            flash(msg, "error")
             return render_template("new_critter.html",
                                     aquariums=user_aquariums,
                                     selected_aquarium_id=selected_aquarium_id,
                                     filled=filled,
-                                    form_action="/new_critter",
+                                    form_action="/create_critter",
                                     submit_button="Lisää eläin",
                                     critter=None,
                                     current_page="new_critter")
 
-        flash("Eläin lisätty!", "success")
-        return redirect("/aquarium/" + str(aquarium_id))
+    try:
+        aquariums.add_critter(user_id, aquarium_id, species, count)
+    except sqlite3.IntegrityError:
+        flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
+        return render_template("new_critter.html",
+                                aquariums=user_aquariums,
+                                selected_aquarium_id=selected_aquarium_id,
+                                filled=filled,
+                                form_action="/create_critter",
+                                submit_button="Lisää eläin",
+                                critter=None,
+                                current_page="new_critter")
+
+    flash("Eläin lisätty!", "success")
+    return redirect("/aquarium/" + str(aquarium_id))
 
 @app.route("/edit_critter/<int:critter_id>")
 def edit_critter(critter_id):
