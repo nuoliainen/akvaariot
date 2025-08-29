@@ -363,13 +363,14 @@ def new_critter():
         flash("Sinun pitää luoda ainakin yksi akvaario ennen eläinten lisäämistä.", "warning")
         return redirect("/new_aquarium")
 
-    # Get the default selected aquarium from query parameters (if present)
-    selected_aquarium_id = request.args.get("aquarium_id", type=int)
+    # Get the original selected aquarium from URL query parameters
+    # (present if adding a new critter through the aquarium's page)
+    original_aquarium_id = request.args.get("aquarium_id", type=int)
 
     filled = {"count": 1}
     return render_template("new_critter.html",
                             aquariums=user_aquariums,
-                            selected_aquarium_id=selected_aquarium_id,
+                            original_aquarium_id=original_aquarium_id,
                             filled=filled,
                             form_action="/create_critter",
                             submit_button="Lisää eläin",
@@ -389,19 +390,18 @@ def create_critter():
 
     # Get all aquariums of the user to display options for changing the target aquarium
     user_aquariums = users.get_aquariums(user_id)
-    # Get the default selected aquarium
-    selected_aquarium_id = request.form.get("selected_aquarium_id")
+    original_aquarium_id = request.form.get("original_aquarium_id")
 
     species, count, filled, errors = get_critter_data()
     filled["aquarium_id"] = int(aquarium_id)
-    filled["selected_aquarium_id"] = selected_aquarium_id
+    filled["original_aquarium_id"] = original_aquarium_id
 
     if errors:
         for msg in errors:
             flash(msg, "error")
             return render_template("new_critter.html",
                                     aquariums=user_aquariums,
-                                    selected_aquarium_id=selected_aquarium_id,
+                                    original_aquarium_id=original_aquarium_id,
                                     filled=filled,
                                     form_action="/create_critter",
                                     submit_button="Lisää eläin",
@@ -414,7 +414,7 @@ def create_critter():
         flash(f"Olet jo lisännyt lajin {species} akvaarioon {aquarium['name']}.", "error")
         return render_template("new_critter.html",
                                 aquariums=user_aquariums,
-                                selected_aquarium_id=selected_aquarium_id,
+                                original_aquarium_id=original_aquarium_id,
                                 filled=filled,
                                 form_action="/create_critter",
                                 submit_button="Lisää eläin",

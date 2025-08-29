@@ -11,7 +11,7 @@
     <label for="aquarium">Akvaario</label>: <br />
     <select id="aquarium" name="aquarium_id">
       {% for aquarium in aquariums %}
-        <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == (filled.aquarium_id | default(critter.aquarium_id | default((selected_aquarium_id)))) %}selected{% endif %}>
+        <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == (filled.aquarium_id | default(critter.aquarium_id | default((original_aquarium_id)))) %}selected{% endif %}>
           {{ aquarium["name"] }}
         </option>
       {% endfor %}
@@ -22,6 +22,6 @@
   {% if critter %}
     <input type="hidden" name="critter_id" value="{{ critter.id }}" />
   {% endif %}
-  <input type="hidden" name="selected_aquarium_id" value="{{ filled.selected_aquarium_id | default(selected_aquarium_id) }}">
+  <input type="hidden" name="original_aquarium_id" value="{{ filled.original_aquarium_id | default(original_aquarium_id) }}">
   <input class="button" type="submit" name="submit" value="{{ submit_button }}" />
 </form>
