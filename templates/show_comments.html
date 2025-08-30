@@ -21,18 +21,7 @@
 
   {% if comments %}
     <hr />
-    {% for comment in comments %}
-      <p>
-        <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> ({{ comment.sent_at }}):
-      </p>
-      <p>
-        {{ comment.content | show_lines }}
-      </p>
-      {% if session.user_id == comment.user_id %}
-        <a class="button small" href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}/comments">Poista</a>
-      {% endif %}
-      <hr />
-    {% endfor %}
+    {% include "comments.html" %}
   {% else %}
     <p>Ei vielä kommentteja</p>
   {% endif %}

@@ -1,0 +1,15 @@
+{% for comment in comments %}
+  <div class="comment {% if session.user_id == comment.user_id %}owner{% endif %}">
+    <p class="time">{{ comment.sent_at }}</p>
+    <p>
+      <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:
+    </p>
+    <p>
+      {{ comment.content | show_lines }}
+    </p>
+    {% if session.user_id == comment.user_id %}
+      <a class="button small" href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}/comments">Poista</a>
+    {% endif %}
+  </div>
+  <hr />
+{% endfor %}

@@ -97,7 +97,7 @@
   {% if session.username %}
     <h4>Lisää kommentti</h4>
     <form action="/create_comment" method="post">
-      <textarea name="content" rows="10" cols="60" maxlength="{{ max_comment_length }}" required>{{ draft_comment }}</textarea> <br />
+      <textarea name="content" rows="10" cols="60" maxlength="{{ max_comment_length}}" required>{{ draft_comment }}</textarea> <br />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
       <input class="button" type="submit" name="show_aquarium" value="Lähetä" />
@@ -106,18 +106,7 @@
 
   <hr />
   {% if comments %}
-    {% for comment in comments %}
-      <p>
-        <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a> ({{ comment.sent_at }}):
-      </p>
-      <p>
-        {{ comment.content | show_lines }}
-      </p>
-      {% if session.user_id == comment.user_id %}
-        <a class="button small" href="/remove_comment/{{ comment.id }}?next=/aquarium/{{ aquarium.id }}">Poista</a>
-      {% endif %}
-      <hr />
-    {% endfor %}
+    {% include "comments.html" %}
     {% if total_comments > max_comments %}
       <a class="button" href="/aquarium/{{ aquarium.id }}/comments">Näytä kaikki kommentit (+{{ total_comments - max_comments }})</a>
     {% endif %}
