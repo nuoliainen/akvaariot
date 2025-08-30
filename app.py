@@ -23,6 +23,9 @@ max_description_length = 5000
 min_aquarium_dimension = 5 # cm
 max_aquarium_dimension = 10000 # cm
 
+max_species_length = 32
+max_individual_count = 9999
+
 def require_login():
     """Ensures that the user is logged in."""
     if "user_id" not in session:
@@ -117,14 +120,14 @@ def get_critter_data():
     # Validate length of species name
     if not species:
         errors.append("Lajilla täytyy olla nimi.")
-    elif len(species) > 100:
-        errors.append("Lajin nimi saa olla enintään 100 merkkiä pitkä.")
+    elif len(species) > max_species_length:
+        errors.append(f"Lajin nimi saa olla enintään {max_species_length} merkkiä pitkä.")
 
     # Validate count of individuals
     try:
         count = int(count)
-        if count < 1 or count > 9999:
-            errors.append("Yksilöiden määrän tulee olla positiivinen kokonaisluku väliltä 1\u20139999.")
+        if count < 1 or count > max_individual_count:
+            errors.append(f"Yksilöiden määrän tulee olla positiivinen kokonaisluku väliltä 1\u2013{max_individual_count}.")
     except (ValueError, KeyError):
         errors.append("Yksilöiden määrän tulee olla positiivinen kokonaisluku.")
 
@@ -394,7 +397,9 @@ def render_new_critter_form(original_aquarium_id=None, filled=None, errors=None)
                             form_action="/create_critter",
                             submit_button="Lisää eläin",
                             critter=None,
-                            current_page="new_critter")
+                            current_page="new_critter",
+                            max_species_length=max_species_length,
+                            max_individual_count=max_individual_count)
 
 @app.route("/new_critter")
 def new_critter():
