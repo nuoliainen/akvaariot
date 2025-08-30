@@ -311,7 +311,11 @@ def edit_aquarium(aquarium_id):
                            all_classes=all_classes,
                            classes=classes,
                            form_action="/update_aquarium",
-                           submit_button="Tallenna muutokset")
+                           submit_button="Tallenna muutokset",
+                           max_aquarium_name_length=max_aquarium_name_length,
+                           max_description_length=max_description_length,
+                           min_aquarium_dimension=min_aquarium_dimension,
+                           max_aquarium_dimension=max_aquarium_dimension)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():
@@ -337,7 +341,11 @@ def update_aquarium():
                                all_classes=all_classes,
                                classes=filled_classes,
                                form_action="/update_aquarium",
-                               submit_button="Tallenna muutokset")
+                               submit_button="Tallenna muutokset",
+                               max_aquarium_name_length=max_aquarium_name_length,
+                               max_description_length=max_description_length,
+                               min_aquarium_dimension=min_aquarium_dimension,
+                               max_aquarium_dimension=max_aquarium_dimension)
 
     name, dims, volume, date, description = data
     aquariums.update_aquarium(name, dims, volume, date, description, aquarium_id, classes)
