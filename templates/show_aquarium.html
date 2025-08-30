@@ -61,7 +61,11 @@
 
   <div class="description">
     Kuvaus:
-    <p>{{ aquarium.description | show_lines }}</p>
+    {% if aquarium.description %}
+      <p>{{ aquarium.description | show_lines }}</p>
+    {% else %}
+      <p><i>ei kuvausta</i></p>
+    {% endif %}
   </div>
 
   <h3>Eläimet:</h3>
