@@ -50,8 +50,10 @@
 
   </div>
 
-  <h3>Akvaariot</h3>
-  {% include "aquarium_list.html" %}
+  {% if aquariums %}
+    <h3>Akvaariot</h3>
+    {% include "aquarium_list.html" %}
+  {% endif %}
 
   {% if page_count > 1 %}
     <div class="page-nav">
