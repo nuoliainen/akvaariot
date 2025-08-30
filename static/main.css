@@ -393,7 +393,25 @@ form, .button.return {
 }
 
 .comment {
+  position: relative;
   padding: 10px;
+}
+
+.comment .button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.comment .comment-content {
+  padding-left: 10px;
+}
+
+.comment .time {
+  color: #313830;
+  font-size: 0.9rem;
+  margin: 0;
+  font-style: italic;
 }
 
 .comment.self {
