@@ -391,3 +391,16 @@ form, .button.return {
 .button.return:hover {
   background-color: rgb(114, 126, 104);
 }
+
+.comment {
+  padding: 10px;
+}
+
+.comment.self {
+  border: 4px solid rgb(85, 4, 67);
+  border-radius: 5px;
+}
+
+.comment.owner {
+  background-color: rgb(206, 216, 195);
+}

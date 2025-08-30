@@ -1,5 +1,5 @@
 {% for comment in comments %}
-  <div class="comment {% if session.user_id == comment.user_id %}owner{% endif %}">
+  <div class="comment {% if session.user_id == comment.user_id %}self{% endif %} {% if aquarium.user_id == comment.user_id %}owner{% endif %}">
     <p class="time">{{ comment.sent_at }}</p>
     <p>
       <a href="/user/{{ comment.user_id }}">{{ comment.username }}</a>:
