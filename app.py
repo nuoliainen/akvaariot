@@ -159,6 +159,7 @@ def index(page=1):
     all_aquariums = aquariums.get_aquariums_page(page, page_size)
     return render_template("index.html",
                            aquariums=all_aquariums,
+                           aquarium_count=aquarium_count,
                            page=page,
                            page_count=page_count,
                            current_page="index")

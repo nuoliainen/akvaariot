@@ -3,7 +3,7 @@
 {% block title %}Akvaariot{% endblock %}
 
 {% block content %}
-  <h2>Kaikki akvaariot</h2>
+  <h2>Kaikki akvaariot ({{ aquarium_count }} kpl)</h2>
   {% include "aquarium_list.html" %}
 
   {% if page_count > 1 %}
