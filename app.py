@@ -59,8 +59,8 @@ def validate_input(name, description, dims):
     try:
         l, d, h = int(dims[0]), int(dims[1]), int(dims[2])
         # Check that each dimension is within a correct range
-        if not min_aquarium_dimension < l < max_aquarium_dimension or not min_aquarium_dimension < d < max_aquarium_dimension or not min_aquarium_dimension < h < max_aquarium_dimension:
-            errors.append(f"Akvaarion mittojen tulee olla positiivisia kokonaislukuja väliltä {min_aquarium_dimension}1\u20139999{max_aquarium_dimension}.")
+        if not min_aquarium_dimension <= l <= max_aquarium_dimension or not min_aquarium_dimension <= d <= max_aquarium_dimension or not min_aquarium_dimension <= h <= max_aquarium_dimension:
+            errors.append(f"Akvaarion mittojen tulee olla positiivisia kokonaislukuja väliltä {min_aquarium_dimension}\u2013{max_aquarium_dimension}.")
     except (ValueError, KeyError):
         errors.append("Akvaarion mittojen tulee olla positiivisia kokonaislukuja.")
 
