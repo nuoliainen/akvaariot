@@ -53,12 +53,13 @@
   <h3>Akvaariot</h3>
   {% include "aquarium_list.html" %}
 
-  <div class="pages">
-    <a href="/user/{{ user.id }}/{{ 1 }}">ensimmäinen</a>
-    <a href="/user/{{ user.id }}/{{ page - 1 }}">&lt;&lt;</a>
-    Sivu {{ page }}/{{ page_count }}
-    <a href="/user/{{ user.id }}/{{ page + 1 }}">&gt;&gt;</a>
-    <a href="/user/{{ user.id }}/{{ page_count }}">viimeinen</a>
-  </div>
-
+  {% if page_count > 1 %}
+    <div class="page-nav">
+      <a href="/user/{{ user.id }}/{{ 1 }}">ensimmäinen</a>
+      <a href="/user/{{ user.id }}/{{ page - 1 }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a href="/user/{{ user.id }}/{{ page + 1 }}">&gt;&gt;</a>
+      <a href="/user/{{ user.id }}/{{ page_count }}">viimeinen</a>
+    </div>
+  {% endif %}
 {% endblock %}

@@ -37,9 +37,13 @@
     <p>Ei vielä kommentteja</p>
   {% endif %}
 
-  <p>
-    <a href="/aquarium/{{ aquarium.id }}/comments/{{ page - 1 }}">&lt;&lt;</a>
-    Sivu {{ page }}/{{ page_count }}
-    <a href="/aquarium/{{ aquarium.id }}/comments/{{ page + 1 }}">&gt;&gt;</a>
-  </p>
+  {% if page_count > 1 %}
+    <div class="page-nav">
+      <a href="aquarium/{{ aquarium.id }}/comments/{{ 1 }}">ensimmäinen</a>
+      <a href="/aquarium/{{ aquarium.id }}/comments/{{ page - 1 }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a href="/aquarium/{{ aquarium.id }}/comments/{{ page + 1 }}">&gt;&gt;</a>
+      <a href="aquarium/{{ aquarium.id }}/comments/{{ page_count }}">viimeinen</a>
+    </div>
+  {% endif %}
 {% endblock %}

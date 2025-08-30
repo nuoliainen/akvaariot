@@ -58,13 +58,15 @@
       <p>Ei tuloksia hakuehdoilla</p>
     {% endif %}
 
-    <div class="pages">
-      {% set query_string = filters | urlencode %}
-      <a href="/search/1?{{ query_string }}">ensimmäinen</a>
-      <a href="/search/{{ page - 1 }}?{{ query_string }}">&lt;&lt;</a>
-      Sivu {{ page }}/{{ page_count }}
-      <a href="/search/{{ page + 1 }}?{{ query_string }}">&gt;&gt;</a>
-      <a href="/search/{{ page_count }}?{{ query_string }}">viimeinen</a>
-    </div>
+    {% if page_count > 1 %}
+      <div class="page-nav">
+        {% set query_string = filters | urlencode %}
+        <a href="/search/1?{{ query_string }}">ensimmäinen</a>
+        <a href="/search/{{ page - 1 }}?{{ query_string }}">&lt;&lt;</a>
+        Sivu {{ page }}/{{ page_count }}
+        <a href="/search/{{ page + 1 }}?{{ query_string }}">&gt;&gt;</a>
+        <a href="/search/{{ page_count }}?{{ query_string }}">viimeinen</a>
+      </div>
+    {% endif %}
   {% endif %}
 {% endblock %}

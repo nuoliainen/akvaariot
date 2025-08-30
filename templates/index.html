@@ -6,11 +6,13 @@
   <h2>Kaikki akvaariot</h2>
   {% include "aquarium_list.html" %}
 
-  <div class="pages">
-    <a href="/{{ 1 }}">ensimmäinen</a>
-    <a href="/{{ page - 1 }}">&lt;&lt;</a>
-    Sivu {{ page }}/{{ page_count }}
-    <a href="/{{ page + 1 }}">&gt;&gt;</a>
-    <a href="/{{ page_count }}">viimeinen</a>
-  </div>
+  {% if page_count > 1 %}
+    <div class="page-nav">
+      <a class="button small" href="/{{ 1 }}">ensimmäinen</a>
+      <a class="button small" href="/{{ page - 1 }}">&lt;&lt;</a>
+      Sivu {{ page }}/{{ page_count }}
+      <a class="button small" href="/{{ page + 1 }}">&gt;&gt;</a>
+      <a class="button small" href="/{{ page_count }}">viimeinen</a>
+    </div>
+  {% endif %}
 {% endblock %}
