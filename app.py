@@ -18,6 +18,11 @@ max_username_len = 32
 max_password_len = 128
 max_comment_length = 2000
 
+max_aquarium_name_length = 32
+max_description_length = 5000
+min_aquarium_dimension = 5 # cm
+max_aquarium_dimension = 10000 # cm
+
 def require_login():
     """Ensures that the user is logged in."""
     if "user_id" not in session:
@@ -41,21 +46,21 @@ def validate_input(name, description, dims):
     """Validates the input from a form to an aquarium."""
     errors = []
     # Validate length of aquarium name
-    if not name or len(name) > 50:
+    if not name:
         errors.append("Akvaariolla täytyy olla nimi.")
-    elif len(name) > 50:
-        errors.append("Akvaarion nimen pituus voi olla enintään 50 merkkiä.")
+    elif len(name) > max_aquarium_name_length:
+        errors.append(f"Akvaarion nimen pituus voi olla enintään {max_aquarium_name_length} merkkiä.")
 
     # Validate length of description
-    if len(description) > 5000:
-        errors.append("Kuvauksen pituus voi olla enintään 5000 merkkiä.")
+    if len(description) > max_description_length:
+        errors.append(f"Kuvauksen pituus voi olla enintään {max_description_length} merkkiä.")
 
     # Validate dimensions:
     try:
         l, d, h = int(dims[0]), int(dims[1]), int(dims[2])
         # Check that each dimension is within a correct range
-        if not 0 < l < 10000 or not 0 < d < 10000 or not 0 < h < 10000:
-            errors.append("Akvaarion mittojen tulee olla positiivisia kokonaislukuja väliltä 1\u20139999.")
+        if not min_aquarium_dimension < l < max_aquarium_dimension or not min_aquarium_dimension < d < max_aquarium_dimension or not min_aquarium_dimension < h < max_aquarium_dimension:
+            errors.append(f"Akvaarion mittojen tulee olla positiivisia kokonaislukuja väliltä {min_aquarium_dimension}1\u20139999{max_aquarium_dimension}.")
     except (ValueError, KeyError):
         errors.append("Akvaarion mittojen tulee olla positiivisia kokonaislukuja.")
 
@@ -242,7 +247,11 @@ def new_aquarium():
                            form_action="/create_aquarium",
                            submit_button="Luo akvaario",
                            aquarium=None,
-                           current_page="new_aquarium")
+                           current_page="new_aquarium",
+                           max_aquarium_name_length=max_aquarium_name_length,
+                           max_description_length=max_description_length,
+                           min_aquarium_dimension=min_aquarium_dimension,
+                           max_aquarium_dimension=max_aquarium_dimension)
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
@@ -266,7 +275,11 @@ def create_aquarium():
                                form_action="/create_aquarium",
                                submit_button="Luo akvaario",
                                aquarium=None,
-                               current_page="new_aquarium")
+                               current_page="new_aquarium",
+                               max_aquarium_name_length=max_aquarium_name_length,
+                               max_description_length=max_description_length,
+                               min_aquarium_dimension=min_aquarium_dimension,
+                               max_aquarium_dimension=max_aquarium_dimension)
 
     name, dims, volume, date, description = data
     aquarium_id = aquariums.add_aquarium(user_id, name, dims, volume, date, description, classes)
