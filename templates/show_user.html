@@ -23,29 +23,29 @@
     {% if aquarium_count.count == 0 %}
       {{ subject }} ei ole akvaarioita.
     {% elif aquarium_count.count == 1 %}
-      {{ subject }} on 1 akvaario, jossa on {{ aquarium_count.volume }} litraa vettä.
+      {{ subject }} on <b>1</b> akvaario, jossa on <b>{{ aquarium_count.volume }}</b> litraa vettä.
     {% else %}
-      {{ subject }} on {{ aquarium_count.count }} akvaariota, joissa on yhteensä {{ aquarium_count.volume }} litraa vettä.
+      {{ subject }} on <b>{{ aquarium_count.count }}</b> akvaariota, joissa on yhteensä <b>{{ aquarium_count.volume }}</b> litraa vettä.
     {% endif %}
     </br>
     {% if critter_counts.species == 0 %}
       {{ subject }} ei ole eläimiä.
     {% elif critter_counts.species == 1 and critter_counts.individuals == 1 %}
-      {{ subject }} on 1 laji ja 1 yksilö.
+      {{ subject }} on <b>1</b> laji ja <b>1</b> yksilö.
     {% elif critter_counts.species == 1 and critter_counts.individuals > 1 %}
-      {{ subject }} on 1 laji ja {{ critter_counts.individuals }} yksilöä.
+      {{ subject }} on <b>1</b> laji ja <b>{{ critter_counts.individuals }}</b> yksilöä.
     {% else %}
-      {{ subject }} on yhteensä {{ critter_counts.species }} lajia ja {{ critter_counts.individuals }} yksilöä.
+      {{ subject }} on yhteensä <b>{{ critter_counts.species }}</b> lajia ja <b>{{ critter_counts.individuals }}</b> yksilöä.
     {% endif %}
     </br>
     {% if age.date %}
-      Vanhin akvaario on pystytetty {{ age.date[8:10] }}-{{ age.date[5:7] }}-{{ age.date[:4] }}:
+      Vanhin akvaario on pystytetty <b>{{ age.date[8:10] }}-{{ age.date[5:7] }}-{{ age.date[:4] }}</b>
       {% if age.years == 1 %}
-        1 vuosi ja
+        (1 vuosi ja
       {% elif age.years > 1 %}
-        {{ age.years }} vuotta ja
+        ({{ age.years }} vuotta ja
       {% endif %}
-      {{ age.days }} päivää sitten.
+      {{ age.days }} päivää sitten).
     {% endif %}
 
   </div>
