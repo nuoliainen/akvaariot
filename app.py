@@ -20,7 +20,7 @@ max_comment_length = 2000
 
 max_aquarium_name_length = 32
 max_description_length = 5000
-min_aquarium_dimension = 5 # cm
+min_aquarium_dimension = 10 # cm
 max_aquarium_dimension = 10000 # cm
 
 max_species_length = 32
