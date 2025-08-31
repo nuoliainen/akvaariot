@@ -13,14 +13,21 @@
   {% set max_visible = 2 %}
   <input type="checkbox" id="toggle-images" hidden>
   <div class="aquarium-images">
-    {% for image in images %}
-      <div class="image-wrapper {% if loop.index > max_visible %} hidden{% endif %}">
+    {% if main_image in images %}
+      <div class="image-wrapper">
+        <img class="aquarium-image main-image"
+          src="/image/{{ main_image }}"
+          alt="Akvaarion {{ aquarium.name }} pääkuva">
+        <div class="image-overlay-text">Pääkuva</div>
+      </div>
+    {% endif %}
+
+    {% set remaining_images = images | reject('equalto', main_image) %}
+    {% for image in remaining_images %}
+      <div class="image-wrapper {% if loop.index >= max_visible %} hidden{% endif %}">
         <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
           src="/image/{{ image }}"
           alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva">
-        {% if main_image == image %}
-          <div class="image-overlay-text">Pääkuva</div>
-        {% endif %}
       </div>
     {% endfor %}
   </div>
