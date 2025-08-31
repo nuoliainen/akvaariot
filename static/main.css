@@ -145,6 +145,8 @@ nav li.active {
   z-index: 1;
 }
 
+/* -- Aquarium list and aquarium cards --- */
+
 .aquarium-list {
   display: flex;
   flex-wrap: wrap;
@@ -266,9 +268,13 @@ nav li.active {
   padding: 0;
 }
 
+/* -- Page navigation -- */
+
 .page-nav {
   text-align: center;
 }
+
+/* -- Images in aqiarium pages -- */
 
 .aquarium-images {
   display: flex;
@@ -349,6 +355,8 @@ input.image-overlay-button:hover {
   display: inline;
 }
 
+/* -- Flash messages -- */
+
 .flash {
   padding: 15px;
   margin-top: 0;
@@ -374,6 +382,8 @@ input.image-overlay-button:hover {
   background-color: #d8a50d;
   color: #212529;
 }
+
+/* -- Forms -- */
 
 input,
 textarea,
@@ -408,6 +418,8 @@ textarea {
 form, .button.return {
   display: inline;
 }
+
+/* -- Buttons -- */
 
 .button {
   display: inline-block;
@@ -444,6 +456,8 @@ form, .button.return {
 .button.return:hover {
   background-color: rgb(114, 126, 104);
 }
+
+/* -- Comments -- */
 
 .comment {
   position: relative;
