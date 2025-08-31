@@ -26,6 +26,13 @@ max_aquarium_dimension = 10000 # cm
 max_species_length = 32
 max_individual_count = 9999
 
+help_texts = {
+    "Vesi": "Valitse akvaarioon sopiva veden tyyppi suolapitoisuuden mukaan.",
+    "Lämpötila": "Valitse akvaarion lämpötila-alue. Suuntaa-antava vaihteluväli trooppiselle akvaariolle on yli 24°C, lauhkealle 18°C\u201324°C ja kylmälle alle 18°C.",
+    "Tyyppi": "Valitse akvaarion käyttötarkoitus tai teema.",
+    "Tekniikka": "Valitse akvaarion tekniikan määrä (esim. high tech -akvaariossa on usein kirkas valaistus ja hiilidioksidijärjestelmä)."
+}
+
 def require_login():
     """Ensures that the user is logged in."""
     if "user_id" not in session:
@@ -254,7 +261,8 @@ def new_aquarium():
                            max_aquarium_name_length=max_aquarium_name_length,
                            max_description_length=max_description_length,
                            min_aquarium_dimension=min_aquarium_dimension,
-                           max_aquarium_dimension=max_aquarium_dimension)
+                           max_aquarium_dimension=max_aquarium_dimension,
+                           help_texts=help_texts)
 
 @app.route("/create_aquarium", methods=["POST"])
 def create_aquarium():
@@ -318,7 +326,8 @@ def edit_aquarium(aquarium_id):
                            max_aquarium_name_length=max_aquarium_name_length,
                            max_description_length=max_description_length,
                            min_aquarium_dimension=min_aquarium_dimension,
-                           max_aquarium_dimension=max_aquarium_dimension)
+                           max_aquarium_dimension=max_aquarium_dimension,
+                           help_texts=help_texts)
 
 @app.route("/update_aquarium", methods=["POST"])
 def update_aquarium():

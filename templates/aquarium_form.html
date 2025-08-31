@@ -1,10 +1,15 @@
 <form action="{{ form_action }}" method="post">
-  <p>
+  <div class="form-group">
     <label for="name">Akvaarion nimi</label>:<br />
     <input type="text" id="name" name="name" value="{{ filled.name | default(aquarium.name | default('')) }}" size="50" maxlength="{{ max_aquarium_name_length }}" required />
-  </p>
+    <p class="help-text">
+      Pakollinen kenttä.<br />
+      Anna akvaariolle jokin kuvaava nimi, esimerkiksi "Afrikka-akvaario" tai "Sekalainen seurakunta".<br />
+      Akvaario nimen pituus voi olla enintään {{ max_aquarium_name_length }} merkkiä pitkä.
+    </p>
+  </div>
 
-  <p>
+  <div class="form-group">
     Mitat
     (<label for="length">pituus</label>,
     <label for="depth">syvyys</label>,
@@ -12,15 +17,23 @@
     <input type="number" id="length" name="length" size="5" min="{{ min_aquarium_dimension }}" max="{{ max_aquarium_dimension }}" value="{{ filled.length | default(aquarium.length | default(100)) }}" required /> x
     <input type="number" id="depth" name="depth" size="5" min="{{ min_aquarium_dimension }}" max="{{ max_aquarium_dimension }}" value="{{ filled.depth | default(aquarium.depth | default(40)) }}" required /> x
     <input type="number" id="height" name="height" size="5" min="{{ min_aquarium_dimension }}" max="{{ max_aquarium_dimension }}" value="{{ filled.height | default(aquarium.height | default(40)) }}" required /> cm
-  </p>
+    <p class="help-text">
+      Pakollinen kenttä.<br />
+      Anna akvaarion pituus, syvyys ja korkeus senttimetrin tarkkuudella väliltä {{ min_aquarium_dimension }}&ndash;{{ max_aquarium_dimension }}cm.
+    </p>
+  </div>
 
-  <p>
+  <div class="form-group">
     <label for="date">Akvaarion pystytyspäivämäärä</label>:<br />
     <input type="date" id="date" name="date" value="{{ filled.date | default(aquarium.date | default('')) }}"/>
-  </p>
+    <p class="help-text">
+      Päivämäärä, jolloin akvaario käynnistettiin.
+      Jos et muista tarkkaa päivämäärää, voit jättää kentän tyhjäksi, veikata jotakin, tai laittaa päivämääräksi esimerkiksi kuukauden vai vuoden ensimmäisen päivän.
+    </p>
+  </div>
 
   {% for class in all_classes %}
-    <p>
+    <div class="form-group">
       <label for="class:{{ class }}">{{ class }}</label>:<br />
       <select id="class:{{ class }}" name="classes">
         <option value="">(tyhjä)</option>
@@ -30,13 +43,21 @@
           </option>
         {% endfor %}
       </select>
-    </p>
+      {% if help_texts and help_texts.get(class) %}
+        <p class="help-text">{{ help_texts[class] }}</p>
+      {% endif %}
+    </div>
   {% endfor %}
 
-  <p>
+  <div class="form-group">
     <label for="description">Muuta</label>:<br />
     <textarea id="description" name="description" rows="10" cols="60" maxlength="{{ max_description_length }}">{{ filled.description | default(aquarium.description | default('')) }}</textarea>
-  </p>
+    <p class="help-text">
+      Vapaamuotoinen lisätietokenttä.
+      Voit esimerkiksi kertoa tarkempia teknisiä tietoja tai kuvailla akvaariota ja sen asukkaita.<br />
+      Maksimipituus {{ max_description_length }} merkkiä.
+    </p>
+  </div>
 
   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
     {% if aquarium %}
