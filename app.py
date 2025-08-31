@@ -468,7 +468,9 @@ def render_edit_critter_form(critter, filled=None, errors=None):
                            aquariums=user_aquariums,
                            filled=filled,
                            form_action="/update_critter",
-                           submit_button="Tallenna muutokset")
+                           submit_button="Tallenna muutokset",
+                           max_species_length=max_species_length,
+                           max_individual_count=max_individual_count)
 
 @app.route("/edit_critter/<int:critter_id>")
 def edit_critter(critter_id):
