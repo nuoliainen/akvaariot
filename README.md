@@ -51,4 +51,17 @@ Suuren määrän testidataa voi halutessaan luoda tiedostolla seed.py.
 
 ## Suuri tietomäärä
 
-*(Raportoi tulokset)*
+Sovellus on testattu suurella määrällä dataa, joka luotiin tiedostolla seed.py. Lähtöarvot olivat seuraavat:
+
+```
+user_count = 1000
+aquarium_count = 10**6
+comment_count = 10**7
+critter_count = 10**6
+```
+
+Etusivu aukeaa välittömästi (0.0-0.02s) ja sivulta seuraaville siirtyminen toimii myös hyvin. Viimeisimmille sivulle hyppääminen kuitenkin nostaa sivun latautumisaikaa noin kahteen sekuntiin, joka liittynee siihen, miten sivutus on toteutettu (`LIMIT ? OFFSET ?`). Käyttäjäsivut toimivat myös yhtä nopeasti. Akvaarion luomisessa ja muokkaamisessa sekä eläinten lisäämisessä ei ole viivettä. Tunnuksen luomisessa kuluu noin 0.11 sekuntia, mikä ei vielä häiritse käyttökokemusta.
+
+Hakutoiminto kuitenkin toimii vaihtelevasti. Tilavuuden ja päivämäärän mukaan rajaaminen toimii alle sekunnissa. Hakusanan perusteella hamkemiseen kuluu jo lähemmäs 3 sekuntia, mutta sen tehostamiseen ei voi käyttää indeksiä, sillä kysely on muotoa `"%" + query + "%"` (alkaa %:lla). Sama ongelma on lajihaussa, joka on toteutettu samalla tavalla kuin hakusana; hakutulokset latautuvat noin 4,5 sekunnissa.
+
+Luokkien mukaan hakutulosten rajaaminen toimii selkeästi heikoiten; jopa 7-9 sekuntia riippuen hieman paljonko tuloksia on ja montako luokkaa on valittuna. Jättämällä taulukosta aquarium_classes pois `UNIQUE(aquarium_id, title)`, haku nopeutuu muutamalla sekunnilla. Sen kanssa SQL käyttää ilmeisesti omaa indeksiään (`sqlite_autoindex_aquarium_classes_1`) itse luomani indeksin sijaan. Sen pois jättäminen ei kuitenkaan ole välttämättä hyvä idea tietokannan eheyden ylläpitämiseksi. SQL-kyselyn rakenteesta löytyisi varmasti parannettavaa.
