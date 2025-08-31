@@ -5,18 +5,28 @@
 {% block content %}
   <h2>Luo uusi tunnus</h2>
   <form action="/register" method="post">
-    <p>
+    <div class="form-group">
       <label for="username">Tunnus</label>:<br />
       <input type="text" id="username" name="username" value="{{ filled.username }}" maxlength="{{ username_max }}" required />
-    </p>
-    <p>
+      <p class="help-text">
+        Pakollinen kenttä.<br />
+        Tunnuksen maksimipituus on {{ username_max }} merkkiä eikä se saa sisältää välilyöntejä.
+      </p>
+    </div>
+
+    <div class="form-group">
       <label for="password1">Salasana</label>:<br />
       <input type="password" id="password1" name="password1" maxlength="{{ password_max }}" required />
-    </p>
-    <p>
+      <p class="help-text">
+        Pakollinen kenttä.<br />
+        Salasanan maksimipituus on {{ password_max }} merkkiä.</p>
+    </div>
+
+    <div class="form-group">
       <label for="password2">Salasana uudestaan</label>:<br />
       <input type="password" id="password2" name="password2" maxlength="{{ password_max }}" required />
-    </p>
+      <p class="help-text">Pakollinen kenttä.</p>
+    </div>
 
     <input class="button" type="submit" value="Luo tunnus" />
   </form>

@@ -386,6 +386,16 @@ textarea {
   max-width: 100%;
 }
 
+.form-group {
+  margin-bottom: 1.5em;
+}
+
+.help-text {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0;
+}
+
 form, .button.return {
   display: inline;
 }
