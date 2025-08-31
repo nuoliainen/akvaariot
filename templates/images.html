@@ -19,7 +19,7 @@
           <div class="image-wrapper">
             <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
               src="/image/{{ image }}"
-              alt="Akvaarion kuva" />
+              alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva" />
 
             {% if main_image == image %}
               <div class="image-overlay-text">
