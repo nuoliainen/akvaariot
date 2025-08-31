@@ -12,7 +12,7 @@
   {% if images %}
     <form id="remove_images" action="/remove_images" method="post"></form>
 
-    <div class="aquarium-images">
+    <div class="aquarium-images manage-images">
       {% for image in images %}
         <div class="image-wrapper">
           <input type="checkbox" class="image-chackbox" name="image_id" value="{{ image }}" form="remove_images" />

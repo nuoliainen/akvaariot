@@ -278,6 +278,10 @@ nav li.active {
 }
 
 .image-wrapper {
+  width: 100%;
+}
+
+.manage-images .image-wrapper {
   flex: 1 1 48%; /* flex-grow, flex-shrink, width */
   min-width: 320px; /* min width until switches to 1 column */
   position: relative;
