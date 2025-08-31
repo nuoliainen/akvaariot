@@ -13,6 +13,9 @@
     <h3>Lisää kommentti</h3>
     <form action="/create_comment" method="post">
       <textarea name="content" rows="10" cols="60" maxlength="{{ max_comment_length }}" required>{{ draft_comment }}</textarea> <br />
+      <p class="help-text">
+        Maksimipituus {{ max_comment_length }} merkkiä.
+      </p>
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
       <input class="button" type="submit" name="show_comments" value="Lähetä" />
