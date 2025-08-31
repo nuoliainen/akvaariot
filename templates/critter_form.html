@@ -8,7 +8,7 @@
     <input type="number" id="count" name="count" size="5" min="1" max="{{ max_individual_count }}" value="{{ filled.count | default(critter.count | default(1)) }}" required />
   </p>
   <p>
-    <label for="aquarium">Akvaario</label>: <br />
+    <label for="aquarium">Akvaario</label>:<br />
     <select id="aquarium" name="aquarium_id">
       {% for aquarium in aquariums %}
         <option value="{{ aquarium['id'] }}" {% if aquarium['id'] == (filled.aquarium_id | default(critter.aquarium_id | default((original_aquarium_id)))) %}selected{% endif %}>
