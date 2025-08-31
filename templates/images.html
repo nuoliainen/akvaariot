@@ -38,7 +38,7 @@
     <div class="aquarium-images manage-images">
       {% for image in images %}
         <div class="image-wrapper">
-          <input type="checkbox" class="image-chackbox" name="image_id" value="{{ image }}" form="remove_images" />
+          <input type="checkbox" class="image-checkbox" name="image_id" value="{{ image }}" form="remove_images" />
           <div class="image-container">
             <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
               src="/image/{{ image }}"
