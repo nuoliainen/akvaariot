@@ -28,7 +28,7 @@
   </p>
 
   <p>
-    Akvaarion tilavuus: {{ aquarium.volume }} litraa 
+    Akvaarion tilavuus: {% if aquarium.volume == 1 %}1 litra{% else %}{{ aquarium.volume }} litraa{% endif %}
     ({{ aquarium.length }} x {{ aquarium.depth }} x {{ aquarium.height }} cm)
   </p>
 
