@@ -734,7 +734,7 @@ def remove_images():
     image_ids = request.form.getlist("image_id")
     image_ids = [int(i) for i in image_ids]
     if image_ids:
-        # Ensure id's are valid (belong to the aquarium)
+        # Ensure IDs are valid (belong to the aquarium)
         valid_image_ids = aquariums.get_image_ids(aquarium_id)
         images_to_remove = [id for id in image_ids if id in valid_image_ids]
 
