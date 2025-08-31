@@ -10,8 +10,8 @@
   </p>
 
   {% if session.username %}
-    <h3>Lisää kommentti</h3>
-    <label for="content">Lisää kommentti</label>:<br />
+    <form action="/create_comment" method="post">
+      <label for="content">Lisää kommentti</label>:<br />
       <textarea id="content" name="content" rows="10" cols="60" maxlength="{{ max_comment_length }}" required>{{ draft_comment }}</textarea> <br />
       <p class="help-text">
         Maksimipituus {{ max_comment_length }} merkkiä.
