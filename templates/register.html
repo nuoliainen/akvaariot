@@ -9,7 +9,7 @@
       <label for="username">Tunnus</label>:<br />
       <input type="text" id="username" name="username" value="{{ filled.username }}" maxlength="{{ username_max }}" required />
       <p class="help-text">
-        Pakollinen kenttä.<br />
+        <span class="required">Pakollinen kenttä.</span><br />
         Tunnuksen maksimipituus on {{ username_max }} merkkiä eikä se saa sisältää välilyöntejä.
       </p>
     </div>
@@ -18,7 +18,7 @@
       <label for="password1">Salasana</label>:<br />
       <input type="password" id="password1" name="password1" maxlength="{{ password_max }}" required />
       <p class="help-text">
-        Pakollinen kenttä.<br />
+        <span class="required">Pakollinen kenttä.</span><br />
         Salasanan maksimipituus on {{ password_max }} merkkiä.</p>
     </div>
 

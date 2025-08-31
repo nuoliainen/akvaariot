@@ -396,6 +396,11 @@ textarea {
   margin: 0;
 }
 
+.required {
+  color: #9b2531;
+  text-decoration: underline;
+}
+
 form, .button.return {
   display: inline;
 }

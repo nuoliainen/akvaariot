@@ -3,7 +3,7 @@
     <label for="name">Akvaarion nimi</label>:<br />
     <input type="text" id="name" name="name" value="{{ filled.name | default(aquarium.name | default('')) }}" size="50" maxlength="{{ max_aquarium_name_length }}" required />
     <p class="help-text">
-      Pakollinen kenttä.<br />
+      <span class="required">Pakollinen kenttä.</span><br />
       Anna akvaariolle jokin kuvaava nimi, esimerkiksi "Afrikka-akvaario" tai "Sekalainen seurakunta".<br />
       Akvaario nimen pituus voi olla enintään {{ max_aquarium_name_length }} merkkiä pitkä.
     </p>
@@ -18,7 +18,7 @@
     <input type="number" id="depth" name="depth" size="5" min="{{ min_aquarium_dimension }}" max="{{ max_aquarium_dimension }}" value="{{ filled.depth | default(aquarium.depth | default(40)) }}" required /> x
     <input type="number" id="height" name="height" size="5" min="{{ min_aquarium_dimension }}" max="{{ max_aquarium_dimension }}" value="{{ filled.height | default(aquarium.height | default(40)) }}" required /> cm
     <p class="help-text">
-      Pakollinen kenttä.<br />
+      <span class="required">Pakollinen kenttä.</span><br />
       Anna akvaarion pituus, syvyys ja korkeus senttimetrin tarkkuudella väliltä {{ min_aquarium_dimension }}&ndash;{{ max_aquarium_dimension }}cm.
     </p>
   </div>

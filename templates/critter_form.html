@@ -3,7 +3,7 @@
     <label for="species">Laji</label>:<br />
     <input type="text" id="species" name="species" size="50" maxlength="{{ max_species_length }}" value="{{ filled.species | default(critter.species | default('')) }}" required />
     <p class="help-text">
-      Pakollinen kenttä.<br />
+      <span class="required">Pakollinen kenttä.</span><br />
       Lajinimen maksimipituus on {{ max_species_length }}.
     </p>
   </div>
@@ -12,7 +12,7 @@
     <label for="count">Eläinten lukumäärä</label>:<br />
     <input type="number" id="count" name="count" size="5" min="1" max="{{ max_individual_count }}" value="{{ filled.count | default(critter.count | default(1)) }}" required />
     <p class="help-text">
-      Pakollinen kenttä.<br />
+      <span class="required">Pakollinen kenttä.</span><br />
       Yksilöiden lukumäärä voi olla välillä 1&ndash;{{ max_individual_count }}.
     </p>
   </div>
@@ -27,7 +27,7 @@
       {% endfor %}
     </select>
     <p class="help-text">
-      Pakollinen kenttä.<br />
+      <span class="required">Pakollinen kenttä.</span><br />
       Voit halutessasi siirtää lajin akvaariosta toiseen vaihtamalla kohdeakvaarion valikosta.
     </p>
   </div>
