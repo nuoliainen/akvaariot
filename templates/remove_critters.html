@@ -8,20 +8,20 @@
   <p>
     Eläimet:
     {% if critters %}
-    <ul>
-      {% for critter in critters %}
-        <li>
-          {{ critter.species }} ({{ critter.count }})
-        </li>
-      {% endfor %}
-    </ul>
+      <ul>
+        {% for critter in critters %}
+          <li>
+            {{ critter.species }} ({{ critter.count }})
+          </li>
+        {% endfor %}
+      </ul>
     {% endif %}
   </p>
 
-    <form action="/remove_critters/{{ aquarium.id }}" method="post">
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input class="button" type="submit" name="remove" value="Poista" />
-    </form>
+  <form action="/remove_critters/{{ aquarium.id }}" method="post">
+    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+    <input class="button" type="submit" name="remove" value="Poista" />
+  </form>
 
-    <a class="button return" href="/aquarium/{{ aquarium.id }}">Peruuta</a>
+  <a class="button return" href="/aquarium/{{ aquarium.id }}">Peruuta</a>
 {% endblock %}

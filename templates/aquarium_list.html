@@ -53,7 +53,9 @@
         </div>
       </a>
       {% if current_page not in ["userpage", "own_userpage"] %}
-        <p class="aquarium-owner">Omistaja <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a></p>
+        <p class="aquarium-owner">
+          Omistaja <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a>
+        </p>
       {% endif %}
     </li>
   {% endfor %}
