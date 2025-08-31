@@ -52,7 +52,7 @@
     </p>
     <form class="image-form" action="/add_image" method="post" enctype="multipart/form-data">
       <label for="image">Kuva</label>:
-      <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" />
+      <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" required />
       <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
       <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
       <input class="button" type="submit" value="Lähetä" />
