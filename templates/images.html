@@ -38,25 +38,29 @@
     <div class="aquarium-images manage-images">
       {% for image in images %}
         <div class="image-wrapper">
-          <input type="checkbox" class="image-checkbox" name="image_id" value="{{ image }}" form="remove_images" />
-          <div class="image-container">
-            <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
-              src="/image/{{ image }}"
-              alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva" />
+          <label>
+            <input type="checkbox" class="image-checkbox" name="image_id" value="{{ image }}" form="remove_images" />
+            <div class="image-container">
+              <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
+                src="/image/{{ image }}"
+                alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva" />
 
-            {% if main_image == image %}
-              <div class="image-overlay-text">
-                Pääkuva
-              </div>
-            {% else %}
-              <form action="/set_main_image" method="post">
-                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-                <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-                <input type="hidden" name="image_id" value="{{ image }}" />
-                <input type="submit" class="image-overlay-button" value="Valitse pääkuvaksi" />
-              </form>
-            {% endif %}
-          </div>
+              <div class="image-label image-overlay left">Valitse</div>
+
+              {% if main_image == image %}
+                <div class="image-overlay right">
+                  Pääkuva
+                </div>
+              {% else %}
+                <form action="/set_main_image" method="post">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+                  <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+                  <input type="hidden" name="image_id" value="{{ image }}" />
+                  <input type="submit" class="image-overlay image-overlay-button right" value="Valitse pääkuvaksi" />
+                </form>
+              {% endif %}
+            </div>
+          </label>
         </div>
       {% endfor %}
     </div>
