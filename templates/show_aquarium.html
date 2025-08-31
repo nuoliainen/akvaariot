@@ -10,9 +10,11 @@
     <a class="button" href="/images/{{ aquarium.id }}">Hallinnoi kuvia</a>
   {% endif %}
 
+  {% set max_visible = 2 %}
+  <input type="checkbox" id="toggle-images" hidden>
   <div class="aquarium-images">
     {% for image in images %}
-      <div class="image-wrapper">
+      <div class="image-wrapper {% if loop.index > max_visible %} hidden{% endif %}">
         <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
           src="/image/{{ image }}"
           alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva">
@@ -22,6 +24,12 @@
       </div>
     {% endfor %}
   </div>
+  {% if images|length > max_visible %}
+    <label for="toggle-images" class="show-more-button button small">
+      <span class="show-text">Näytä lisää (+{{ images|length - max_visible }})</span>
+      <span class="hide-text">Piilota</span>
+    </label>
+  {% endif %}
 
   <p>
     Akvaarion omistaja: <a href="/user/{{ aquarium.user_id }}">{{ aquarium.username }}</a>

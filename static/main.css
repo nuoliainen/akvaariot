@@ -318,6 +318,30 @@ input.image-overlay-button:hover {
   transition: background-color 0.2s ease;
 }
 
+.hidden {
+  display: none;
+}
+
+#toggle-images:checked ~ .aquarium-images .hidden {
+  display: block;
+}
+
+/* Show show images button and hide hide images button by default */
+.show-text {
+  display: inline;
+}
+.hide-text {
+  display: none;
+}
+
+/* When checkbox is checked, reverse visibility */
+#toggle-images:checked ~ .show-more-button .show-text {
+  display: none;
+}
+#toggle-images:checked ~ .show-more-button .hide-text {
+  display: inline;
+}
+
 .flash {
   padding: 15px;
   margin-top: 0;
