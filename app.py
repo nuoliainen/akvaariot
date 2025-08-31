@@ -194,9 +194,9 @@ def show_user(user_id, page=1):
     page_count = max(page_count, 1)
 
     if page < 1:
-        return redirect("/1")
+        return redirect(f"/user/{user_id}/1")
     if page > page_count:
-        return redirect("/" + str(page_count))
+        return redirect(f"/user/{user_id}/{page_count}")
 
     user_aquariums = users.get_aquariums_page(user_id, page, page_size)
     critter_counts = users.count_critters(user_id)
