@@ -9,8 +9,31 @@
     Kuvia: {{ image_count }}/6 kpl
   </p>
 
+  {% if image_count < 6 %}
+    <h3>Lisää uusi kuva</h3>
+    <p>
+      <i>Vaadittu tiedostomuoto .png, .jpg tai .jpeg ja maksimikoko 100kt</i>
+    </p>
+    <form class="image-form" action="/add_image" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="image">Kuva</label>:
+        <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" required />
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
+        <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
+        <input class="button" type="submit" value="Lähetä" />
+      </div>
+    </form>
+  {% else %}
+    <p>Olet jo lisännyt maksimimäärän kuvia.</p>
+  {% endif %}
+
   {% if images %}
     <form id="remove_images" action="/remove_images" method="post"></form>
+      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="remove_images" />
+      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="remove_images" />
+      <input class="button" type="submit" value="Poista valitut" form="remove_images" />
+
+      <a class="button" href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
 
     <div class="aquarium-images manage-images">
       {% for image in images %}
@@ -37,27 +60,6 @@
         </div>
       {% endfor %}
     </div>
-
-    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" form="remove_images" />
-    <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" form="remove_images" />
-    <input class="button" type="submit" value="Poista valitut" form="remove_images" />
-
-    <a class="button" href="/remove_all_images/{{ aquarium.id }}">Poista kaikki kuvat</a>
   {% endif %}
 
-  {% if image_count < 6 %}
-    <h3>Lisää uusi kuva</h3>
-    <p>
-      <i>Vaadittu tiedostomuoto .png, .jpg tai .jpeg ja maksimikoko 100kt</i>
-    </p>
-    <form class="image-form" action="/add_image" method="post" enctype="multipart/form-data">
-      <label for="image">Kuva</label>:
-      <input type="file" id="image" name="image" accept=".png, .jpg, .jpeg" required />
-      <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
-      <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
-      <input class="button" type="submit" value="Lähetä" />
-    </form>
-  {% else %}
-    <p>Olet jo lisännyt maksimimäärän kuvia.</p>
-  {% endif %}
 {% endblock %}
