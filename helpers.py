@@ -8,7 +8,11 @@ def date_difference(my_date):
         my_date = datetime.strptime(my_date, "%Y-%m-%d").date()
     today = date.today()
 
+    if today < my_date:
+        return 0, 0
+
     years = today.year - my_date.year
+
     # Substract 1 from total years if a full year has not passed from "my_date" this year
     if (today.month, today.day) < (my_date.month, my_date.day):
         years -= 1
