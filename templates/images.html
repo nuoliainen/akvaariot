@@ -14,9 +14,9 @@
 
     <div class="aquarium-images">
       {% for image in images %}
-        <div class="image-row">
-          <input type="checkbox" name="image_id" value="{{ image }}" form="remove_images" />
-          <div class="image-wrapper">
+        <div class="image-wrapper">
+          <input type="checkbox" class="image-chackbox" name="image_id" value="{{ image }}" form="remove_images" />
+          <div class="image-container">
             <img class="aquarium-image{% if main_image == image %} main-image{% endif %}"
               src="/image/{{ image }}"
               alt="Akvaarion {{ aquarium.name }} {% if main_image == image %}pää{% endif %}kuva" />
@@ -30,7 +30,7 @@
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}" />
                 <input type="hidden" name="aquarium_id" value="{{ aquarium.id }}" />
                 <input type="hidden" name="image_id" value="{{ image }}" />
-                <input type="submit" class="image-overlay-text" value="Valitse pääkuvaksi" />
+                <input type="submit" class="image-overlay-button" value="Valitse pääkuvaksi" />
               </form>
             {% endif %}
           </div>
