@@ -55,8 +55,8 @@ CREATE TABLE critters (
 
 CREATE TABLE comments (
     id INTEGER PRIMARY KEY,
-    aquarium_id INTEGER REFERENCES aquariums,
-    user_id INTEGER REFERENCES users,
+    aquarium_id INTEGER REFERENCES aquariums ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users ON DELETE CASCADE,
     content TEXT,
     sent_at TEXT
 );
